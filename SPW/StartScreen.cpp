@@ -1,6 +1,7 @@
 #include "StartScreen.h"
 #include "TitleScene.h"
 #include "LevelSelection.h"
+#include "CreativeSelection.h"
 #include "Image.h"
 #include "Button.h"
 
@@ -34,6 +35,24 @@ namespace StartScreenNS
     private:
         TitleScene &m_titleScene;
         StartScreen &m_startScreen;
+    };
+
+    class CreativeSelectionListener : public ButtonListener
+    {
+    public:
+        CreativeSelectionListener(TitleScene& titleScene, StartScreen& startScreen) :
+            m_titleScene(titleScene), m_startScreen(startScreen)
+        {
+        }
+        virtual void OnPress() override
+        {
+            CreativeSelection* creativeSelection = new CreativeSelection(m_titleScene);
+            creativeSelection->SetParent(m_startScreen.GetParent());
+            m_startScreen.Delete();
+        }
+    private:
+        TitleScene& m_titleScene;
+        StartScreen& m_startScreen;
     };
 }
 
@@ -80,7 +99,7 @@ StartScreen::StartScreen(TitleScene &scene) :
     const std::string texts[3] = { u8"Jouer", u8"Mode créatif", u8"Quitter"};
     ButtonListener *listener[3] = { 0 };
     listener[0] = new StartScreenNS::SelectionListener(scene, *this);
-    listener[1] = new StartScreenNS::SelectionListener(scene, *this);
+    listener[1] = new StartScreenNS::CreativeSelectionListener(scene, *this);
     listener[2] = new StartScreenNS::QuitListener(scene);
 
     float curY = topSkip;
