@@ -112,7 +112,24 @@ void ControlsInput::OnEventProcess(SDL_Event evt)
             jumpPressed = true;
             break;
 
+        case SDL_SCANCODE_1:
+            terrainSelected = 1;
+            break;
+            
+        case SDL_SCANCODE_2:
+            terrainSelected = 2;
+            break;
+            
+        case SDL_SCANCODE_3:
+            terrainSelected = 3;
+            break;
+            
+        case SDL_SCANCODE_4:
+            terrainSelected = 4;
+            break;
+
         default:
+            terrainSelected = 1;
             break;
         }
         break;

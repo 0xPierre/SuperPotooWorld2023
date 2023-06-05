@@ -16,5 +16,5 @@ public:
     bool jumpDown;
     bool jumpPressed;
     bool goDownDown;
-    int 
+    int terrainSelected;
 };

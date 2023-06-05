@@ -1,6 +1,5 @@
 #pragma once
 
-#include "Settings.h"
 #include "UIObject.h"
 #include "Text.h"
 #include "Image.h"
@@ -18,4 +17,6 @@ private:
     LevelScene &m_levelScene;
     Text *m_fireflyCount;
     Text *m_livesCount;
+    Text *m_selectedBlock;
+    Image *m_blockImage;
 };
