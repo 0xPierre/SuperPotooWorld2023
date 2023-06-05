@@ -1,3 +1,5 @@
 - auto detection des lvls
 - Add animation walking
 - Add lives
+- ajout d'un bouton retour en arrièer sur la liste des niveaux
+- menu creative
