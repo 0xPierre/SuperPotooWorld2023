@@ -1,5 +1,6 @@
 #include "Settings.h"
 #include "LevelScene.h"
+#include "StaticMap.h"
 #include "TitleScene.h"
 
 //#define FHD
@@ -103,8 +104,9 @@ int main(int argc, char *argv[])
     Scene *scene = nullptr;
     bool quitGame = false;
     GameState state = GameState::MAIN_MENU;
-    const std::vector<LevelData> levels(LevelData::Init());
+    std::vector<LevelData> levels(LevelData::Init());
     int levelID = 0;
+    bool isCreative = false;
 
 #ifdef SKIP_MENU
     state = GameState::LEVEL;
@@ -121,6 +123,11 @@ int main(int argc, char *argv[])
         case GameState::LEVEL:
             assert(0 <= levelID && levelID < levels.size());
             scene = new LevelScene(renderer, time, levels[levelID]);
+
+            // When creative mode has been selected
+            if (isCreative) {
+                ((LevelScene *)scene)->SetCreative(true);
+            }
             break;
 
         case GameState::MAIN_MENU:
@@ -137,6 +144,7 @@ int main(int argc, char *argv[])
 
             // Met à jour la scène
             bool quit = scene->Update();
+            
 
             if (scene->GetInputManager().GetApplication().quitPressed)
             {
@@ -168,6 +176,8 @@ int main(int argc, char *argv[])
         case GameState::MAIN_MENU:
         default:
             levelID = ((TitleScene *)scene)->GetLevelID();
+            // Used to selected creative mode on next loop
+            isCreative = ((TitleScene*)scene)->IsCreative();
 ;
             if (levelID == TitleState::RETURN)
                 state = GameState::MAIN_MENU;

@@ -16,6 +16,13 @@ namespace CreativeSelectionNS
         virtual void OnPress()
         {
             m_titleScene.SetLevelID(m_levelID);
+
+            // When a level is selected the creative mode is selected
+            if (m_levelID != TitleState::RETURN)
+                m_titleScene.SetCreative(true);
+            else
+                m_titleScene.SetCreative(false);
+
             m_titleScene.Quit();
         }
 
