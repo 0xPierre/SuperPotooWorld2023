@@ -50,6 +50,7 @@ private:
     int m_lifeCount;
     int m_heartCount;
     int m_fireflyCount;
+    double m_livesTimeMemory;
 };
 
 

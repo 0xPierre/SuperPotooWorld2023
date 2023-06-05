@@ -1,1 +1,3 @@
 - auto detection des lvls
+- Add animation walking
+- Add lives

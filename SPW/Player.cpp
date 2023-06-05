@@ -4,6 +4,7 @@
 #include "Collectable.h"
 #include "Enemy.h"
 #include "Graphics.h"
+#include <time.h>
 
 Player::Player(Scene &scene) :
     GameBody(scene, Layer::PLAYER), m_animator(),
@@ -93,7 +94,6 @@ void Player::Update()
         m_jump = true;
 
     m_hDirection = controls.hAxis;
-    // printf("%d\n", m_hDirection);
 }
 
 void Player::Render()
@@ -374,11 +374,22 @@ void Player::AddHeart()
 void Player::Damage()
 {
     // Méthode appelée par un ennemi qui touche le joueur
-    Kill();
+
+    time_t now = time(NULL);
+    if (now - m_livesTimeMemory > 2)
+    {
+        m_lifeCount--;
+        m_livesTimeMemory = now;
+    }
+    if (m_lifeCount <= 0)
+    {
+        Kill();
+    }
 }
 
 void Player::Kill()
 {
+    m_lifeCount = 5;
     m_scene.Respawn();
 }
 

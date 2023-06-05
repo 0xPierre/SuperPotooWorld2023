@@ -17,4 +17,5 @@ public:
 private:
     LevelScene &m_levelScene;
     Text *m_fireflyCount;
+    Text *m_livesCount;
 };
