@@ -36,6 +36,15 @@ Player::Player(Scene &scene) :
     fallingAnim->SetCycleCount(-1);
     fallingAnim->SetCycleTime(0.2f);
 
+    // Animation "RunningForward"
+    part = atlas->GetPart("Running");
+    AssertNew(part);
+    RE_TexAnim* runninForwardgAnim = new RE_TexAnim(
+        m_animator, "RunningForward", part
+    );
+    runninForwardgAnim->SetCycleCount(-1);
+    runninForwardgAnim->SetCycleTime(0.2f);
+
     // Couleur des colliders en debug
     m_debugColor.r = 255;
     m_debugColor.g = 0;
@@ -84,6 +93,7 @@ void Player::Update()
         m_jump = true;
 
     m_hDirection = controls.hAxis;
+    // printf("%d\n", m_hDirection);
 }
 
 void Player::Render()
@@ -119,7 +129,7 @@ void Player::FixedUpdate()
 
     // Réveille les corps autour du joueur
     WakeUpSurroundings();
-
+    
     // Tue le joueur s'il tombe dans un trou
     if (position.y < -2.0f)
     {
@@ -163,13 +173,23 @@ void Player::FixedUpdate()
     // Détermine l'état du joueur et change l'animation si nécessaire
 
     // TODO : Ajouter la gestion des animations Idle et Falling
+    // printf("POSITION %f\n", position.x);
+    // printf("mem %f\n",  abs(position.x - m_positionMemory));
 
     if (m_onGround)
     {
-        if (m_state != State::IDLE)
+        if (m_state != State::IDLE && m_hDirection == 0.0f)
         {
             m_state = State::IDLE;
             m_animator.PlayAnimation("Idle");
+        }
+        else if (m_state != State::RUNNING && m_hDirection == 1.0f)
+        {
+            if (m_facingRight)
+            {
+                m_state = State::RUNNING;
+                m_animator.PlayAnimation("RunningForward");   
+            }
         }
     }
     else
