@@ -205,9 +205,9 @@ void Player::FixedUpdate()
     velocity.x = PE_Clamp(velocity.x, -maxHSpeed, maxHSpeed);
 
     // TODO : Ajouter un jump avec une vitesse au choix*
-    if (m_jump) {
+    if (m_jump && m_onGround) {
         m_jump = false;
-        velocity.y = 15.0f;
+        velocity.y = 20.0f;
     }
 
     if (m_bounce)
