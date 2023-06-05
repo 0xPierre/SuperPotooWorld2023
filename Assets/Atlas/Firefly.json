@@ -1,0 +1,12 @@
+{
+    "texture": "Firefly.png",
+    "geometry": {
+        "rowCount": 2,
+        "colCount": 4,
+        "width": 80,
+        "height": 80
+    },
+    "parts": [
+        {"name": "Firefly", "frames": [0,1,2,3,4,5,6,7]}
+    ]
+}

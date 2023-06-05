@@ -1,0 +1,12 @@
+{
+    "texture": "Logo.png",
+    "geometry": {
+        "rowCount": 1,
+        "colCount": 1,
+        "width": 617,
+        "height": 317
+    },
+    "parts": [
+        {"name": "Logo", "frames": [0]}
+    ]
+}

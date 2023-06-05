@@ -1,0 +1,1 @@
+- auto detection des lvls

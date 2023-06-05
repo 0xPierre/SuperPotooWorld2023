@@ -1,0 +1,16 @@
+{
+    "texture": "UI.png",
+    "geometry": {
+        "rowCount": 3,
+        "colCount": 4,
+        "width": 80,
+        "height": 80,
+        "border": 5
+    },
+    "parts": [
+        {"name": "Firefly",     "frames": [0]},
+        {"name": "Life",        "frames": [1]},
+        {"name": "Heart",       "frames": [2]},
+        {"name": "Button",      "frames": [4,5,6,7]}
+    ]
+}

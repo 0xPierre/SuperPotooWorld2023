@@ -1,0 +1,14 @@
+{
+    "texture": "Enemy.png",
+    "geometry": {
+        "rowCount": 1,
+        "colCount": 5,
+        "width": 80,
+        "height": 80
+    },
+    "parts": [
+        {"name": "NutIdle", "frames": [0]},
+        {"name": "NutSpinning", "frames": [0,1,2,3]},
+        {"name": "NutDying", "frames": [4]}
+    ]
+}
