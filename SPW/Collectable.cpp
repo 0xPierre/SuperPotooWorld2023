@@ -13,3 +13,7 @@ Collectable::~Collectable()
 void Collectable::Collect(GameBody *collector)
 {
 }
+
+void Collectable::CreativeRemove()
+{
+}

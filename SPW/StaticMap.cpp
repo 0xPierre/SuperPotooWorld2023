@@ -67,18 +67,23 @@ void StaticMap::SetTile(int x, int y, Tile::Type type)
 }
 
 
-void StaticMap::RemoveTile(int x, int y)
+bool StaticMap::RemoveTile(int x, int y, Tile& tile)
 {
     if (x < 0 || x >= m_width || y < 0 || y >= m_height)
     {
         // Disable this assert because user can place Tile outside the map in creative mode
         //assert(false);
-        return;
+        return false;
     }
 
-    Tile &tile = m_tiles[x][y];
+    tile = m_tiles[x][y];
+    printf("%d %d\n", m_tiles[x][y].type, tile.type);
     tile.partIdx = 0;
     tile.type = Tile::Type::EMPTY;
+
+    m_tiles[x][y] = tile;
+
+    return true;
 }
 
 void StaticMap::InitTiles()

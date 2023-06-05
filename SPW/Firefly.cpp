@@ -90,3 +90,9 @@ void Firefly::Collect(GameBody * collector)
     SetEnabled(false);
     player->AddFirefly(1);
 }
+
+void Firefly::CreativeRemove()
+{
+    SetToRespawn(true);
+	SetEnabled(false);
+}

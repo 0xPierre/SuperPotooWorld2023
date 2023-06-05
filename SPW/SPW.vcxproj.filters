@@ -188,6 +188,9 @@
     <ClCompile Include="CreativeSelection.cpp">
       <Filter>Fichiers sources\GameObject\UI\Title</Filter>
     </ClCompile>
+    <ClCompile Include="Creative.cpp">
+      <Filter>Fichiers sources\Utils</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Settings.h">
@@ -324,6 +327,9 @@
     </ClInclude>
     <ClInclude Include="CreativeSelection.h">
       <Filter>Fichiers sources\GameObject\UI\Title</Filter>
+    </ClInclude>
+    <ClInclude Include="Creative.h">
+      <Filter>Fichiers sources\Utils</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
