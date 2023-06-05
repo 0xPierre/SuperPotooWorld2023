@@ -169,6 +169,7 @@
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="Firefly.cpp" />
+    <ClCompile Include="CreativeSelection.cpp" />
     <ClCompile Include="StartScreen.cpp" />
     <ClCompile Include="StaticMap.cpp" />
     <ClCompile Include="Text.cpp" />
@@ -196,6 +197,7 @@
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="Graphics.h" />
     <ClInclude Include="Firefly.h" />
+    <ClInclude Include="CreativeSelection.h" />
     <ClInclude Include="Heart.h" />
     <ClInclude Include="Image.h" />
     <ClInclude Include="InputGroup.h" />

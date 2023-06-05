@@ -1,14 +1,14 @@
-#include "LevelSelection.h"
+#include "CreativeSelection.h"
 #include "TitleScene.h"
 #include "Button.h"
 #include "Text.h"
 
-namespace LevelSelectionNS
+namespace CreativeSelectionNS
 {
-    class SelectionListener : public ButtonListener
+    class CreativeListener : public ButtonListener
     {
     public:
-        SelectionListener(TitleScene &scene, int levelID) :
+        CreativeListener(TitleScene& scene, int levelID) :
             m_titleScene(scene), m_levelID(levelID)
         {
         }
@@ -20,12 +20,12 @@ namespace LevelSelectionNS
         }
 
     private:
-        TitleScene &m_titleScene;
+        TitleScene& m_titleScene;
         int m_levelID;
     };
 }
 
-LevelSelection::LevelSelection(TitleScene &scene) :
+CreativeSelection::CreativeSelection(TitleScene& scene) :
     UIObject(scene)
 {
     float buttonH = 55.0f;
@@ -39,13 +39,13 @@ LevelSelection::LevelSelection(TitleScene &scene) :
     m_rect.offsetMin.Set(-0.5f * panelW, -0.5f * panelH);
     m_rect.offsetMax.Set(+0.5f * panelW, +0.5f * panelH);
 
-    AssetManager &assets = scene.GetAssetManager();
-    RE_Atlas *atlas = assets.GetAtlas(AtlasID::UI);
+    AssetManager& assets = scene.GetAssetManager();
+    RE_Atlas* atlas = assets.GetAtlas(AtlasID::UI);
     AssertNew(atlas);
 
     // Création du titre
-    TTF_Font *font = assets.GetFont(FontID::LARGE);
-    Text *title = new Text(scene, u8"Sélection du niveau", font, assets.GetColor(ColorID::NORMAL));
+    TTF_Font* font = assets.GetFont(FontID::LARGE);
+    Text* title = new Text(scene, u8"Mode créatif", font, assets.GetColor(ColorID::NORMAL));
     title->GetLocalRect().anchorMin.Set(0.0f, 0.0f);
     title->GetLocalRect().anchorMax.Set(1.0f, 0.0f);
     title->GetLocalRect().offsetMin.Set(0.0f, 0);
@@ -54,28 +54,28 @@ LevelSelection::LevelSelection(TitleScene &scene) :
     title->SetParent(this);
 
     // Création des boutons
-    RE_AtlasPart *buttonPart = atlas->GetPart("Button");
+    RE_AtlasPart* buttonPart = atlas->GetPart("Button");
     AssertNew(buttonPart);
     SDL_Color colorUp = assets.GetColor(ColorID::NORMAL);
     SDL_Color colorHover = assets.GetColor(ColorID::BLACK);
     SDL_Color colorDown = assets.GetColor(ColorID::NORMAL);
     font = assets.GetFont(FontID::NORMAL);
 
-    const std::vector<LevelData> &levels = scene.GetLevels();
+    const std::vector<LevelData>& levels = scene.GetLevels();
 
     float curY = topSkip;
     for (int i = 0; i < levels.size(); i++, curY += buttonH + sep)
     {
-        Button *button = new Button(scene, buttonPart);
+        Button* button = new Button(scene, buttonPart);
         button->GetLocalRect().anchorMin.Set(0.0f, 0.0f);
         button->GetLocalRect().anchorMax.Set(1.0f, 0.0f);
         button->GetLocalRect().offsetMin.Set(0.0f, curY);
         button->GetLocalRect().offsetMax.Set(0.0f, curY + buttonH);
         button->SetParent(this);
         button->SetBorders(new UIBorders(25, 25, 25, 25));
-        button->SetListener(new LevelSelectionNS::SelectionListener(scene, i));
+        button->SetListener(new CreativeSelectionNS::CreativeListener(scene, i));
 
-        Text *buttonLabel = new Text(scene, levels[i].name, font, colorUp);
+        Text* buttonLabel = new Text(scene, levels[i].name, font, colorUp);
         button->SetText(buttonLabel, Button::State::UP);
 
         buttonLabel = new Text(scene, levels[i].name, font, colorHover);
@@ -86,18 +86,18 @@ LevelSelection::LevelSelection(TitleScene &scene) :
     }
 
     // Add a return/cancel button
-    Button *button = new Button(scene, buttonPart);
+    Button* button = new Button(scene, buttonPart);
     button->GetLocalRect().anchorMin.Set(0.0f, 0.0f);
     button->GetLocalRect().anchorMax.Set(1.0f, 0.0f);
     button->GetLocalRect().offsetMin.Set(0.0f, curY);
     button->GetLocalRect().offsetMax.Set(0.0f, curY + buttonH);
     button->SetParent(this);
     button->SetBorders(new UIBorders(25, 25, 25, 25));
-    
-    // We set levelId to TitleState::RETURN.
-    button->SetListener(new LevelSelectionNS::SelectionListener(scene, TitleState::RETURN));
 
-    Text *buttonLabel = new Text(scene, u8"Retour", font, colorUp);
+    // We set levelId to TitleState::RETURN.
+    button->SetListener(new CreativeSelectionNS::CreativeListener(scene, TitleState::RETURN));
+
+    Text* buttonLabel = new Text(scene, u8"Retour", font, colorUp);
     button->SetText(buttonLabel, Button::State::UP);
 
     buttonLabel = new Text(scene, u8"Retour", font, colorHover);
