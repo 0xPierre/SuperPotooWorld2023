@@ -4,7 +4,7 @@
 
 //#define FHD
 //#define FULLSCREEN
-#define SKIP_MENU
+//#define SKIP_MENU
 #define DEFAUT_LEVEL 0
 
 #ifdef FHD
@@ -168,11 +168,11 @@ int main(int argc, char *argv[])
         case GameState::MAIN_MENU:
         default:
             levelID = ((TitleScene *)scene)->GetLevelID();
-            if (levelID < 0)
-            {
-                quitGame = true;
-            }
-            state = GameState::LEVEL;
+
+            if (levelID == -1)
+                state = GameState::MAIN_MENU;
+            else
+                state = GameState::LEVEL;
             break;
         }
 

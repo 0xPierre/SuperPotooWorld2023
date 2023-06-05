@@ -84,4 +84,25 @@ LevelSelection::LevelSelection(TitleScene &scene) :
         buttonLabel = new Text(scene, levels[i].name, font, colorDown);
         button->SetText(buttonLabel, Button::State::DOWN);
     }
+
+    // Add a return/cancel button
+    Button *button = new Button(scene, buttonPart);
+    button->GetLocalRect().anchorMin.Set(0.0f, 0.0f);
+    button->GetLocalRect().anchorMax.Set(1.0f, 0.0f);
+    button->GetLocalRect().offsetMin.Set(0.0f, curY);
+    button->GetLocalRect().offsetMax.Set(0.0f, curY + buttonH);
+    button->SetParent(this);
+    button->SetBorders(new UIBorders(25, 25, 25, 25));
+    
+    // We set levelId to -1.
+    button->SetListener(new LevelSelectionNS::SelectionListener(scene, -1));
+
+    Text *buttonLabel = new Text(scene, u8"Retour", font, colorUp);
+    button->SetText(buttonLabel, Button::State::UP);
+
+    buttonLabel = new Text(scene, u8"Retour", font, colorHover);
+    button->SetText(buttonLabel, Button::State::HOVER);
+
+    buttonLabel = new Text(scene, u8"Retour", font, colorDown);
+    button->SetText(buttonLabel, Button::State::DOWN);
 }
