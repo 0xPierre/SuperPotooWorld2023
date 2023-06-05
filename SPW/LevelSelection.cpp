@@ -28,6 +28,7 @@ namespace LevelSelectionNS
 LevelSelection::LevelSelection(TitleScene &scene) :
     UIObject(scene)
 {
+    scene.SetCreative(false);
     float buttonH = 55.0f;
     float topSkip = 100.0f;
     float sep = 10.0f;

@@ -4,6 +4,8 @@
 #include "Collectable.h"
 #include "Enemy.h"
 #include "Graphics.h"
+#include "LevelParser.h"
+#include "LevelScene.h"
 #include <time.h>
 
 Player::Player(Scene &scene) :
@@ -15,14 +17,14 @@ Player::Player(Scene &scene) :
 
     SetToRespawn(true);
 
-    AssetManager &assetsManager = scene.GetAssetManager();
-    RE_Atlas *atlas = assetsManager.GetAtlas(AtlasID::PLAYER);
-    RE_AtlasPart *part = nullptr;
+    AssetManager& assetsManager = scene.GetAssetManager();
+    RE_Atlas* atlas = assetsManager.GetAtlas(AtlasID::PLAYER);
+    RE_AtlasPart* part = nullptr;
 
     // Animation "Idle"
     part = atlas->GetPart("Idle");
     AssertNew(part);
-    RE_TexAnim *idleAnim = new RE_TexAnim(
+    RE_TexAnim* idleAnim = new RE_TexAnim(
         m_animator, "Idle", part
     );
     idleAnim->SetCycleCount(0);
@@ -62,13 +64,13 @@ void Player::Start()
     m_animator.PlayAnimation("Idle");
 
     // Crée le corps
-    PE_World &world = m_scene.GetWorld();
+    PE_World& world = m_scene.GetWorld();
     PE_BodyDef bodyDef;
     bodyDef.type = PE_BodyType::DYNAMIC;
     bodyDef.position = GetStartPosition() + PE_Vec2(0.5f, 0.0f);
-    bodyDef.name = (char *)"Player";
+    bodyDef.name = (char*)"Player";
     bodyDef.damping.SetZero();
-    PE_Body *body = world.CreateBody(bodyDef);
+    PE_Body* body = world.CreateBody(bodyDef);
     SetBody(body);
 
     // Création du collider
@@ -79,21 +81,36 @@ void Player::Start()
     colliderDef.friction = 1.0f;
     colliderDef.filter.categoryBits = CATEGORY_PLAYER;
     colliderDef.shape = &capsule;
-    PE_Collider *collider = body->CreateCollider(colliderDef);
+    PE_Collider* collider = body->CreateCollider(colliderDef);
 }
 
 void Player::Update()
 {
-    ControlsInput &controls = m_scene.GetInputManager().GetControls();
+    ControlsInput& controls = m_scene.GetInputManager().GetControls();
 
     // Sauvegarde les contrôles du joueur pour modifier
     // sa physique au prochain FixedUpdate()
-    
-	// TODO : Mettre à jour l'état du joueur en fonction des contrôles de jump
+
+    // TODO : Mettre à jour l'état du joueur en fonction des contrôles de jump
     if (controls.jumpPressed)
         m_jump = true;
 
     m_hDirection = controls.hAxis;
+
+    LevelScene* levelScene = dynamic_cast<LevelScene*>(&m_scene);
+    MouseInput& mouse = m_scene.GetInputManager().GetMouse();
+    PE_Vec2 Pos;
+
+    if (mouse.leftReleased && levelScene->IsCreative())
+    {
+        m_scene.GetActiveCamera()->ViewToWorld((int)mouse.viewPos.x, (int)mouse.viewPos.y, Pos);
+        levelScene->GetMap()->SetTile(Pos.x, Pos.y, Tile::Type::WOOD);
+    }
+    if (mouse.rightReleased && levelScene->IsCreative()) {
+        m_scene.GetActiveCamera()->ViewToWorld((int)mouse.viewPos.x, (int)mouse.viewPos.y, Pos);
+        levelScene->GetMap()->RemoveTile(Pos.x, Pos.y);
+    }
+    //printf("%f %f\n", Pos.x, Pos.y);
 }
 
 void Player::Render()

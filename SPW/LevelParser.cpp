@@ -148,6 +148,7 @@ void LevelParser::InitScene(LevelScene &scene) const
 {
     // Crée la TileMap
     StaticMap *map = new StaticMap(scene, m_width, m_height);
+    scene.SetMap(map);
 
     for (int x = 0; x < m_width; ++x)
     {

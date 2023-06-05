@@ -3,6 +3,7 @@
 #include "MainCamera.h"
 #include "DebugCamera.h"
 #include "Background.h"
+#include "StaticMap.h"
 
 LevelScene::LevelScene(SDL_Renderer *renderer, RE_Timer &mainTime, const LevelData &level) :
     Scene(renderer, mainTime, level.themeID), m_paused(false),
@@ -13,9 +14,11 @@ LevelScene::LevelScene(SDL_Renderer *renderer, RE_Timer &mainTime, const LevelDa
     m_inputManager.GetControls().SetEnabled(true);
     m_inputManager.GetDebug().SetEnabled(true);
 
-    // Crée le Player
+    // Crée le 
+
     m_player = new Player(*this);
     m_player->SetName("Player");
+    m_map = NULL;
 
     // Crée les caméras
     m_cameras[0] = new MainCamera(*this);
@@ -26,6 +29,8 @@ LevelScene::LevelScene(SDL_Renderer *renderer, RE_Timer &mainTime, const LevelDa
     LevelParser parser(level.path);
     parser.InitScene(*this);
 
+    this->GetMap()->SetTile(5, 4, Tile::Type::WOOD);
+    this->GetMap()->InitTiles();
     // Canvas
     m_canvas = new LevelCanvas(*this);
 

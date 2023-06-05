@@ -19,12 +19,25 @@ public:
     const std::vector<LevelData> &GetLevels() const;
     void SetLevelID(int levelID);
     int GetLevelID() const;
+    void SetCreative(bool isCreative);
+    bool IsCreative() const;
 
 private:
     TitleCanvas *m_canvas;
     const std::vector<LevelData> &m_levels;
     int m_selectedLevel;
+    int m_is_creative;
 };
+
+inline void TitleScene::SetCreative(bool isCreative)
+{
+	m_is_creative = isCreative;
+}
+
+inline bool TitleScene::IsCreative() const
+{
+	return m_is_creative;
+}
 
 inline const std::vector<LevelData>& TitleScene::GetLevels() const
 {

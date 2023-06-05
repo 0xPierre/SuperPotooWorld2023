@@ -11,6 +11,7 @@ public:
     ~LevelParser();
 
     void InitScene(LevelScene &scene) const;
+    void AddTile(LevelScene &scene, int x, int y);
 
 private:
     char **m_matrix;

@@ -23,10 +23,13 @@ public:
     virtual ~StaticMap();
 
     void SetTile(int x, int y, Tile::Type type);
+    void RemoveTile(int x, int y);
     void InitTiles();
 
     virtual void Render() override;
     virtual void Start() override;
+    // NOT REALLY USED FOR THE MOMENT, MAYBE ONE DAY IT WILL WORKS
+    virtual void AddNewTileToCollide(int x, int y);
     virtual void OnCollisionStay(GameCollision &collision) override;
 
 private:

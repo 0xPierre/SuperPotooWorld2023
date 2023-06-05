@@ -5,6 +5,7 @@
 #include "Player.h"
 #include "LevelCanvas.h"
 #include "LevelData.h"
+#include "StaticMap.h"
 
 class LevelScene : public Scene
 {
@@ -21,17 +22,45 @@ public:
     bool IsPaused() const;
     void SetPaused(bool isPaused);
 
+    StaticMap* GetMap() const;
+    void SetMap(StaticMap *map);
+
+    bool IsCreative() const;
+    void SetCreative(bool isCreative);
+
 private:
     std::array<Camera *, 2> m_cameras;
     Player *m_player;
+    bool m_is_creative;
     LevelCanvas *m_canvas;
 
     PE_Vec2 m_startPos;
+    StaticMap* m_map;
 
     bool m_paused;
     int m_camIndex;
     float m_stepDelay;
 };
+
+inline StaticMap* LevelScene::GetMap() const
+{
+	return m_map;
+}
+
+inline void LevelScene::SetMap(StaticMap* map)
+{
+	m_map = map;
+}
+
+inline bool LevelScene::IsCreative() const
+{
+    return m_is_creative;
+}
+
+inline void LevelScene::SetCreative(bool isCreative)
+{
+	m_is_creative = isCreative;
+}
 
 inline Player *LevelScene::GetPlayer() const
 {
