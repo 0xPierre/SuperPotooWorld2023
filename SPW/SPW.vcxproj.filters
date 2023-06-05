@@ -1,0 +1,323 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Fichiers de ressources">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Fichiers sources">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="Fichiers sources\GameObject">
+      <UniqueIdentifier>{5bea2b69-95cb-43dd-98ec-f6cf9faa3947}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fichiers sources\Input">
+      <UniqueIdentifier>{f2bc65aa-eb3e-442c-8d22-4adbb1648525}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fichiers sources\GameObject\UI">
+      <UniqueIdentifier>{38f75102-bed8-42c0-95c6-800fbfb7e3d9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fichiers sources\Scene">
+      <UniqueIdentifier>{fcdd2ade-2cfc-4caa-becb-912c993b5c70}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fichiers sources\GameObject\GameBody">
+      <UniqueIdentifier>{dee18917-812a-4c27-a585-f2af7a6d96c1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fichiers sources\GameObject\GameBody\Camera">
+      <UniqueIdentifier>{d3ab6d77-405a-48e0-acc6-f9d43e8ac51d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fichiers sources\GameObject\GameBody\Terrain">
+      <UniqueIdentifier>{3a4454b7-8694-4f1b-84f5-80462451b241}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fichiers sources\GameObject\GameBody\Collectable">
+      <UniqueIdentifier>{205a7cf0-95c3-4f4e-a8fb-009d4f1143af}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fichiers sources\GameObject\GameBody\Enemy">
+      <UniqueIdentifier>{f6dee8d2-9e04-4e1b-b009-8a8959503f01}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fichiers sources\GameObject\UI\Base">
+      <UniqueIdentifier>{da23b8f9-40b3-44e6-89af-83e86ae3f006}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fichiers sources\GameObject\UI\Level">
+      <UniqueIdentifier>{08a6ef7b-f2a8-428e-8a53-55862febc77b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fichiers sources\GameObject\UI\Title">
+      <UniqueIdentifier>{e645b1e3-6249-40c7-93b0-133391080234}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fichiers sources\Utils">
+      <UniqueIdentifier>{dc51217e-0b45-4967-85bb-a1aa61b0faed}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fichiers sources\Assets">
+      <UniqueIdentifier>{9f7f57a1-c744-4a8c-95c1-ca3cf54b6c7c}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Main.cpp">
+      <Filter>Fichiers sources</Filter>
+    </ClCompile>
+    <ClCompile Include="ApplicationInput.cpp">
+      <Filter>Fichiers sources\Input</Filter>
+    </ClCompile>
+    <ClCompile Include="ControlsInput.cpp">
+      <Filter>Fichiers sources\Input</Filter>
+    </ClCompile>
+    <ClCompile Include="InputGroup.cpp">
+      <Filter>Fichiers sources\Input</Filter>
+    </ClCompile>
+    <ClCompile Include="InputManager.cpp">
+      <Filter>Fichiers sources\Input</Filter>
+    </ClCompile>
+    <ClCompile Include="MouseInput.cpp">
+      <Filter>Fichiers sources\Input</Filter>
+    </ClCompile>
+    <ClCompile Include="GameObject.cpp">
+      <Filter>Fichiers sources\GameObject</Filter>
+    </ClCompile>
+    <ClCompile Include="TitleCamera.cpp">
+      <Filter>Fichiers sources\GameObject\GameBody\Camera</Filter>
+    </ClCompile>
+    <ClCompile Include="Camera.cpp">
+      <Filter>Fichiers sources\GameObject\GameBody\Camera</Filter>
+    </ClCompile>
+    <ClCompile Include="LevelScene.cpp">
+      <Filter>Fichiers sources\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene.cpp">
+      <Filter>Fichiers sources\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="MainCamera.cpp">
+      <Filter>Fichiers sources\GameObject\GameBody\Camera</Filter>
+    </ClCompile>
+    <ClCompile Include="GameBody.cpp">
+      <Filter>Fichiers sources\GameObject\GameBody</Filter>
+    </ClCompile>
+    <ClCompile Include="Player.cpp">
+      <Filter>Fichiers sources\GameObject\GameBody</Filter>
+    </ClCompile>
+    <ClCompile Include="Background.cpp">
+      <Filter>Fichiers sources\GameObject</Filter>
+    </ClCompile>
+    <ClCompile Include="StaticMap.cpp">
+      <Filter>Fichiers sources\GameObject\GameBody\Terrain</Filter>
+    </ClCompile>
+    <ClCompile Include="Brick.cpp">
+      <Filter>Fichiers sources\GameObject\GameBody\Terrain</Filter>
+    </ClCompile>
+    <ClCompile Include="Collectable.cpp">
+      <Filter>Fichiers sources\GameObject\GameBody\Collectable</Filter>
+    </ClCompile>
+    <ClCompile Include="DebugInput.cpp">
+      <Filter>Fichiers sources\Input</Filter>
+    </ClCompile>
+    <ClCompile Include="Checkpoint.cpp">
+      <Filter>Fichiers sources\GameObject\GameBody\Terrain</Filter>
+    </ClCompile>
+    <ClCompile Include="Nut.cpp">
+      <Filter>Fichiers sources\GameObject\GameBody\Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="Enemy.cpp">
+      <Filter>Fichiers sources\GameObject\GameBody\Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="LevelEnd.cpp">
+      <Filter>Fichiers sources\GameObject\GameBody\Terrain</Filter>
+    </ClCompile>
+    <ClCompile Include="Bonus.cpp">
+      <Filter>Fichiers sources\GameObject\GameBody\Terrain</Filter>
+    </ClCompile>
+    <ClCompile Include="Heart.cpp">
+      <Filter>Fichiers sources\GameObject\GameBody\Collectable</Filter>
+    </ClCompile>
+    <ClCompile Include="Button.cpp">
+      <Filter>Fichiers sources\GameObject\UI\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="Text.cpp">
+      <Filter>Fichiers sources\GameObject\UI\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="UIObject.cpp">
+      <Filter>Fichiers sources\GameObject\UI\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="LevelCanvas.cpp">
+      <Filter>Fichiers sources\GameObject\UI\Level</Filter>
+    </ClCompile>
+    <ClCompile Include="PauseMenu.cpp">
+      <Filter>Fichiers sources\GameObject\UI\Level</Filter>
+    </ClCompile>
+    <ClCompile Include="TitleCanvas.cpp">
+      <Filter>Fichiers sources\GameObject\UI\Title</Filter>
+    </ClCompile>
+    <ClCompile Include="Image.cpp">
+      <Filter>Fichiers sources\GameObject\UI\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="LevelHeader.cpp">
+      <Filter>Fichiers sources\GameObject\UI\Level</Filter>
+    </ClCompile>
+    <ClCompile Include="DebugCamera.cpp">
+      <Filter>Fichiers sources\GameObject\GameBody\Camera</Filter>
+    </ClCompile>
+    <ClCompile Include="TitleScene.cpp">
+      <Filter>Fichiers sources\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics.cpp">
+      <Filter>Fichiers sources\Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="ObjectManager.cpp">
+      <Filter>Fichiers sources\Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="AssetManager.cpp">
+      <Filter>Fichiers sources\Assets</Filter>
+    </ClCompile>
+    <ClCompile Include="LevelParser.cpp">
+      <Filter>Fichiers sources\Assets</Filter>
+    </ClCompile>
+    <ClCompile Include="Utils.cpp">
+      <Filter>Fichiers sources\Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="StartScreen.cpp">
+      <Filter>Fichiers sources\GameObject\UI\Title</Filter>
+    </ClCompile>
+    <ClCompile Include="LevelSelection.cpp">
+      <Filter>Fichiers sources\GameObject\UI\Title</Filter>
+    </ClCompile>
+    <ClCompile Include="LevelData.cpp">
+      <Filter>Fichiers sources\Assets</Filter>
+    </ClCompile>
+    <ClCompile Include="Firefly.cpp">
+      <Filter>Fichiers sources\GameObject\GameBody\Collectable</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Settings.h">
+      <Filter>Fichiers sources</Filter>
+    </ClInclude>
+    <ClInclude Include="GameObject.h">
+      <Filter>Fichiers sources\GameObject</Filter>
+    </ClInclude>
+    <ClInclude Include="InputGroup.h">
+      <Filter>Fichiers sources\Input</Filter>
+    </ClInclude>
+    <ClInclude Include="ApplicationInput.h">
+      <Filter>Fichiers sources\Input</Filter>
+    </ClInclude>
+    <ClInclude Include="InputManager.h">
+      <Filter>Fichiers sources\Input</Filter>
+    </ClInclude>
+    <ClInclude Include="MouseInput.h">
+      <Filter>Fichiers sources\Input</Filter>
+    </ClInclude>
+    <ClInclude Include="ControlsInput.h">
+      <Filter>Fichiers sources\Input</Filter>
+    </ClInclude>
+    <ClInclude Include="TitleCamera.h">
+      <Filter>Fichiers sources\GameObject\GameBody\Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="Camera.h">
+      <Filter>Fichiers sources\GameObject\GameBody\Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="LevelScene.h">
+      <Filter>Fichiers sources\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene.h">
+      <Filter>Fichiers sources\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="MainCamera.h">
+      <Filter>Fichiers sources\GameObject\GameBody\Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="GameBody.h">
+      <Filter>Fichiers sources\GameObject\GameBody</Filter>
+    </ClInclude>
+    <ClInclude Include="Player.h">
+      <Filter>Fichiers sources\GameObject\GameBody</Filter>
+    </ClInclude>
+    <ClInclude Include="Background.h">
+      <Filter>Fichiers sources\GameObject</Filter>
+    </ClInclude>
+    <ClInclude Include="StaticMap.h">
+      <Filter>Fichiers sources\GameObject\GameBody\Terrain</Filter>
+    </ClInclude>
+    <ClInclude Include="Brick.h">
+      <Filter>Fichiers sources\GameObject\GameBody\Terrain</Filter>
+    </ClInclude>
+    <ClInclude Include="Collectable.h">
+      <Filter>Fichiers sources\GameObject\GameBody\Collectable</Filter>
+    </ClInclude>
+    <ClInclude Include="DebugInput.h">
+      <Filter>Fichiers sources\Input</Filter>
+    </ClInclude>
+    <ClInclude Include="Checkpoint.h">
+      <Filter>Fichiers sources\GameObject\GameBody\Terrain</Filter>
+    </ClInclude>
+    <ClInclude Include="Nut.h">
+      <Filter>Fichiers sources\GameObject\GameBody\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="Enemy.h">
+      <Filter>Fichiers sources\GameObject\GameBody\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="LevelEnd.h">
+      <Filter>Fichiers sources\GameObject\GameBody\Terrain</Filter>
+    </ClInclude>
+    <ClInclude Include="Bonus.h">
+      <Filter>Fichiers sources\GameObject\GameBody\Terrain</Filter>
+    </ClInclude>
+    <ClInclude Include="Heart.h">
+      <Filter>Fichiers sources\GameObject\GameBody\Collectable</Filter>
+    </ClInclude>
+    <ClInclude Include="UIObject.h">
+      <Filter>Fichiers sources\GameObject\UI\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="Button.h">
+      <Filter>Fichiers sources\GameObject\UI\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="Text.h">
+      <Filter>Fichiers sources\GameObject\UI\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="LevelCanvas.h">
+      <Filter>Fichiers sources\GameObject\UI\Level</Filter>
+    </ClInclude>
+    <ClInclude Include="PauseMenu.h">
+      <Filter>Fichiers sources\GameObject\UI\Level</Filter>
+    </ClInclude>
+    <ClInclude Include="TitleCanvas.h">
+      <Filter>Fichiers sources\GameObject\UI\Title</Filter>
+    </ClInclude>
+    <ClInclude Include="Image.h">
+      <Filter>Fichiers sources\GameObject\UI\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="LevelHeader.h">
+      <Filter>Fichiers sources\GameObject\UI\Level</Filter>
+    </ClInclude>
+    <ClInclude Include="DebugCamera.h">
+      <Filter>Fichiers sources\GameObject\GameBody\Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="TitleScene.h">
+      <Filter>Fichiers sources\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics.h">
+      <Filter>Fichiers sources\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="ObjectManager.h">
+      <Filter>Fichiers sources\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="LevelParser.h">
+      <Filter>Fichiers sources\Assets</Filter>
+    </ClInclude>
+    <ClInclude Include="AssetManager.h">
+      <Filter>Fichiers sources\Assets</Filter>
+    </ClInclude>
+    <ClInclude Include="Utils.h">
+      <Filter>Fichiers sources\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="StartScreen.h">
+      <Filter>Fichiers sources\GameObject\UI\Title</Filter>
+    </ClInclude>
+    <ClInclude Include="LevelSelection.h">
+      <Filter>Fichiers sources\GameObject\UI\Title</Filter>
+    </ClInclude>
+    <ClInclude Include="LevelData.h">
+      <Filter>Fichiers sources\Assets</Filter>
+    </ClInclude>
+    <ClInclude Include="Firefly.h">
+      <Filter>Fichiers sources\GameObject\GameBody\Collectable</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>
