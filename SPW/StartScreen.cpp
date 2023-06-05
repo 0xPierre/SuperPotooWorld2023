@@ -77,13 +77,14 @@ StartScreen::StartScreen(TitleScene &scene) :
     SDL_Color colorDown = assets.GetColor(ColorID::NORMAL);
     TTF_Font *font = assets.GetFont(FontID::NORMAL);
 
-    const std::string texts[2] = { u8"Démarrer", u8"Quitter" };
-    ButtonListener *listener[2] = { 0 };
+    const std::string texts[3] = { u8"Jouer", u8"Mode créatif", u8"Quitter"};
+    ButtonListener *listener[3] = { 0 };
     listener[0] = new StartScreenNS::SelectionListener(scene, *this);
-    listener[1] = new StartScreenNS::QuitListener(scene);
+    listener[1] = new StartScreenNS::SelectionListener(scene, *this);
+    listener[2] = new StartScreenNS::QuitListener(scene);
 
     float curY = topSkip;
-    for (int i = 0; i < 2; i++, curY += buttonH + sep)
+    for (int i = 0; i < 3; i++, curY += buttonH + sep)
     {
         Button *button = new Button(scene, buttonPart);
         button->GetLocalRect().anchorMin.Set(0.0f, 0.0f);

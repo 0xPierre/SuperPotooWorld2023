@@ -5,6 +5,11 @@
 #include "TitleCanvas.h"
 #include "LevelData.h"
 
+enum TitleState {
+    QUIT = -1,
+    RETURN = -2,
+};
+
 class TitleScene : public Scene
 {
 public:

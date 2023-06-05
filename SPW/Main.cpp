@@ -168,9 +168,11 @@ int main(int argc, char *argv[])
         case GameState::MAIN_MENU:
         default:
             levelID = ((TitleScene *)scene)->GetLevelID();
-
-            if (levelID == -1)
+;
+            if (levelID == TitleState::RETURN)
                 state = GameState::MAIN_MENU;
+            else if (levelID == TitleState::QUIT)
+                quitGame = true;
             else
                 state = GameState::LEVEL;
             break;

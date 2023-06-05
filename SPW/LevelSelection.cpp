@@ -94,8 +94,8 @@ LevelSelection::LevelSelection(TitleScene &scene) :
     button->SetParent(this);
     button->SetBorders(new UIBorders(25, 25, 25, 25));
     
-    // We set levelId to -1.
-    button->SetListener(new LevelSelectionNS::SelectionListener(scene, -1));
+    // We set levelId to TitleState::RETURN.
+    button->SetListener(new LevelSelectionNS::SelectionListener(scene, TitleState::RETURN));
 
     Text *buttonLabel = new Text(scene, u8"Retour", font, colorUp);
     button->SetText(buttonLabel, Button::State::UP);
