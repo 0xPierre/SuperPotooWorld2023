@@ -23,7 +23,7 @@ public:
     virtual ~StaticMap();
 
     void SetTile(int x, int y, Tile::Type type);
-    void RemoveTile(int x, int y);
+    bool RemoveTile(int x, int y, Tile &tile);
     void InitTiles();
 
     virtual void Render() override;

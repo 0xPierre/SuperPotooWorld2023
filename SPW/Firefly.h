@@ -13,6 +13,7 @@ public:
     virtual void Render() override;
     virtual void OnRespawn() override;
     virtual void Collect(GameBody* collector) override;
+    void CreativeRemove() override;
 
 private:
     RE_Animator m_animator;

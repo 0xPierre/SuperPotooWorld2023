@@ -10,4 +10,6 @@ public:
     virtual ~Collectable();
 
     virtual void Collect(GameBody *collector);
+
+    virtual void CreativeRemove();
 };

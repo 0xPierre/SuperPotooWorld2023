@@ -119,6 +119,9 @@ public:
     );
     GameBody *OverlapArea(const PE_AABB &area, int maskBits);
 
+    ObjectManager &GetObjectManager();
+
+
 protected:
     friend class GameObject;
 

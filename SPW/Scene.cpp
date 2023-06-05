@@ -339,3 +339,8 @@ GameBody *Scene::OverlapArea(const PE_AABB &area, int maskBits)
     m_world.QueryAABB(callback, area);
     return callback.m_gameBody;
 }
+
+ObjectManager& Scene::GetObjectManager()
+{
+	return m_objectManager;
+}

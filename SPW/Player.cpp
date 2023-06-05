@@ -6,6 +6,7 @@
 #include "Graphics.h"
 #include "LevelParser.h"
 #include "LevelScene.h"
+#include "StaticMap.h"
 #include <time.h>
 
 Player::Player(Scene &scene) :
@@ -97,7 +98,7 @@ void Player::Update()
 
     m_hDirection = controls.hAxis;
 
-    LevelScene* levelScene = dynamic_cast<LevelScene*>(&m_scene);
+    LevelScene* levelScene = (LevelScene* )(&m_scene);
     MouseInput& mouse = m_scene.GetInputManager().GetMouse();
     PE_Vec2 Pos;
 
@@ -108,7 +109,18 @@ void Player::Update()
     }
     if (mouse.rightReleased && levelScene->IsCreative()) {
         m_scene.GetActiveCamera()->ViewToWorld((int)mouse.viewPos.x, (int)mouse.viewPos.y, Pos);
-        levelScene->GetMap()->RemoveTile(Pos.x, Pos.y);
+
+       /* m_scene.GetObjectManager().PrintObjects();
+        m_scene.GetObjectManager().;*/
+
+        Tile removedTile;
+        if (levelScene->GetMap()->RemoveTile(Pos.x, Pos.y, removedTile))
+        {
+            // Remove collision for tile
+            /*if (removedTile.collider != nullptr)
+				levelScene->GetMap()->GetBody()->RemoveCollider(removedTile.collider);*/
+        }
+
     }
     //printf("%f %f\n", Pos.x, Pos.y);
 }
@@ -247,13 +259,13 @@ void Player::FixedUpdate()
         velocity.y = 20.0f;
     }
 
+    // TODO : Rebond sur les ennemis
     if (m_bounce)
     {
         m_bounce = false;
         velocity.y = 15.0f;
     }
 
-    // TODO : Rebond sur les ennemis
 
     // Remarques :
     // Le facteur de gravité peut être modifié avec l'instruction
