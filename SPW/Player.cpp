@@ -137,6 +137,11 @@ void Player::Render()
     SDL_RendererFlip flip = SDL_FLIP_NONE;
     SDL_FRect rect = { 0 };
 
+    if (m_hDirection == -1.0f)
+    {
+        flip = SDL_FLIP_HORIZONTAL;
+    }
+
     // TODO : Trouver les bonnes diemnsions de l'affichage en fonction du sprite (dimensions en tuiles)
     rect.h = 1.375f * scale; // Le sprite fait 1.375 tuile de haut
     rect.w = 1.000f * scale; // Le sprite fait 1 tuile de large
