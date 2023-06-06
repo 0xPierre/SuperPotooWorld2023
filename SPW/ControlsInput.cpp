@@ -157,11 +157,7 @@ void ControlsInput::OnEventProcess(SDL_Event evt)
         case SDL_SCANCODE_9:
             terrainSelected = (int)Tile::Type::GENTLE_SLOPE_L2;
             groundSelected = 16;
-            break;
-
-            terrainSelected = (int)Tile::Type::GENTLE_SLOPE_R1;
-            groundSelected = 12;
-            break;            
+            break;        
 
         default:
             //terrainSelected = (int)Tile::Type::WOOD;

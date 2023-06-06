@@ -16,8 +16,6 @@ LevelScene::LevelScene(SDL_Renderer *renderer, RE_Timer &mainTime, LevelData &le
 
     SetCreative(isCreative);
 
-    // Crée le 
-
     m_player = new Player(*this);
     m_player->SetName("Player");
     m_map = NULL;

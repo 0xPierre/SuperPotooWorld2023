@@ -49,6 +49,52 @@ void Creative::RemoveItem() {
 	bool removed = m_levelScene->GetMap()->RemoveTile(Pos.x, Pos.y, tile);
 }
 
+char GetCharFromTile(Tile tile)
+{
+	char c = '.';
+	switch (tile.type)
+	{
+	case Tile::Type::GROUND:
+		switch (tile.partIdx)
+		{
+		case 4:
+			return '#';
+		case 1:
+			return '_';
+		case 17:
+			return '[';
+		case 14:
+			return ']';
+		case 0:
+			return '{';
+		case 2:
+			return '}';
+		}
+
+		break;
+	case Tile::Type::WOOD:
+		return 'W';
+	case Tile::Type::ONE_WAY:
+		return '=';
+	case Tile::Type::SPIKE:
+		return 'A';
+	case Tile::Type::STEEP_SLOPE_L:
+		return '\\';
+	case Tile::Type::STEEP_SLOPE_R:
+		return '/';
+	case Tile::Type::GENTLE_SLOPE_L1:
+		return 'L';
+	case Tile::Type::GENTLE_SLOPE_L2:
+		return 'l';
+	case Tile::Type::GENTLE_SLOPE_R1:
+		return 'r';
+	case Tile::Type::GENTLE_SLOPE_R2:
+		return 'R';
+	}
+
+	return c;
+}
+
 void Creative::SaveInFile() {
 	printf("%s\n", m_levelScene->GetLevelData()->path.c_str());
 	FILE* levelFile = fopen("../assets/Level/aa.txt", "wb");
@@ -57,14 +103,22 @@ void Creative::SaveInFile() {
 	const int width = m_levelScene->GetMap()->GetMaxWidth();
 	const int height = m_levelScene->GetMap()->GetHeight();
 
-
-
-	for (int y = 0; y < height; y++)
+	
+	Tile** tiles = m_levelScene->GetMap()->GetTiles();
+	
+	char c;
+	for (int y = height; y >= 0; y--)
 	{
 		for (int x = 0; x < width; x++)
 		{
+			char c = GetCharFromTile(tiles[x][y]);
+			fputc(c, levelFile);
 		}
+		fputc('\n', levelFile);
 	}
+
+
+	fclose(levelFile);
 
 	printf("Update level\n");
 }
