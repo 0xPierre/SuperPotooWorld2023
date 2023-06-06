@@ -290,7 +290,7 @@ void StaticMap::Start()
 
                 vertices[0] = position + PE_Vec2(0.1f, 0.0f);
                 vertices[1] = position + PE_Vec2(0.9f, 0.0f);
-                vertices[2] = position + PE_Vec2(0.9f, 0.9f);
+                vertices[2] = position + PE_Vec2(0.5f, 0.8f);
                 polygon.SetVertices(vertices, 3);
                 break;
 
@@ -394,7 +394,7 @@ void StaticMap::OnCollisionStay(GameCollision& collision)
 	// On vérifie que la collision concerne une pique
 	if (collision.collider->GetUserData().id != 1)
 		return;
-
+	
 	if (collision.otherCollider->CheckCategory(CATEGORY_PLAYER))
 	{
 		Player* player = dynamic_cast<Player*>(collision.gameBody);
@@ -403,7 +403,7 @@ void StaticMap::OnCollisionStay(GameCollision& collision)
 			assert(false);
 			return;
 		}
-
+	
 		player->Damage();
 		player->Bounce();
 	}

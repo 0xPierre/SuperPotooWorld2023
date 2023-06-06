@@ -183,13 +183,13 @@ void Player::FixedUpdate()
     // Lance deux rayons vers le bas ayant pour origines
     // les coins gauche et droit du bas du collider du joueur
     // Ces deux rayons sont dessinés en jaune dans DrawGizmos()
-    PE_Vec2 originL = position + PE_Vec2(-0.35f, 0.0f);
-    PE_Vec2 originR = position + PE_Vec2(+0.35f, 0.0f);
+    PE_Vec2 originL = position + PE_Vec2(-0.35f, +0.5f);
+    PE_Vec2 originR = position + PE_Vec2(+0.35f, +0.5f);
 
     // Les rayons ne touchent que des colliders solides (non trigger)
     // ayant la catégorie FILTER_TERRAIN
-    RayHit hitL = m_scene.RayCast(originL, PE_Vec2::down, 0.1f, CATEGORY_TERRAIN, true);
-    RayHit hitR = m_scene.RayCast(originR, PE_Vec2::down, 0.1f, CATEGORY_TERRAIN, true);
+    RayHit hitL = m_scene.RayCast(originL, PE_Vec2::down, 0.6f, CATEGORY_TERRAIN, true);
+    RayHit hitR = m_scene.RayCast(originR, PE_Vec2::down, 0.6f, CATEGORY_TERRAIN, true);
 
     if (hitL.collider != NULL)
     {
@@ -208,20 +208,10 @@ void Player::FixedUpdate()
     // Slop detection
 
     bool m_onSlope = false;
-    // Les rayons ne touchent que des colliders solides (non trigger)
-    // ayant la catégorie FILTER_TERRAIN
-    hitL = m_scene.RayCast(originL, PE_Vec2::down, 1.0f, CATEGORY_TERRAIN, true);
-    hitR = m_scene.RayCast(originR, PE_Vec2::down, 1.0f, CATEGORY_TERRAIN, true);
-
-    if (hitL.collider != NULL)
-    {
-        // Le rayon gauche à touché le sol
-        m_onSlope = m_onGround ? false : true;
-    }
-    if (hitR.collider != NULL)
-    {
-        // Le rayon droit à touché le sol
-        m_onSlope = m_onSlope = m_onGround ? false : true;
+    
+    if ((hitL.hitPoint.x > 0.0f && hitR.hitPoint.x == 0.0f) ||
+        (hitL.hitPoint.x == 0.0f && hitR.hitPoint.x > 0.0f)) {
+        m_onSlope = true;
     }
     
     //--------------------------------------------------------------------------
@@ -293,13 +283,12 @@ void Player::FixedUpdate()
     velocity.x = PE_Clamp(velocity.x, -maxHSpeed, maxHSpeed);
 
     // TODO : Ajouter un jump avec une vitesse au choix*
-    if (m_jump) {
-        if (m_onGround || m_onSlope)
-        {
+    if (m_jump && m_onGround) {
+        if (m_onGround) {
             m_jump = false;
             velocity.y = 20.0f;   
         }
-    }
+    } else if (!m_onGround) m_jump = false;
 
     // TODO : Rebond sur les ennemis
     if (m_bounce)
@@ -313,7 +302,7 @@ void Player::FixedUpdate()
         m_fallTimeMemory = time(NULL);
     }
     
-    if (m_onSlope && m_hDirection == 0.0f) {
+    if (m_onSlope == true && m_hDirection == 0) {
         if (maxSpeedCoef > 0)
         {
             velocity.x -= 0.3f * (time(NULL) - m_fallTimeMemory);
@@ -323,7 +312,6 @@ void Player::FixedUpdate()
             velocity.x += 0.3f * (time(NULL) - m_fallTimeMemory);
         }
     }
-
 
     // Remarques :
     // Le facteur de gravité peut être modifié avec l'instruction
