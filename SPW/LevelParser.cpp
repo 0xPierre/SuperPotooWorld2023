@@ -158,7 +158,7 @@ void LevelParser::InitScene(LevelScene &scene) const
             switch (m_matrix[x][y])
             {
             case '#':
-                map->SetTile(x, y, Tile::Type::GROUND);
+                map->SetTile(x, y, Tile::Type::GROUND, 4);
                 break;
             case 'W':
                 map->SetTile(x, y, Tile::Type::WOOD);
@@ -170,22 +170,22 @@ void LevelParser::InitScene(LevelScene &scene) const
                 map->SetTile(x, y, Tile::Type::SPIKE);
                 break;
             case '\\':
-                map->SetTile(x, y, Tile::Type::STEEP_SLOPE_L);
+                map->SetTile(x, y, Tile::Type::STEEP_SLOPE_L, 9);
                 break;
             case '/':
-                map->SetTile(x, y, Tile::Type::STEEP_SLOPE_R);
+                map->SetTile(x, y, Tile::Type::STEEP_SLOPE_R, 10);
                 break;
-            case 'L':
-                map->SetTile(x, y, Tile::Type::GENTLE_SLOPE_L1);
+            case 'L': 
+                map->SetTile(x, y, Tile::Type::GENTLE_SLOPE_L1, 12);
                 break;
             case 'l':
-                map->SetTile(x, y, Tile::Type::GENTLE_SLOPE_L2);
+                map->SetTile(x, y, Tile::Type::GENTLE_SLOPE_L2, 13);
                 break;
             case 'r':
-                map->SetTile(x, y, Tile::Type::GENTLE_SLOPE_R1);
+                map->SetTile(x, y, Tile::Type::GENTLE_SLOPE_R1, 16);
                 break;
             case 'R':
-                map->SetTile(x, y, Tile::Type::GENTLE_SLOPE_R2);
+                map->SetTile(x, y, Tile::Type::GENTLE_SLOPE_R2, 15);
                 break;
             case 'S':
             {
