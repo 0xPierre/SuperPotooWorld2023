@@ -44,6 +44,7 @@ private:
     float m_hDirection;
     bool m_jump;
     bool m_onGround;
+    bool m_onSlope;
     bool m_bounce;
     bool m_facingRight;
 

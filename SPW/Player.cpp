@@ -200,17 +200,35 @@ void Player::FixedUpdate()
         m_onGround = true;
         gndNormal = hitR.normal;
     }
+    
+    //--------------------------------------------------------------------------
+    // Slop detection
 
+    bool m_onSlope = false;
+    // Les rayons ne touchent que des colliders solides (non trigger)
+    // ayant la catégorie FILTER_TERRAIN
+    hitL = m_scene.RayCast(originL, PE_Vec2::down, 1.0f, CATEGORY_TERRAIN, true);
+    hitR = m_scene.RayCast(originR, PE_Vec2::down, 1.0f, CATEGORY_TERRAIN, true);
+
+    if (hitL.collider != NULL)
+    {
+        // Le rayon gauche à touché le sol
+        m_onSlope = m_onGround ? false : true;
+    }
+    if (hitR.collider != NULL)
+    {
+        // Le rayon droit à touché le sol
+        m_onSlope = m_onSlope = m_onGround ? false : true;
+    }
+    
     //--------------------------------------------------------------------------
     // Etat du joueur
 
     // Détermine l'état du joueur et change l'animation si nécessaire
 
     // TODO : Ajouter la gestion des animations Idle et Falling
-    // printf("POSITION %f\n", position.x);
-    // printf("mem %f\n",  abs(position.x - m_positionMemory));
 
-    if (m_onGround)
+    if (m_onGround || m_onSlope)
     {
         if (m_state != State::IDLE && m_hDirection == 0.0f)
         {
@@ -253,15 +271,24 @@ void Player::FixedUpdate()
     PE_Vec2 force = (20.0f * m_hDirection) * direction;
     body->ApplyForce(force);
 
+    float coef = (position.y - force.y) / (position.x - force.x); // Directing coefficient
 
     // TODO : Limiter la vitesse horizontale
     float maxHSpeed = 9.0f;
+
+    if (m_onSlope) {
+        maxHSpeed = coef < 0 ? 2.0f : 30.0f;
+    }
+    
     velocity.x = PE_Clamp(velocity.x, -maxHSpeed, maxHSpeed);
 
     // TODO : Ajouter un jump avec une vitesse au choix*
-    if (m_jump && m_onGround) {
-        m_jump = false;
-        velocity.y = 20.0f;
+    if (m_jump) {
+        if (m_onGround || m_onSlope)
+        {
+            m_jump = false;
+            velocity.y = 20.0f;   
+        }
     }
 
     // TODO : Rebond sur les ennemis

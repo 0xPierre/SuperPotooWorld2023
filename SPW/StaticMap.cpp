@@ -150,13 +150,19 @@ void StaticMap::Render()
             switch (tile.type)
             {
             case Tile::Type::GROUND:
+                m_terrainPart->RenderCopyF(tile.partIdx, &dst, RE_Anchor::SOUTH_WEST);
+                break;
             case Tile::Type::STEEP_SLOPE_L:
             case Tile::Type::STEEP_SLOPE_R:
             case Tile::Type::GENTLE_SLOPE_L1:
             case Tile::Type::GENTLE_SLOPE_L2:
+                m_terrainPart->RenderCopyF(9, &dst, RE_Anchor::SOUTH_WEST);
+                break;
             case Tile::Type::GENTLE_SLOPE_R1:
+                m_terrainPart->RenderCopyF(9, &dst, RE_Anchor::SOUTH_WEST);
+                break;
             case Tile::Type::GENTLE_SLOPE_R2:
-                m_terrainPart->RenderCopyF(tile.partIdx, &dst, RE_Anchor::SOUTH_WEST);
+                m_terrainPart->RenderCopyF(10, &dst, RE_Anchor::SOUTH_WEST);
                 break;
             case Tile::Type::WOOD:
                 m_woodPart->RenderCopyF(0, &dst, RE_Anchor::SOUTH_WEST);
@@ -223,12 +229,25 @@ void StaticMap::Start()
                 polygon.SetAsBox(PE_AABB(position, position + PE_Vec2(1.0f, 1.0f)));
                 break;
 
+            case Tile::Type::GENTLE_SLOPE_R1:
+                vertices[0] = position + PE_Vec2(0.0f, 0.0f);
+                vertices[1] = position + PE_Vec2(1.0f, 0.0f);
+                vertices[2] = position + PE_Vec2(0.0f, 1.0f);
+                polygon.SetVertices(vertices, 3);
+                break;
+            case Tile::Type::GENTLE_SLOPE_R2:  
+                vertices[0] = position + PE_Vec2(0.0f, 0.0f);
+                vertices[1] = position + PE_Vec2(1.0f, 0.0f);
+                vertices[2] = position + PE_Vec2(1.0f, 1.0f);
+                polygon.SetVertices(vertices, 3);
+                break;
+
             case Tile::Type::SPIKE:
                 colliderDef.userData.id = 1;
 
                 vertices[0] = position + PE_Vec2(0.1f, 0.0f);
                 vertices[1] = position + PE_Vec2(0.9f, 0.0f);
-                vertices[2] = position + PE_Vec2(0.5f, 0.8f);
+                vertices[2] = position + PE_Vec2(0.9f, 0.9f);
                 polygon.SetVertices(vertices, 3);
                 break;
 
