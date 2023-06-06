@@ -82,10 +82,10 @@ LevelHeader::LevelHeader(LevelScene &scene):
     // Creative selected block
 
     // lives counter
-    m_selectedBlock = new Text(scene, "Block Selected :", font, color);
+    m_selectedBlock = new Text(scene, "Item Selected :", font, color);
     m_selectedBlock->SetAnchor(RE_Anchor::WEST);
-    m_selectedBlock->GetLocalRect().anchorMin.Set(-1.0f, 12.0f);
-    m_selectedBlock->GetLocalRect().anchorMax.Set(-1.0f, 12.0f);
+    m_selectedBlock->GetLocalRect().anchorMin.Set(-1.0f, 11.8f);
+    m_selectedBlock->GetLocalRect().anchorMax.Set(-1.0f, 11.8f);
     m_selectedBlock->GetLocalRect().offsetMin.Set(currLivesX, currLivesY);
     m_selectedBlock->GetLocalRect().offsetMax.Set(currLivesX + numW, currLivesY + imgH);
     m_selectedBlock->SetParent(this);
@@ -127,8 +127,8 @@ void LevelHeader::Update()
     AssertNew(m_block);
 
     m_blockImage = new Image(m_levelScene, m_block, 0);
-    m_blockImage->GetLocalRect().anchorMin.Set(2.0f, 12.0f);
-    m_blockImage->GetLocalRect().anchorMax.Set(2.0f, 12.0f);
+    m_blockImage->GetLocalRect().anchorMin.Set(2.0f, 11.9f);
+    m_blockImage->GetLocalRect().anchorMax.Set(2.0f, 11.9f);
     m_blockImage->GetLocalRect().offsetMin.Set(currLivesX, currLivesY);
     m_blockImage->GetLocalRect().offsetMax.Set(currLivesX + imgW, currLivesY + imgH);
     m_blockImage->SetParent(this);
