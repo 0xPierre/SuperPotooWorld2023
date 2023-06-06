@@ -272,13 +272,20 @@ void Player::FixedUpdate()
     PE_Vec2 force = (20.0f * m_hDirection) * direction;
     body->ApplyForce(force);
 
-    float coef = (position.y - force.y) / (position.x - force.x); // Directing coefficient
-
+    float maxSpeedCoef = (velocity.y - force.y) / (velocity.x - force.x); // Directing coefficient
+    
     // TODO : Limiter la vitesse horizontale
     float maxHSpeed = 9.0f;
 
     if (m_onSlope) {
-        maxHSpeed = coef < 0 ? 2.0f : 30.0f;
+        if (m_hDirection == 1.0f)
+        {
+            maxHSpeed = maxSpeedCoef < 0 ? 2.0f : 30.0f;
+        }
+        else if (m_hDirection == -1.0f)
+        {
+            maxHSpeed = maxSpeedCoef > 0 ? 2.0f : 30.0f;
+        }
     }
     
     velocity.x = PE_Clamp(velocity.x, -maxHSpeed, maxHSpeed);
