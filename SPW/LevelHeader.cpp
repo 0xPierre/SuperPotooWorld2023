@@ -165,8 +165,8 @@ void LevelHeader::Update()
     m_blockImage = new Image(m_levelScene, m_block, terrainGroundId);
     if (terrain == "LevelEnd")
     {
-        m_blockImage->GetLocalRect().anchorMin.Set(2.0f, 11.9f);
-        m_blockImage->GetLocalRect().anchorMax.Set(2.0f, 11.9f);
+        m_blockImage->GetLocalRect().anchorMin.Set(2.0f, 10.8f);
+        m_blockImage->GetLocalRect().anchorMax.Set(2.2f, 11.9f);
     }
     else
     {
