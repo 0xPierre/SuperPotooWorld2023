@@ -5,7 +5,7 @@
 #include "Background.h"
 #include "StaticMap.h"
 
-LevelScene::LevelScene(SDL_Renderer *renderer, RE_Timer &mainTime, const LevelData &level) :
+LevelScene::LevelScene(SDL_Renderer *renderer, RE_Timer &mainTime, LevelData &level, bool isCreative) :
     Scene(renderer, mainTime, level.themeID), m_paused(false),
     m_camIndex(0), m_cameras(), m_stepDelay(0.0f)
 {
@@ -13,6 +13,8 @@ LevelScene::LevelScene(SDL_Renderer *renderer, RE_Timer &mainTime, const LevelDa
     m_inputManager.GetMouse().SetEnabled(true);
     m_inputManager.GetControls().SetEnabled(true);
     m_inputManager.GetDebug().SetEnabled(true);
+
+    SetCreative(isCreative);
 
     // Crée le 
 
@@ -28,6 +30,9 @@ LevelScene::LevelScene(SDL_Renderer *renderer, RE_Timer &mainTime, const LevelDa
     // Parse le niveau
     LevelParser parser(level.path);
     parser.InitScene(*this);
+
+    m_levelData = &level;
+
 
     this->GetMap()->SetTile(5, 4, Tile::Type::WOOD);
     this->GetMap()->InitTiles();

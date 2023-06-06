@@ -122,12 +122,8 @@ int main(int argc, char *argv[])
         {
         case GameState::LEVEL:
             assert(0 <= levelID && levelID < levels.size());
-            scene = new LevelScene(renderer, time, levels[levelID]);
+            scene = new LevelScene(renderer, time, levels[levelID], isCreative);
 
-            // When creative mode has been selected
-            if (isCreative) {
-                ((LevelScene *)scene)->SetCreative(true);
-            }
             break;
 
         case GameState::MAIN_MENU:

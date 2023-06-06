@@ -1,8 +1,11 @@
 #include "ControlsInput.h"
+#include "StaticMap.h"
 
 ControlsInput::ControlsInput() :
     InputGroup(), hAxis(0.0f),
-    jumpDown(false), jumpPressed(false), goDownDown(false)
+    jumpDown(false), jumpPressed(false), goDownDown(false),
+    terrainSelected((int)Tile::Type::WOOD),
+    groundSelected(4)
 {
 }
 
@@ -87,7 +90,7 @@ void ControlsInput::OnEventProcess(SDL_Event evt)
 
         if (evt.key.repeat)
             break;
-
+        
         switch (scanCode)
         {
         case SDL_SCANCODE_RIGHT:
@@ -113,25 +116,112 @@ void ControlsInput::OnEventProcess(SDL_Event evt)
             break;
 
         case SDL_SCANCODE_1:
-            terrainSelected = 1;
+            terrainSelected = (int)Tile::Type::WOOD;
             break;
             
         case SDL_SCANCODE_2:
-            terrainSelected = 2;
-            break;
-            
-        case SDL_SCANCODE_3:
-            terrainSelected = 3;
-            break;
-            
-        case SDL_SCANCODE_4:
-            terrainSelected = 4;
+            terrainSelected = (int)Tile::Type::GROUND;
+            groundSelected = 1;
             break;
 
+        case SDL_SCANCODE_3:
+            terrainSelected = (int)Tile::Type::GROUND;
+            groundSelected = 4;
+            break;
+
+        case SDL_SCANCODE_4:
+            terrainSelected = (int)Tile::Type::GROUND;
+            groundSelected = 0;
+            break;
+
+        case SDL_SCANCODE_5:
+            terrainSelected = (int)Tile::Type::GROUND;
+            groundSelected = 2;
+            break;
+
+        case SDL_SCANCODE_6:
+            terrainSelected = (int)Tile::Type::STEEP_SLOPE_R;
+            groundSelected = 9;
+            break;
+
+        case SDL_SCANCODE_7:
+            terrainSelected = (int)Tile::Type::STEEP_SLOPE_L;
+            groundSelected = 10;
+            break;
+
+        case SDL_SCANCODE_8:
+            terrainSelected = (int)Tile::Type::GENTLE_SLOPE_L1;
+            groundSelected = 15;
+            break;
+
+        case SDL_SCANCODE_9:
+            terrainSelected = (int)Tile::Type::GENTLE_SLOPE_L2;
+            groundSelected = 16;
+            break;
+
+            terrainSelected = (int)Tile::Type::GENTLE_SLOPE_R1;
+            groundSelected = 12;
+            break;            
+
         default:
-            terrainSelected = 1;
+            //terrainSelected = (int)Tile::Type::WOOD;
             break;
         }
+
+        switch (evt.key.keysym.sym)
+        {
+            case SDLK_a:
+                terrainSelected = (int)Tile::Type::GENTLE_SLOPE_R1;
+                groundSelected = 12;
+				break;
+            case SDLK_z:
+                terrainSelected = (int)Tile::Type::GENTLE_SLOPE_R2;
+                groundSelected = 13;
+                break;
+            case SDLK_e:
+                terrainSelected = (int)Tile::Type::GROUND;
+                groundSelected = 14;
+                break;
+            case SDLK_r:
+                terrainSelected = (int)Tile::Type::GROUND;
+                groundSelected = 17;
+                break;
+            case SDLK_t:
+                terrainSelected = (int)Tile::Type::GROUND;
+                groundSelected = 8;
+                break;
+            case SDLK_y:
+                terrainSelected = (int)Tile::Type::GROUND;
+                groundSelected = 11;
+                break;
+            case SDLK_u:
+                terrainSelected = (int)Tile::Type::SPIKE;
+                break;
+            case SDLK_q:
+                terrainSelected = (int)Tile::Type::ONE_WAY;
+                break;
+            case SDLK_s:
+                terrainSelected = (int)Tile::Type::BRICK;
+                break;
+            case SDLK_d:
+                terrainSelected = (int)Tile::Type::BONUSFULL;
+                break;
+            case SDLK_f:
+                terrainSelected = (int)Tile::Type::BONUSEMPTY;
+                break;
+            case SDLK_w:
+                terrainSelected = (int)Tile::Type::MOVINGPLATFORM;
+                break;
+            //case SDLK_d:
+            //    // BRICK
+            //    terrainSelected = (int)Tile::Type::BRICK;
+            //    break;
+            //case SDLK_d:
+            //    // BRICK
+            //    terrainSelected = (int)Tile::Type::BRICK;
+            //    break;
+        }
+
         break;
 
     case SDL_KEYUP:
