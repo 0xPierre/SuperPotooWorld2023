@@ -35,6 +35,7 @@ public:
 
     int GetMaxWidth() const;
     int GetHeight() const;
+    Tile** GetTiles() const;
 
 private:
 
@@ -70,4 +71,9 @@ inline int StaticMap::GetMaxWidth() const
 inline int StaticMap::GetHeight() const
 {
 	return m_height;
+}
+
+inline Tile** StaticMap::GetTiles() const
+{
+	return m_tiles;
 }

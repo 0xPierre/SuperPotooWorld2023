@@ -6,7 +6,7 @@ StaticMap::StaticMap(Scene& scene, int width, int height, bool isCreative) :
 	GameBody(scene, Layer::TERRAIN_BACKGROUND), m_width(width), m_height(height), m_is_creative(isCreative)
 {
 	m_name = "StaticMap";
-	m_max_width = 1000;
+	m_max_width = 100;
 
 	m_tiles = new Tile * [m_max_width];
 	for (int x = 0; x < m_max_width; x++)
@@ -435,3 +435,11 @@ bool StaticMap::IsGround(int x, int y) const
 		return false;
 	}
 }
+
+//char StaticMap::GetTileChar(int x, int y) const
+//{
+//	if (x < 0 || x >= m_max_width || y < 0 || y >= m_height)
+//		return ' ';
+//	else
+//		return m_tiles[x][y].type;
+//}	
