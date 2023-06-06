@@ -122,6 +122,7 @@ void StaticMap::InitTiles()
 			Tile& tile = m_tiles[x][y];
 			Tile::Type type = GetTileType(x, y);
 
+			/*printf("%d %d\n", tile.type, tile.partIdx);
 			switch (type)
 			{
 			case Tile::Type::GROUND:
@@ -138,7 +139,7 @@ void StaticMap::InitTiles()
 			default:
 				tile.partIdx = 0;
 				break;
-			}
+			}*/
 		}
 	}
 }
@@ -271,13 +272,13 @@ void StaticMap::Start()
 				polygon.SetAsBox(PE_AABB(position, position + PE_Vec2(1.0f, 1.0f)));
 				break;
 
-            case Tile::Type::GENTLE_SLOPE_R1:
+            case Tile::Type::STEEP_SLOPE_L:
                 vertices[0] = position + PE_Vec2(0.0f, 0.0f);
                 vertices[1] = position + PE_Vec2(1.0f, 0.0f);
                 vertices[2] = position + PE_Vec2(0.0f, 1.0f);
                 polygon.SetVertices(vertices, 3);
                 break;
-            case Tile::Type::GENTLE_SLOPE_R2:  
+            case Tile::Type::STEEP_SLOPE_R:
                 vertices[0] = position + PE_Vec2(0.0f, 0.0f);
                 vertices[1] = position + PE_Vec2(1.0f, 0.0f);
                 vertices[2] = position + PE_Vec2(1.0f, 1.0f);
