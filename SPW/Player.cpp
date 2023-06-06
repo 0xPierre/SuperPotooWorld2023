@@ -217,7 +217,7 @@ void Player::FixedUpdate()
             m_state = State::IDLE;
             m_animator.PlayAnimation("Idle");
         }
-        else if (m_state != State::RUNNING && m_hDirection == 1.0f)
+        else if (m_state != State::RUNNING && abs(m_hDirection) == 1.0f)
         {
             if (m_facingRight)
             {
