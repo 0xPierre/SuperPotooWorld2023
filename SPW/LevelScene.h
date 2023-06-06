@@ -6,6 +6,7 @@
 #include "LevelCanvas.h"
 #include "LevelData.h"
 #include "StaticMap.h"
+#include "LevelEnd.h"
 
 class LevelScene : public Scene
 {
@@ -30,6 +31,12 @@ public:
 
 	LevelData* GetLevelData() const;
 
+	LevelEnd* GetLevelEnd() const;
+	void SetLevelEnd(LevelEnd* levelEnd);
+
+	PE_Vec2 GetStartingPoint() const;
+	void SetStartingPoint(PE_Vec2 startingPoint);
+
 private:
 	std::array<Camera*, 2> m_cameras;
 	Player* m_player;
@@ -43,6 +50,9 @@ private:
 	bool m_paused;
 	int m_camIndex;
 	float m_stepDelay;
+
+	LevelEnd* m_levelEnd;
+	PE_Vec2 m_startingPoint;
 };
 
 inline LevelData* LevelScene::GetLevelData() const
@@ -79,4 +89,24 @@ inline Player* LevelScene::GetPlayer() const
 inline bool LevelScene::IsPaused() const
 {
 	return m_paused;
+}
+
+inline LevelEnd* LevelScene::GetLevelEnd() const
+{
+	return m_levelEnd;
+}
+
+inline void LevelScene::SetLevelEnd(LevelEnd* levelEnd)
+{
+	m_levelEnd = levelEnd;
+}
+
+inline PE_Vec2 LevelScene::GetStartingPoint() const
+{
+	return m_startingPoint;
+}
+
+inline void LevelScene::SetStartingPoint(PE_Vec2 startingPoint)
+{
+	m_startingPoint = startingPoint;
 }
