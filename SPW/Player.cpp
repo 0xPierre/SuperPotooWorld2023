@@ -8,6 +8,7 @@
 #include "LevelScene.h"
 #include "StaticMap.h"
 #include <time.h>
+#include "Creative.h"
 
 Player::Player(Scene &scene) :
     GameBody(scene, Layer::PLAYER), m_animator(),
@@ -100,29 +101,29 @@ void Player::Update()
 
     LevelScene* levelScene = (LevelScene* )(&m_scene);
     MouseInput& mouse = m_scene.GetInputManager().GetMouse();
-    PE_Vec2 Pos;
+    /*PE_Vec2 Pos;*/
 
+    Creative *creative = new Creative(*levelScene, mouse);
     if (mouse.leftReleased && levelScene->IsCreative())
     {
-        m_scene.GetActiveCamera()->ViewToWorld((int)mouse.viewPos.x, (int)mouse.viewPos.y, Pos);
-        levelScene->GetMap()->SetTile(Pos.x, Pos.y, Tile::Type::WOOD);
+        creative->AddItem((Tile::Type)controls.terrainSelected, controls.groundSelected);
     }
     if (mouse.rightReleased && levelScene->IsCreative()) {
-        m_scene.GetActiveCamera()->ViewToWorld((int)mouse.viewPos.x, (int)mouse.viewPos.y, Pos);
+        creative->RemoveItem();
+        //m_scene.GetActiveCamera()->ViewToWorld((int)mouse.viewPos.x, (int)mouse.viewPos.y, Pos);
 
        /* m_scene.GetObjectManager().PrintObjects();
         m_scene.GetObjectManager().;*/
 
-        Tile removedTile;
-        if (levelScene->GetMap()->RemoveTile(Pos.x, Pos.y, removedTile))
-        {
-            // Remove collision for tile
-            /*if (removedTile.collider != nullptr)
-				levelScene->GetMap()->GetBody()->RemoveCollider(removedTile.collider);*/
-        }
+    //    Tile removedTile;
+    //    if (levelScene->GetMap()->RemoveTile(Pos.x, Pos.y, removedTile))
+    //    {
+    //        // Remove collision for tile
+    //        /*if (removedTile.collider != nullptr)
+				//levelScene->GetMap()->GetBody()->RemoveCollider(removedTile.collider);*/
+    //    }
 
     }
-    //printf("%f %f\n", Pos.x, Pos.y);
 }
 
 void Player::Render()

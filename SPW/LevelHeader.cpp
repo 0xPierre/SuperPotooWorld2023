@@ -111,16 +111,48 @@ void LevelHeader::Update()
     
     // Update creative block
     const char* terrain = "Wood";
-    switch (controls.terrainSelected)
+    int terrainGroundId = 0;
+    switch ((Tile::Type)controls.terrainSelected)
     {
-    case 1:
+    case Tile::Type::WOOD:
         terrain = "Wood";
         break;
-    case 2:
+    case Tile::Type::ONE_WAY:
         terrain = "OneWay";
         break;
-    case 3:
+    case Tile::Type::SPIKE:
         terrain = "Spike";
+        break;
+    case Tile::Type::BRICK:
+        terrain = "Brick";
+        break;
+    case Tile::Type::BONUSFULL:
+        terrain = "BonusFull";
+        break;
+    case Tile::Type::BONUSEMPTY:
+        terrain = "BonusEmpty";
+        break;
+    case Tile::Type::CHECKPOINTFULL:
+        terrain = "CheckPointFull";
+        break;
+    case Tile::Type::CHECKPOINTEMPTY:
+        terrain = "CheckPointEmpty";
+        break;
+    case Tile::Type::LEVELEND:
+        terrain = "LevelEnd";
+        break;
+    case Tile::Type::MOVINGPLATFORM:
+        terrain = "LevelEnd";
+        break;
+    case Tile::Type::GROUND:
+    case Tile::Type::STEEP_SLOPE_L:
+    case Tile::Type::STEEP_SLOPE_R:
+    case Tile::Type::GENTLE_SLOPE_L1:
+    case Tile::Type::GENTLE_SLOPE_L2:
+    case Tile::Type::GENTLE_SLOPE_R1:
+    case Tile::Type::GENTLE_SLOPE_R2:
+        terrain = "Terrain";
+        terrainGroundId = controls.groundSelected;
         break;
     }
 
@@ -129,9 +161,18 @@ void LevelHeader::Update()
     RE_AtlasPart* m_block = atlasCreative->GetPart(terrain);
     AssertNew(m_block);
 
-    m_blockImage = new Image(m_levelScene, m_block, 0);
-    m_blockImage->GetLocalRect().anchorMin.Set(2.0f, 11.9f);
-    m_blockImage->GetLocalRect().anchorMax.Set(2.0f, 11.9f);
+
+    m_blockImage = new Image(m_levelScene, m_block, terrainGroundId);
+    if (terrain == "LevelEnd")
+    {
+        m_blockImage->GetLocalRect().anchorMin.Set(2.0f, 11.9f);
+        m_blockImage->GetLocalRect().anchorMax.Set(2.0f, 11.9f);
+    }
+    else
+    {
+        m_blockImage->GetLocalRect().anchorMin.Set(2.0f, 11.9f);
+        m_blockImage->GetLocalRect().anchorMax.Set(2.0f, 11.9f);
+    }
     m_blockImage->GetLocalRect().offsetMin.Set(currLivesX, currLivesY);
     m_blockImage->GetLocalRect().offsetMax.Set(currLivesX + imgW, currLivesY + imgH);
     m_blockImage->SetParent(this);
