@@ -136,11 +136,13 @@ void Player::Render()
 
     float scale = camera->GetWorldToViewScale();
     SDL_RendererFlip flip = SDL_FLIP_NONE;
+    m_isFlipped = false;
     SDL_FRect rect = { 0 };
 
     if (m_hDirection == -1.0f)
     {
         flip = SDL_FLIP_HORIZONTAL;
+        m_isFlipped = true;
     }
 
     // TODO : Trouver les bonnes diemnsions de l'affichage en fonction du sprite (dimensions en tuiles)
@@ -287,7 +289,7 @@ void Player::FixedUpdate()
             maxHSpeed = maxSpeedCoef > 0 ? 2.0f : 30.0f;
         }
     }
-    
+
     velocity.x = PE_Clamp(velocity.x, -maxHSpeed, maxHSpeed);
 
     // TODO : Ajouter un jump avec une vitesse au choix*
@@ -304,6 +306,22 @@ void Player::FixedUpdate()
     {
         m_bounce = false;
         velocity.y = 15.0f;
+    }
+
+    if (m_onSlope && m_hDirection != 0.0f)
+    {
+        m_fallTimeMemory = time(NULL);
+    }
+    
+    if (m_onSlope && m_hDirection == 0.0f) {
+        if (maxSpeedCoef > 0)
+        {
+            velocity.x -= 0.3f * (time(NULL) - m_fallTimeMemory);
+        }
+        else
+        {
+            velocity.x += 0.3f * (time(NULL) - m_fallTimeMemory);
+        }
     }
 
 
