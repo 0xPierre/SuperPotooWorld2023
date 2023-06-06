@@ -3,6 +3,7 @@
 #include "StaticMap.h"
 #include "Camera.h"
 #include "ControlsInput.h"
+#include "ObjectManager.h"
 
 Creative::Creative(LevelScene& levelScene, MouseInput& mouse)
 {
@@ -13,7 +14,8 @@ Creative::Creative(LevelScene& levelScene, MouseInput& mouse)
 
 void Creative::AddItem(Tile::Type tileType, int groundSelected) {
 	PE_Vec2 Pos;
-	
+	m_levelScene->GetActiveCamera()->ViewToWorld((int)m_mouse->viewPos.x, (int)m_mouse->viewPos.y, Pos);
+
 	switch (tileType)
 	{
 	case Tile::Type::GROUND:
@@ -31,11 +33,22 @@ void Creative::AddItem(Tile::Type tileType, int groundSelected) {
 	case Tile::Type::BONUSEMPTY:
 	case Tile::Type::CHECKPOINTFULL:
 	case Tile::Type::CHECKPOINTEMPTY:
-		m_levelScene->GetActiveCamera()->ViewToWorld((int)m_mouse->viewPos.x, (int)m_mouse->viewPos.y, Pos);
+		
 		m_levelScene->GetMap()->SetTile(Pos.x, Pos.y, tileType, groundSelected);
+		break;
+	case Tile::Type::LEVELEND:
+		// Delete the older Level End
+		m_levelScene->GetLevelEnd()->SetEnabled(false);
+		// Create another one
+		LevelEnd* levelEnd = new LevelEnd(*m_levelScene);
+		levelEnd->SetStartPosition(Pos);
+		m_levelScene->SetLevelEnd(levelEnd);
+		//m_levelScene->GetLevelEnd()->SetStartPosition(Pos);
+		//m_levelScene->GetLevelEnd()->SetToRespawn(true);
+		//m_levelScene->GetLevelEnd()->Start();
+		//m_levelScene->GetLevelEnd()->SetEnabled(true);
+		break;
 	}
-	/*case Tile::Type::LEVELEND:
-		levelEnd *leve*/
 
 	SaveInFile();
 
@@ -47,6 +60,15 @@ void Creative::RemoveItem() {
 	m_levelScene->GetActiveCamera()->ViewToWorld((int)m_mouse->viewPos.x, (int)m_mouse->viewPos.y, Pos);
 	Tile tile;
 	bool removed = m_levelScene->GetMap()->RemoveTile(Pos.x, Pos.y, tile);
+
+	PE_Vec2 PosLevelEnd = m_levelScene->GetLevelEnd()->GetPosition();
+	// No beautiful but it works
+	if (((int)Pos.x == (int)PosLevelEnd.x || (int)Pos.x == ((int)PosLevelEnd.x+1)) && (int)Pos.y == (int)PosLevelEnd.y)
+	{
+		m_levelScene->GetLevelEnd()->SetEnabled(false);
+	}
+
+	SaveInFile();
 }
 
 char GetCharFromTile(Tile tile)
@@ -79,17 +101,17 @@ char GetCharFromTile(Tile tile)
 	case Tile::Type::SPIKE:
 		return 'A';
 	case Tile::Type::STEEP_SLOPE_L:
-		return '\\';
+		return '//';
 	case Tile::Type::STEEP_SLOPE_R:
-		return '/';
+		return '\\';
 	case Tile::Type::GENTLE_SLOPE_L1:
 		return 'L';
 	case Tile::Type::GENTLE_SLOPE_L2:
 		return 'l';
 	case Tile::Type::GENTLE_SLOPE_R1:
-		return 'r';
-	case Tile::Type::GENTLE_SLOPE_R2:
 		return 'R';
+	case Tile::Type::GENTLE_SLOPE_R2:
+		return 'r';
 	}
 
 	return c;
@@ -105,14 +127,28 @@ void Creative::SaveInFile() {
 
 	
 	Tile** tiles = m_levelScene->GetMap()->GetTiles();
-	
+
+	PE_Vec2 level_end = m_levelScene->GetLevelEnd()->GetStartPosition();
+	PE_Vec2 starting_point = m_levelScene->GetStartingPoint();
+	printf("%f %f %f %f\n", level_end.x, level_end.y, starting_point.x, starting_point.y);
+
 	char c;
 	for (int y = height; y >= 0; y--)
 	{
 		for (int x = 0; x < width; x++)
 		{
-			char c = GetCharFromTile(tiles[x][y]);
-			fputc(c, levelFile);
+			if (x == (int)level_end.x && y == (int)level_end.y) {
+				fputc('F', levelFile);
+			}
+			else if (x == (int)starting_point.x && y == (int)starting_point.y)
+			{
+				fputc('S', levelFile);
+			}
+			else
+			{
+				char c = GetCharFromTile(tiles[x][y]);
+				fputc(c, levelFile);
+			}
 		}
 		fputc('\n', levelFile);
 	}

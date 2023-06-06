@@ -104,25 +104,28 @@ void Player::Update()
     /*PE_Vec2 Pos;*/
 
     Creative *creative = new Creative(*levelScene, mouse);
-    if (mouse.leftReleased && levelScene->IsCreative())
+    if (!levelScene->IsPaused())
     {
-        creative->AddItem((Tile::Type)controls.terrainSelected, controls.groundSelected);
-    }
-    if (mouse.rightReleased && levelScene->IsCreative()) {
-        creative->RemoveItem();
-        //m_scene.GetActiveCamera()->ViewToWorld((int)mouse.viewPos.x, (int)mouse.viewPos.y, Pos);
+        if (mouse.leftReleased && levelScene->IsCreative())
+        {
+            creative->AddItem((Tile::Type)controls.terrainSelected, controls.groundSelected);
+        }
+        if (mouse.rightReleased && levelScene->IsCreative()) {
+            creative->RemoveItem();
+            //m_scene.GetActiveCamera()->ViewToWorld((int)mouse.viewPos.x, (int)mouse.viewPos.y, Pos);
 
-       /* m_scene.GetObjectManager().PrintObjects();
-        m_scene.GetObjectManager().;*/
+           /* m_scene.GetObjectManager().PrintObjects();
+            m_scene.GetObjectManager().;*/
 
-    //    Tile removedTile;
-    //    if (levelScene->GetMap()->RemoveTile(Pos.x, Pos.y, removedTile))
-    //    {
-    //        // Remove collision for tile
-    //        /*if (removedTile.collider != nullptr)
-				//levelScene->GetMap()->GetBody()->RemoveCollider(removedTile.collider);*/
-    //    }
+        //    Tile removedTile;
+        //    if (levelScene->GetMap()->RemoveTile(Pos.x, Pos.y, removedTile))
+        //    {
+        //        // Remove collision for tile
+        //        /*if (removedTile.collider != nullptr)
+				    //levelScene->GetMap()->GetBody()->RemoveCollider(removedTile.collider);*/
+        //    }
 
+        }
     }
 }
 

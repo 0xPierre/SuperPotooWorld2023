@@ -191,27 +191,29 @@ void LevelParser::InitScene(LevelScene &scene) const
                 map->SetTile(x, y, Tile::Type::STEEP_SLOPE_R, 10);
                 break;
             case 'L': 
-                map->SetTile(x, y, Tile::Type::GENTLE_SLOPE_L1, 12);
+                map->SetTile(x, y, Tile::Type::GENTLE_SLOPE_R1, 12);
                 break;
             case 'l':
-                map->SetTile(x, y, Tile::Type::GENTLE_SLOPE_L2, 13);
+                map->SetTile(x, y, Tile::Type::GENTLE_SLOPE_R2, 13);
                 break;
             case 'r':
-                map->SetTile(x, y, Tile::Type::GENTLE_SLOPE_R1, 16);
+                map->SetTile(x, y, Tile::Type::GENTLE_SLOPE_L1, 16);
                 break;
             case 'R':
-                map->SetTile(x, y, Tile::Type::GENTLE_SLOPE_R2, 15);
+                map->SetTile(x, y, Tile::Type::GENTLE_SLOPE_L2, 15);
                 break;
             case 'S':
             {
                 Player *player = scene.GetPlayer();
                 player->SetStartPosition(position);
+                scene.SetStartingPoint(position);
                 break;
             }
             case 'F':
             {
                 LevelEnd *levelEnd = new LevelEnd(scene);
                 levelEnd->SetStartPosition(position);
+                scene.SetLevelEnd(levelEnd);
                 break;
             }
             case 'e':

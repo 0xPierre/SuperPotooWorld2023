@@ -206,7 +206,7 @@ void ControlsInput::OnEventProcess(SDL_Event evt)
                 terrainSelected = (int)Tile::Type::BONUSEMPTY;
                 break;
             case SDLK_w:
-                terrainSelected = (int)Tile::Type::MOVINGPLATFORM;
+                terrainSelected = (int)Tile::Type::LEVELEND;
                 break;
             //case SDLK_d:
             //    // BRICK

@@ -32,7 +32,6 @@ LevelScene::LevelScene(SDL_Renderer *renderer, RE_Timer &mainTime, LevelData &le
     m_levelData = &level;
 
 
-    this->GetMap()->SetTile(5, 4, Tile::Type::WOOD);
     this->GetMap()->InitTiles();
     // Canvas
     m_canvas = new LevelCanvas(*this);

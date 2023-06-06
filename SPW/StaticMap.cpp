@@ -50,9 +50,6 @@ StaticMap::StaticMap(Scene& scene, int width, int height, bool isCreative) :
 	m_checkpointEmptyPart = atlas->GetPart("CheckpointEmpty");
 	AssertNew(m_checkpointEmptyPart);
 
-	m_levelEndPart = atlas->GetPart("LevelEnd");
-	AssertNew(m_levelEndPart);
-
 	m_movingPlatformPart = atlas->GetPart("MovingPlatform");
 	AssertNew(m_movingPlatformPart);
 
@@ -209,9 +206,6 @@ void StaticMap::Render()
 				break;
 			case Tile::Type::CHECKPOINTEMPTY:
 				m_checkpointEmptyPart->RenderCopyF(0, &dst, RE_Anchor::SOUTH_WEST);
-				break;
-			case Tile::Type::LEVELEND:
-				m_levelEndPart->RenderCopyF(0, &dst, RE_Anchor::SOUTH_WEST);
 				break;
 			case Tile::Type::MOVINGPLATFORM:
 				m_movingPlatformPart->RenderCopyF(0, &dst, RE_Anchor::SOUTH_WEST);
