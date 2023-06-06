@@ -11,6 +11,7 @@ LevelHeader::LevelHeader(LevelScene &scene):
     AssetManager &assets = scene.GetAssetManager();
     TTF_Font *font = assets.GetFont(FontID::LARGE);
     SDL_Color color = assets.GetColor(ColorID::NORMAL);
+    LevelScene* levelScene = (LevelScene* )(&m_scene);
 
     int w, h;
     TTF_SizeUTF8(font, u8"00", &w, &h);
@@ -78,11 +79,9 @@ LevelHeader::LevelHeader(LevelScene &scene):
     m_livesCount->GetLocalRect().offsetMax.Set(currLivesX + numW, currLivesY + imgH);
     m_livesCount->SetParent(this);
 
-
     // Creative selected block
-
     // lives counter
-    m_selectedBlock = new Text(scene, "Item Selected :", font, color);
+    m_selectedBlock = new Text(scene, " ", font, color);
     m_selectedBlock->SetAnchor(RE_Anchor::WEST);
     m_selectedBlock->GetLocalRect().anchorMin.Set(-1.0f, 11.8f);
     m_selectedBlock->GetLocalRect().anchorMax.Set(-1.0f, 11.8f);
@@ -95,6 +94,7 @@ void LevelHeader::Update()
 {
     ControlsInput& controls = m_levelScene.GetInputManager().GetControls();
     RE_Atlas* atlasCreative = m_levelScene.GetAssetManager().GetAtlas(AtlasID::TERRAIN);
+    LevelScene* levelScene = (LevelScene* )(&m_scene);
 
     float currLivesX = 0.0f;
     float currLivesY = 0.5f;
@@ -106,6 +106,9 @@ void LevelHeader::Update()
     m_fireflyCount->SetString(std::to_string(player->GetFireflyCount()));
     m_livesCount->SetString(std::to_string(player->GetLifeCount()));
 
+    if (!levelScene->IsCreative()) return;
+    m_selectedBlock->SetString("Item selected :");
+    
     // Update creative block
     const char* terrain = "Wood";
     switch (controls.terrainSelected)
