@@ -7,10 +7,10 @@
 
 class Creative {
 public:
-	Creative(LevelScene& levelScene, MouseInput& mouse);
+	Creative(LevelScene& levelScene);
 
-	void AddItem(Tile::Type tileType, int groundSelect);
-	void RemoveItem();
+	void AddItem(Tile::Type tileType, int groundSelect, MouseInput& mouse);
+	void RemoveItem(MouseInput& mouse);
 	void SaveInFile();
 
 private:

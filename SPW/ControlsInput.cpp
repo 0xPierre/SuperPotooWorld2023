@@ -208,6 +208,9 @@ void ControlsInput::OnEventProcess(SDL_Event evt)
             case SDLK_w:
                 terrainSelected = (int)Tile::Type::LEVELEND;
                 break;
+            case SDLK_o:
+                terrainSelected = (int)Tile::Type::FIREFLY;
+				break;
             //case SDLK_d:
             //    // BRICK
             //    terrainSelected = (int)Tile::Type::BRICK;

@@ -96,7 +96,7 @@ StartScreen::StartScreen(TitleScene &scene) :
     SDL_Color colorDown = assets.GetColor(ColorID::NORMAL);
     TTF_Font *font = assets.GetFont(FontID::NORMAL);
 
-    const std::string texts[3] = { u8"Jouer", u8"Mode créatif", u8"Quitter"};
+    const std::string texts[3] = { u8"Play", u8"Creative", u8"Quit"};
     ButtonListener *listener[3] = { 0 };
     listener[0] = new StartScreenNS::SelectionListener(scene, *this);
     listener[1] = new StartScreenNS::CreativeSelectionListener(scene, *this);

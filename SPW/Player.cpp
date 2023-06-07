@@ -103,15 +103,14 @@ void Player::Update()
     MouseInput& mouse = m_scene.GetInputManager().GetMouse();
     /*PE_Vec2 Pos;*/
 
-    Creative *creative = new Creative(*levelScene, mouse);
     if (!levelScene->IsPaused())
     {
         if (mouse.leftReleased && levelScene->IsCreative())
         {
-            creative->AddItem((Tile::Type)controls.terrainSelected, controls.groundSelected);
+            levelScene->GetCreative()->AddItem((Tile::Type)controls.terrainSelected, controls.groundSelected, mouse);
         }
         if (mouse.rightReleased && levelScene->IsCreative()) {
-            creative->RemoveItem();
+            levelScene->GetCreative()->RemoveItem(mouse);
             //m_scene.GetActiveCamera()->ViewToWorld((int)mouse.viewPos.x, (int)mouse.viewPos.y, Pos);
 
            /* m_scene.GetObjectManager().PrintObjects();
@@ -168,7 +167,12 @@ void Player::FixedUpdate()
     PE_Vec2 velocity = body->GetLocalVelocity();
 
     // Réveille les corps autour du joueur
-    WakeUpSurroundings();
+
+    LevelScene *levelscene = (LevelScene *)(&m_scene);
+
+    if (!levelscene->IsCreative())
+        WakeUpSurroundings();
+
     
     // Tue le joueur s'il tombe dans un trou
     if (position.y < -2.0f)

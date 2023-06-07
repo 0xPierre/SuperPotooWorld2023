@@ -4,17 +4,37 @@
 #include "Camera.h"
 #include "ControlsInput.h"
 #include "ObjectManager.h"
+#include "Firefly.h"
 
-Creative::Creative(LevelScene& levelScene, MouseInput& mouse)
+Creative::Creative(LevelScene& levelScene)
 {
 	this->m_levelScene = &levelScene;
-	this->m_mouse = &mouse;
 };
 
 
-void Creative::AddItem(Tile::Type tileType, int groundSelected) {
+void Creative::AddItem(Tile::Type tileType, int groundSelected, MouseInput& mouse) {
 	PE_Vec2 Pos;
-	m_levelScene->GetActiveCamera()->ViewToWorld((int)m_mouse->viewPos.x, (int)m_mouse->viewPos.y, Pos);
+	m_levelScene->GetActiveCamera()->ViewToWorld((int)mouse.viewPos.x, (int)mouse.viewPos.y, Pos);
+	LevelEnd* levelEnd;
+
+	PE_Vec2 lower;
+	lower.x = (int)Pos.x;
+	lower.y = (int)Pos.y;
+	PE_Vec2 upper;
+	upper.x = (int)Pos.x + 1;
+	upper.y = (int)Pos.y + 1;
+
+	PE_AABB aabb;
+	aabb.lower = lower;
+	aabb.upper = upper;
+
+	printf("test\n");
+	GameBody* gm = m_levelScene->OverlapArea(aabb, CATEGORY_COLLECTABLE);
+
+	if (gm != nullptr)
+	{
+		printf("%f %f", gm->GetPosition().x, gm->GetPosition().y);
+	}
 
 	switch (tileType)
 	{
@@ -39,25 +59,28 @@ void Creative::AddItem(Tile::Type tileType, int groundSelected) {
 	case Tile::Type::LEVELEND:
 		// Delete the older Level End
 		m_levelScene->GetLevelEnd()->SetEnabled(false);
+		// Set position to middle of the block
+		Pos.x = ((float)(int)Pos.x) + 0.3f;
+		Pos.y = (int)Pos.y;
 		// Create another one
-		LevelEnd* levelEnd = new LevelEnd(*m_levelScene);
+		levelEnd = new LevelEnd(*m_levelScene);
 		levelEnd->SetStartPosition(Pos);
 		m_levelScene->SetLevelEnd(levelEnd);
-		//m_levelScene->GetLevelEnd()->SetStartPosition(Pos);
-		//m_levelScene->GetLevelEnd()->SetToRespawn(true);
-		//m_levelScene->GetLevelEnd()->Start();
-		//m_levelScene->GetLevelEnd()->SetEnabled(true);
+		break;
+	case Tile::Type::FIREFLY:
+		Firefly* firefly = new Firefly(*m_levelScene);
+		Pos.x = (int)Pos.x;
+		Pos.y = (int)Pos.y;
+		firefly->SetStartPosition(Pos);
+
 		break;
 	}
-
-	SaveInFile();
-
 }
 
-void Creative::RemoveItem() {
+void Creative::RemoveItem(MouseInput& mouse) {
 	PE_Vec2 Pos;
 
-	m_levelScene->GetActiveCamera()->ViewToWorld((int)m_mouse->viewPos.x, (int)m_mouse->viewPos.y, Pos);
+	m_levelScene->GetActiveCamera()->ViewToWorld((int)mouse.viewPos.x, (int)mouse.viewPos.y, Pos);
 	Tile tile;
 	bool removed = m_levelScene->GetMap()->RemoveTile(Pos.x, Pos.y, tile);
 
@@ -67,8 +90,6 @@ void Creative::RemoveItem() {
 	{
 		m_levelScene->GetLevelEnd()->SetEnabled(false);
 	}
-
-	SaveInFile();
 }
 
 char GetCharFromTile(Tile tile)

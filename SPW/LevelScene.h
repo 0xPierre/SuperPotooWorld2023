@@ -7,6 +7,8 @@
 #include "LevelData.h"
 #include "StaticMap.h"
 #include "LevelEnd.h"
+#include "Creative.h"
+#include "Firefly.h"
 
 class LevelScene : public Scene
 {
@@ -37,6 +39,10 @@ public:
 	PE_Vec2 GetStartingPoint() const;
 	void SetStartingPoint(PE_Vec2 startingPoint);
 
+	Creative* GetCreative() const;
+
+	//std::vector<Firefly> GetFireflies() const;
+
 private:
 	std::array<Camera*, 2> m_cameras;
 	Player* m_player;
@@ -53,11 +59,25 @@ private:
 
 	LevelEnd* m_levelEnd;
 	PE_Vec2 m_startingPoint;
+
+	Creative* m_creative;
+	
+	//std::vector<Firefly> m_fireflies;
 };
+
+//inline std::vector<Firefly> LevelScene::GetFireflies() const
+//{
+//	return m_fireflies;
+//}
 
 inline LevelData* LevelScene::GetLevelData() const
 {
 	return m_levelData;
+}
+
+inline Creative* LevelScene::GetCreative() const
+{
+	return m_creative;
 }
 
 
