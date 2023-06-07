@@ -6,6 +6,7 @@
 #include "ObjectManager.h"
 #include "Firefly.h"
 #include "Nut.h"
+#include "Brick.h"
 
 Creative::Creative(LevelScene& levelScene)
 {
@@ -31,11 +32,22 @@ void Creative::AddItem(Tile::Type tileType, int groundSelected, MouseInput& mous
 	aabb.lower = lower;
 	aabb.upper = upper;
 
-	GameBody* gm = m_levelScene->OverlapArea(aabb, CATEGORY_COLLECTABLE);
+	std::vector<GameBody*> gms;
+	gms = m_levelScene->OverlapAreaAllBodies(aabb, CATEGORY_COLLECTABLE | CATEGORY_ENEMY | CATEGORY_TERRAIN_ENTITY);
 
-	if (gm != nullptr)
+	if (gms.size() > 0)
 	{
-		gm->SetEnabled(false);
+		bool gmHasBeenRemoved = false;
+		for (int i = 0; i < gms.size(); i++)
+		{
+			GameBody* gm = gms[i];
+
+			if ((int)gm->GetPosition().x == lower.x && (int)gm->GetPosition().y == lower.y)
+			{
+				gm->SetEnabled(false);
+				gmHasBeenRemoved = true;
+			}
+		}
 	}
 
 	LevelEnd* levelEnd;
@@ -54,7 +66,6 @@ void Creative::AddItem(Tile::Type tileType, int groundSelected, MouseInput& mous
 	case Tile::Type::WOOD:
 	case Tile::Type::ONE_WAY:
 	case Tile::Type::SPIKE:
-	case Tile::Type::BRICK:
 	case Tile::Type::BONUSFULL:
 	case Tile::Type::BONUSEMPTY:
 	case Tile::Type::CHECKPOINTFULL:
@@ -85,6 +96,15 @@ void Creative::AddItem(Tile::Type tileType, int groundSelected, MouseInput& mous
 		Pos.x = (int)Pos.x;
 		Pos.y = (int)Pos.y;
 		nut->SetStartPosition(Pos);
+		break;
+	case Tile::Type::BRICK:
+	{
+		Brick* brick = new Brick(*m_levelScene);
+		Pos.x = (int)Pos.x;
+		Pos.y = (int)Pos.y;
+		brick->SetStartPosition(Pos);
+		break;
+	}
 	}
 }
 
@@ -103,23 +123,25 @@ void Creative::RemoveItem(MouseInput& mouse) {
 	aabb.lower = lower;
 	aabb.upper = upper;
 
-	GameBody* gm = m_levelScene->OverlapArea(aabb, CATEGORY_COLLECTABLE | CATEGORY_ENEMY);
+	std::vector<GameBody*> gms;
+	gms = m_levelScene->OverlapAreaAllBodies(aabb, CATEGORY_COLLECTABLE | CATEGORY_ENEMY | CATEGORY_TERRAIN_ENTITY);
 
-	if (gm != nullptr)
+	if (gms.size() > 0)
 	{
-		gm->SetEnabled(false);
-		// Make sur nothing is deleted behind
-		return;
+		bool gmHasBeenRemoved = false;
+		for (int i = 0; i < gms.size(); i++)
+		{
+			GameBody* gm = gms[i];
+
+			if ((int)gm->GetPosition().x == lower.x && (int)gm->GetPosition().y == lower.y)
+			{
+				gm->SetEnabled(false);
+				gmHasBeenRemoved = true;
+			}
+		}
 	}
 
-	bool removed = m_levelScene->GetMap()->RemoveTile(Pos.x, Pos.y);
-
-	PE_Vec2 PosLevelEnd = m_levelScene->GetLevelEnd()->GetPosition();
-	// No beautiful but it works
-	if (((int)Pos.x == (int)PosLevelEnd.x || (int)Pos.x == ((int)PosLevelEnd.x+1)) && (int)Pos.y == (int)PosLevelEnd.y)
-	{
-		m_levelScene->GetLevelEnd()->SetEnabled(false);
-	}
+	m_levelScene->GetMap()->RemoveTile(Pos.x, Pos.y);
 }
 
 char GetCharFromTile(Tile tile)
@@ -149,8 +171,6 @@ char GetCharFromTile(Tile tile)
 		}
 
 		break;
-	case Tile::Type::BRICK:
-		return 'B';
 	case Tile::Type::BONUSFULL:
 		return '?';
 	case Tile::Type::BONUSEMPTY:
@@ -208,7 +228,7 @@ void Creative::SaveInFile() {
 			aabb.lower = lower;
 			aabb.upper = upper;
 
-			gms = m_levelScene->OverlapAreaAllBodies(aabb, CATEGORY_COLLECTABLE | CATEGORY_ENEMY);
+			gms = m_levelScene->OverlapAreaAllBodies(aabb, CATEGORY_COLLECTABLE | CATEGORY_ENEMY | CATEGORY_TERRAIN_ENTITY);
 
 			if (gms.size() > 0)
 			{
@@ -229,6 +249,12 @@ void Creative::SaveInFile() {
 						else if (gmName == "Firefly")
 						{
 							fputc('o', levelFile);
+							gmHasBeenPut = true;
+							break;
+						}
+						else if (gmName == "Brick")
+						{
+							fputc('B', levelFile);
 							gmHasBeenPut = true;
 							break;
 						}

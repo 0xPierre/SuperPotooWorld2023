@@ -243,9 +243,6 @@ void StaticMap::Render()
 			case Tile::Type::SPIKE:
 				m_spikePart->RenderCopyF(0, &dst, RE_Anchor::SOUTH_WEST);
 				break;
-			case Tile::Type::BRICK:
-				m_brickPart->RenderCopyF(0, &dst, RE_Anchor::SOUTH_WEST);
-				break;
 			case Tile::Type::BONUSFULL:
 				m_bonusFullPart->RenderCopyF(0, &dst, RE_Anchor::SOUTH_WEST);
 				break;
@@ -312,7 +309,6 @@ void StaticMap::Start()
 				polygon.SetAsBox(PE_AABB(position, position + PE_Vec2(1.0f, 1.0f)));
 				break;
 
-			case Tile::Type::BRICK:
 			case Tile::Type::GROUND:
 			case Tile::Type::WOOD:
 				polygon.SetAsBox(PE_AABB(position, position + PE_Vec2(1.0f, 1.0f)));
