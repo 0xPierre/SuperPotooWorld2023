@@ -28,12 +28,11 @@ void Creative::AddItem(Tile::Type tileType, int groundSelected, MouseInput& mous
 	aabb.lower = lower;
 	aabb.upper = upper;
 
-	printf("test\n");
 	GameBody* gm = m_levelScene->OverlapArea(aabb, CATEGORY_COLLECTABLE);
 
 	if (gm != nullptr)
 	{
-		printf("%f %f", gm->GetPosition().x, gm->GetPosition().y);
+		gm->SetEnabled(false);
 	}
 
 	switch (tileType)
@@ -79,8 +78,26 @@ void Creative::AddItem(Tile::Type tileType, int groundSelected, MouseInput& mous
 
 void Creative::RemoveItem(MouseInput& mouse) {
 	PE_Vec2 Pos;
-
 	m_levelScene->GetActiveCamera()->ViewToWorld((int)mouse.viewPos.x, (int)mouse.viewPos.y, Pos);
+
+	PE_Vec2 lower;
+	lower.x = (int)Pos.x;
+	lower.y = (int)Pos.y;
+	PE_Vec2 upper;
+	upper.x = (int)Pos.x + 1;
+	upper.y = (int)Pos.y + 1;
+
+	PE_AABB aabb;
+	aabb.lower = lower;
+	aabb.upper = upper;
+
+	GameBody* gm = m_levelScene->OverlapArea(aabb, CATEGORY_COLLECTABLE);
+
+	if (gm != nullptr)
+	{
+		gm->SetEnabled(false);
+	}
+
 	Tile tile;
 	bool removed = m_levelScene->GetMap()->RemoveTile(Pos.x, Pos.y, tile);
 
