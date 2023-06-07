@@ -13,6 +13,7 @@ LevelScene::LevelScene(SDL_Renderer *renderer, RE_Timer &mainTime, LevelData &le
     m_inputManager.GetMouse().SetEnabled(true);
     m_inputManager.GetControls().SetEnabled(true);
     m_inputManager.GetDebug().SetEnabled(true);
+    m_creative = new Creative(*this);
 
     SetCreative(isCreative);
 
@@ -32,6 +33,7 @@ LevelScene::LevelScene(SDL_Renderer *renderer, RE_Timer &mainTime, LevelData &le
     m_levelData = &level;
 
 
+    //this->GetMap()->SetTile(5, 4, Tile::Type::WOOD);
     this->GetMap()->InitTiles();
     // Canvas
     m_canvas = new LevelCanvas(*this);

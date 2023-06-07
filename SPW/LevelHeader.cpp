@@ -94,6 +94,7 @@ void LevelHeader::Update()
 {
     ControlsInput& controls = m_levelScene.GetInputManager().GetControls();
     RE_Atlas* atlasCreative = m_levelScene.GetAssetManager().GetAtlas(AtlasID::TERRAIN);
+    RE_Atlas* atlasPlayer = m_levelScene.GetAssetManager().GetAtlas(AtlasID::UI);
     LevelScene* levelScene = (LevelScene* )(&m_scene);
 
     float currLivesX = 0.0f;
@@ -110,7 +111,8 @@ void LevelHeader::Update()
     m_selectedBlock->SetString("Item selected :");
     
     // Update creative block
-    const char* terrain = "Wood";
+    const char* terrain = "-";
+    const char* uiPlayer = "-";
     int terrainGroundId = 0;
     switch ((Tile::Type)controls.terrainSelected)
     {
@@ -154,11 +156,21 @@ void LevelHeader::Update()
         terrain = "Terrain";
         terrainGroundId = controls.groundSelected;
         break;
+    case Tile::Type::FIREFLY:
+        uiPlayer = "Firefly";
+		break;
     }
 
+    if (uiPlayer == "-" && terrain == "-")
+        return;
+
+    RE_AtlasPart* m_block;
+    if (uiPlayer != "-")
+        m_block = atlasPlayer->GetPart(uiPlayer);
+    else
+        m_block = atlasCreative->GetPart(terrain);
+
     if (m_blockImage != nullptr) m_blockImage->Delete();
-    
-    RE_AtlasPart* m_block = atlasCreative->GetPart(terrain);
     AssertNew(m_block);
 
 

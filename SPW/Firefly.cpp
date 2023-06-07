@@ -79,6 +79,11 @@ void Firefly::OnRespawn()
 
 void Firefly::Collect(GameBody * collector)
 {
+    LevelScene* levelScene = (LevelScene *)&m_scene;
+
+    if (levelScene->IsCreative())
+        return;
+
     Player* player = dynamic_cast<Player*>(collector);
     if (player == nullptr)
     {

@@ -40,6 +40,19 @@ namespace PauseMenuNS
     private:
         LevelScene &m_levelScene;
     };
+
+    class SaveListener : public ButtonListener
+    {
+    public:
+        SaveListener(LevelScene& levelScene) : m_levelScene(levelScene) {}
+        virtual void OnPress()
+        {
+            m_levelScene.GetCreative()->SaveInFile();
+            m_levelScene.Quit();
+        }
+    private:
+        LevelScene& m_levelScene;
+    };
 }
 
 PauseMenu::PauseMenu(LevelScene &scene) :
@@ -80,15 +93,21 @@ PauseMenu::PauseMenu(LevelScene &scene) :
     SDL_Color colorDown = assets.GetColor(ColorID::NORMAL);
     font = assets.GetFont(FontID::NORMAL);
 
-    const std::string texts[3] = { u8"Continuer", u8"Recommencer", u8"Quitter" };
-    ButtonListener *listener[3] = { 0 };
+    const std::string texts[4] = { u8"Continue", u8"Restart", u8"Save and Quit", u8"Quit"};
+    ButtonListener *listener[4] = { 0 };
     listener[0] = new PauseMenuNS::ContinueListener(scene);
     listener[1] = new PauseMenuNS::RestartListener(scene);
-    listener[2] = new PauseMenuNS::QuitListener(scene);
+    listener[2] = new PauseMenuNS::SaveListener(scene);
+    listener[3] = new PauseMenuNS::QuitListener(scene);
 
     float curY = topSkip;
-    for (int i = 0; i < 3; i++, curY += buttonH + sep)
+    for (int i = 0; i < 4; i++)
     {
+        // not really beautiful
+        if (i == 2 && !scene.IsCreative())
+			continue;
+
+        curY += buttonH + sep;
         Button *button = new Button(scene, buttonPart);
         button->GetLocalRect().anchorMin.Set(0.0f, 0.0f);
         button->GetLocalRect().anchorMax.Set(1.0f, 0.0f);
