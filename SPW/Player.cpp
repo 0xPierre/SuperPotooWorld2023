@@ -55,6 +55,8 @@ Player::Player(Scene &scene) :
     m_debugColor.r = 255;
     m_debugColor.g = 0;
     m_debugColor.b = 0;
+
+    m_jumped = false;
 }
 
 Player::~Player()
@@ -134,6 +136,9 @@ void Player::Render()
     SDL_Renderer *renderer = m_scene.GetRenderer();
     Camera *camera = m_scene.GetActiveCamera();
 
+    const clock_t currentTime = clock();
+    const double milliseconds = (double)currentTime / (CLOCKS_PER_SEC / 1000);
+
     // Met à jour les animations du joueur
     m_animator.Update(m_scene.GetTime());
 
@@ -148,8 +153,30 @@ void Player::Render()
         m_isFlipped = true;
     }
 
-    // TODO : Trouver les bonnes diemnsions de l'affichage en fonction du sprite (dimensions en tuiles)
     rect.h = 1.375f * scale; // Le sprite fait 1.375 tuile de haut
+
+    if (m_onGround && m_jumped)
+    {
+        m_jumpAnimating = true;
+        printf("%d\n", m_jumped);
+        m_jumped = false;
+    }
+    else if (!m_jumpAnimating)
+    {
+        jumpTimeAnimMemory = milliseconds;
+    }
+
+    if (m_jumpAnimating)
+    {
+        printf("animated");
+        rect.h -= (milliseconds - jumpTimeAnimMemory) / 10;
+        if ((milliseconds - jumpTimeAnimMemory) > 100)
+        {
+            m_jumpAnimating = false;   
+        }
+    }
+
+    // TODO : Trouver les bonnes diemnsions de l'affichage en fonction du sprite (dimensions en tuiles)
     rect.w = 1.000f * scale; // Le sprite fait 1 tuile de large
     camera->WorldToView(GetPosition(), rect.x, rect.y);
 
@@ -185,7 +212,7 @@ void Player::FixedUpdate()
     //--------------------------------------------------------------------------
     // Détection du sol
 
-    bool m_onGround = false;
+    m_onGround = false;
     PE_Vec2 gndNormal = PE_Vec2::up;
 
     // Lance deux rayons vers le bas ayant pour origines
@@ -198,6 +225,8 @@ void Player::FixedUpdate()
     // ayant la catégorie FILTER_TERRAIN
     RayHit hitL = m_scene.RayCast(originL, PE_Vec2::down, 0.6f, CATEGORY_TERRAIN, true);
     RayHit hitR = m_scene.RayCast(originR, PE_Vec2::down, 0.6f, CATEGORY_TERRAIN, true);
+
+    // hitL.normal;
 
     if (hitL.collider != NULL)
     {
@@ -222,7 +251,6 @@ void Player::FixedUpdate()
     // Les rayons ne touchent que des colliders solides (non trigger)
     // ayant la catégorie CATEGORY_SLOPE
     RayHit hit = m_scene.RayCast(origin, PE_Vec2::down, 0.6f, CATEGORY_SLOPE, true);
-
     if (hit.fraction > 0) {
         m_onSlope = true;
         m_onGround = true;
@@ -301,6 +329,7 @@ void Player::FixedUpdate()
     if (m_jump && m_onGround) {
         if (m_onGround) {
             m_jump = false;
+            m_jumped = true;
             velocity.y = 20.0f;
             if (m_longJump) {
             }

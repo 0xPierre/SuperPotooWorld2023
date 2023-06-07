@@ -45,6 +45,9 @@ private:
     bool m_jump;
     bool m_longJump;
     bool m_onGround;
+    bool m_jumpAnimating;
+    double jumpTimeAnimMemory;
+    bool m_jumped;
     bool m_onSlope;
     bool m_bounce;
     bool m_facingRight;
