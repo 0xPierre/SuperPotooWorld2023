@@ -140,12 +140,12 @@ void ControlsInput::OnEventProcess(SDL_Event evt)
             break;
 
         case SDL_SCANCODE_6:
-            terrainSelected = (int)Tile::Type::STEEP_SLOPE_R;
+            terrainSelected = (int)Tile::Type::STEEP_SLOPE_L;
             groundSelected = 9;
             break;
 
         case SDL_SCANCODE_7:
-            terrainSelected = (int)Tile::Type::STEEP_SLOPE_L;
+            terrainSelected = (int)Tile::Type::STEEP_SLOPE_R;
             groundSelected = 10;
             break;
 
@@ -211,6 +211,9 @@ void ControlsInput::OnEventProcess(SDL_Event evt)
             case SDLK_o:
                 terrainSelected = (int)Tile::Type::FIREFLY;
 				break;
+            case SDLK_l:
+                terrainSelected = (int)Tile::Type::NUT;
+                break;
             //case SDLK_d:
             //    // BRICK
             //    terrainSelected = (int)Tile::Type::BRICK;

@@ -118,7 +118,7 @@ public:
         int maskBits, bool solidOnly
     );
     GameBody *OverlapArea(const PE_AABB &area, int maskBits);
-
+    std::vector<GameBody*> OverlapAreaAllBodies(const PE_AABB& area, int maskBits);
 
 protected:
     friend class GameObject;

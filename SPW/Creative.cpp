@@ -5,6 +5,7 @@
 #include "ControlsInput.h"
 #include "ObjectManager.h"
 #include "Firefly.h"
+#include "Nut.h"
 
 Creative::Creative(LevelScene& levelScene)
 {
@@ -15,7 +16,9 @@ Creative::Creative(LevelScene& levelScene)
 void Creative::AddItem(Tile::Type tileType, int groundSelected, MouseInput& mouse) {
 	PE_Vec2 Pos;
 	m_levelScene->GetActiveCamera()->ViewToWorld((int)mouse.viewPos.x, (int)mouse.viewPos.y, Pos);
-	LevelEnd* levelEnd;
+		
+	// Remove actual tile
+	bool removed = m_levelScene->GetMap()->RemoveTile(Pos.x, Pos.y);
 
 	PE_Vec2 lower;
 	lower.x = (int)Pos.x;
@@ -34,6 +37,10 @@ void Creative::AddItem(Tile::Type tileType, int groundSelected, MouseInput& mous
 	{
 		gm->SetEnabled(false);
 	}
+
+	LevelEnd* levelEnd;
+	Firefly* firefly;
+	Nut* nut;
 
 	switch (tileType)
 	{
@@ -67,12 +74,17 @@ void Creative::AddItem(Tile::Type tileType, int groundSelected, MouseInput& mous
 		m_levelScene->SetLevelEnd(levelEnd);
 		break;
 	case Tile::Type::FIREFLY:
-		Firefly* firefly = new Firefly(*m_levelScene);
+		firefly = new Firefly(*m_levelScene);
 		Pos.x = (int)Pos.x;
 		Pos.y = (int)Pos.y;
 		firefly->SetStartPosition(Pos);
 
 		break;
+	case Tile::Type::NUT:
+		nut = new Nut(*m_levelScene);
+		Pos.x = (int)Pos.x;
+		Pos.y = (int)Pos.y;
+		nut->SetStartPosition(Pos);
 	}
 }
 
@@ -91,15 +103,16 @@ void Creative::RemoveItem(MouseInput& mouse) {
 	aabb.lower = lower;
 	aabb.upper = upper;
 
-	GameBody* gm = m_levelScene->OverlapArea(aabb, CATEGORY_COLLECTABLE);
+	GameBody* gm = m_levelScene->OverlapArea(aabb, CATEGORY_COLLECTABLE | CATEGORY_ENEMY);
 
 	if (gm != nullptr)
 	{
 		gm->SetEnabled(false);
+		// Make sur nothing is deleted behind
+		return;
 	}
 
-	Tile tile;
-	bool removed = m_levelScene->GetMap()->RemoveTile(Pos.x, Pos.y, tile);
+	bool removed = m_levelScene->GetMap()->RemoveTile(Pos.x, Pos.y);
 
 	PE_Vec2 PosLevelEnd = m_levelScene->GetLevelEnd()->GetPosition();
 	// No beautiful but it works
@@ -125,6 +138,10 @@ char GetCharFromTile(Tile tile)
 			return '[';
 		case 14:
 			return ']';
+		case 8:
+			return ')';
+		case 11:
+			return '(';
 		case 0:
 			return '{';
 		case 2:
@@ -132,26 +149,31 @@ char GetCharFromTile(Tile tile)
 		}
 
 		break;
+	case Tile::Type::BRICK:
+		return 'B';
+	case Tile::Type::BONUSFULL:
+		return '?';
+	case Tile::Type::BONUSEMPTY:
+		return '^';
 	case Tile::Type::WOOD:
 		return 'W';
 	case Tile::Type::ONE_WAY:
 		return '=';
 	case Tile::Type::SPIKE:
 		return 'A';
-	case Tile::Type::STEEP_SLOPE_L:
-		return '//';
 	case Tile::Type::STEEP_SLOPE_R:
+		return '/';
+	case Tile::Type::STEEP_SLOPE_L:
 		return '\\';
-	case Tile::Type::GENTLE_SLOPE_L1:
-		return 'L';
-	case Tile::Type::GENTLE_SLOPE_L2:
-		return 'l';
 	case Tile::Type::GENTLE_SLOPE_R1:
-		return 'R';
+		return 'L';
 	case Tile::Type::GENTLE_SLOPE_R2:
+		return 'l';
+	case Tile::Type::GENTLE_SLOPE_L1:
+		return 'R';
+	case Tile::Type::GENTLE_SLOPE_L2:
 		return 'r';
 	}
-
 	return c;
 }
 
@@ -162,31 +184,77 @@ void Creative::SaveInFile() {
 
 	const int width = m_levelScene->GetMap()->GetMaxWidth();
 	const int height = m_levelScene->GetMap()->GetHeight();
-
 	
 	Tile** tiles = m_levelScene->GetMap()->GetTiles();
 
 	PE_Vec2 level_end = m_levelScene->GetLevelEnd()->GetStartPosition();
 	PE_Vec2 starting_point = m_levelScene->GetStartingPoint();
-	printf("%f %f %f %f\n", level_end.x, level_end.y, starting_point.x, starting_point.y);
+
+	PE_Vec2 lower;
+	PE_Vec2 upper;
+	PE_AABB aabb;
+	
 
 	char c;
 	for (int y = height; y >= 0; y--)
 	{
 		for (int x = 0; x < width; x++)
 		{
+			std::vector<GameBody*> gms;
+			lower.x = x;
+			lower.y = y;
+			upper.x = x + 1;
+			upper.y = y + 1;
+			aabb.lower = lower;
+			aabb.upper = upper;
+
+			gms = m_levelScene->OverlapAreaAllBodies(aabb, CATEGORY_COLLECTABLE | CATEGORY_ENEMY);
+
+			if (gms.size() > 0)
+			{
+				bool gmHasBeenPut = false;
+				for (int i = 0; i < gms.size(); i++)
+				{
+					GameBody* gm = gms[i];
+
+					if ((int)gm->GetPosition().x == x && (int)gm->GetPosition().y == y)
+					{
+						std::string gmName = gm->GetName();
+						if (gmName == "Nut")
+						{
+							fputc('e', levelFile);
+							gmHasBeenPut = true;
+							break;
+						}
+						else if (gmName == "Firefly")
+						{
+							fputc('o', levelFile);
+							gmHasBeenPut = true;
+							break;
+						}
+					}
+				}
+
+				if (gmHasBeenPut)
+					continue;
+			}
+			
 			if (x == (int)level_end.x && y == (int)level_end.y) {
 				fputc('F', levelFile);
+				continue;
 			}
 			else if (x == (int)starting_point.x && y == (int)starting_point.y)
 			{
 				fputc('S', levelFile);
+				continue;
 			}
 			else
 			{
 				char c = GetCharFromTile(tiles[x][y]);
 				fputc(c, levelFile);
+				continue;
 			}
+
 		}
 		fputc('\n', levelFile);
 	}

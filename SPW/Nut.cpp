@@ -10,7 +10,7 @@ Nut::Nut(Scene &scene) :
     m_name = "Nut";
 
     RE_Atlas *atlas = scene.GetAssetManager().GetAtlas(AtlasID::ENEMY);
-    AssertNew(atlas);
+	AssertNew(atlas);
 
     RE_AtlasPart* part = nullptr;
 
@@ -170,6 +170,10 @@ void Nut::OnRespawn()
 
 void Nut::Damage(GameBody *damager)
 {
+    LevelScene* levelScene = dynamic_cast<LevelScene*>(&m_scene);
+   
+    if (levelScene->IsCreative())
+        return;
     // TODO
     Player* player = dynamic_cast<Player*>(damager);
     if (player == nullptr)

@@ -16,7 +16,6 @@ void ObjectManager::AddObject(GameObject *object)
 {
     if (object->TestFlag(GameObject::Flag::TO_PROCESS) == false)
     {
-        m_objects.insert(object);
         m_toProcess.insert(object);
         object->AddFlags(GameObject::Flag::TO_PROCESS);
         object->AddFlags(GameObject::Flag::TO_START);
@@ -97,6 +96,7 @@ void ObjectManager::SetVisible(GameObject *object, bool isVisible)
 
 void ObjectManager::DeleteObjects()
 {
+    ProcessObjects();
     for (GameObject *gameObject : m_objects)
     {
         delete gameObject;
@@ -126,15 +126,13 @@ void ObjectManager::ProcessObjects()
 
     for (auto &gameObject : toProcessCopy)
     {
-        // DELETE
-        if (gameObject->TestFlag(GameObject::Flag::TO_DELETE))
-        {
-            toDelete.push_back(gameObject);
-        }
 
         // START
         if (gameObject->TestFlag(GameObject::Flag::TO_START))
         {
+            // Insertion dans la liste des objets
+            m_objects.insert(gameObject);
+
             gameObject->SubFlags(GameObject::Flag::TO_START);
             gameObject->Start();
 
@@ -159,6 +157,11 @@ void ObjectManager::ProcessObjects()
             gameObject->OnDisable();
         }
 
+        // DELETE
+        if (gameObject->TestFlag(GameObject::Flag::TO_DELETE))
+        {
+            toDelete.push_back(gameObject);
+        }
     }
 
     for (auto &gameObject : toDelete)
