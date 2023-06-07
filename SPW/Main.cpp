@@ -107,6 +107,7 @@ int main(int argc, char *argv[])
     std::vector<LevelData> levels(LevelData::Init());
     int levelID = 0;
     bool isCreative = false;
+    bool isNewWorld = false;
 
 #ifdef SKIP_MENU
     state = GameState::LEVEL;
@@ -122,12 +123,13 @@ int main(int argc, char *argv[])
         {
         case GameState::LEVEL:
             assert(0 <= levelID && levelID < levels.size());
-            scene = new LevelScene(renderer, time, levels[levelID], isCreative);
+            scene = new LevelScene(renderer, time, levels[levelID], isCreative, isNewWorld);
 
             break;
 
         case GameState::MAIN_MENU:
         default:
+            levels = LevelData::Init();
             scene = new TitleScene(renderer, time, levels);
             break;
         }
@@ -174,6 +176,7 @@ int main(int argc, char *argv[])
             levelID = ((TitleScene *)scene)->GetLevelID();
             // Used to selected creative mode on next loop
             isCreative = ((TitleScene*)scene)->IsCreative();
+            isNewWorld = ((TitleScene*)scene)->IsNewWorld();
 ;
             if (levelID == TitleState::RETURN)
                 state = GameState::MAIN_MENU;

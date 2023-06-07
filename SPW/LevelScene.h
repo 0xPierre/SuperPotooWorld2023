@@ -13,7 +13,7 @@
 class LevelScene : public Scene
 {
 public:
-	LevelScene(SDL_Renderer* renderer, RE_Timer& mainTime, LevelData& level, bool isCreative);
+	LevelScene(SDL_Renderer* renderer, RE_Timer& mainTime, LevelData& level, bool isCreative, bool isNewWorld);
 	LevelScene(LevelScene const&) = delete;
 	LevelScene& operator=(LevelScene const&) = delete;
 	virtual ~LevelScene();
@@ -31,6 +31,9 @@ public:
 	bool IsCreative() const;
 	void SetCreative(bool isCreative);
 
+	bool IsNewWorld() const;
+	void SetNewWorld(bool IsNewWorld);
+
 	LevelData* GetLevelData() const;
 
 	LevelEnd* GetLevelEnd() const;
@@ -41,12 +44,12 @@ public:
 
 	Creative* GetCreative() const;
 
-	//std::vector<Firefly> GetFireflies() const;
 
 private:
 	std::array<Camera*, 2> m_cameras;
 	Player* m_player;
 	bool m_is_creative;
+	bool m_is_new_world;
 	LevelCanvas* m_canvas;
 	LevelData* m_levelData;
 
@@ -61,14 +64,8 @@ private:
 	PE_Vec2 m_startingPoint;
 
 	Creative* m_creative;
-	
-	//std::vector<Firefly> m_fireflies;
 };
 
-//inline std::vector<Firefly> LevelScene::GetFireflies() const
-//{
-//	return m_fireflies;
-//}
 
 inline LevelData* LevelScene::GetLevelData() const
 {
@@ -99,6 +96,16 @@ inline bool LevelScene::IsCreative() const
 inline void LevelScene::SetCreative(bool isCreative)
 {
 	m_is_creative = isCreative;
+}
+
+inline bool LevelScene::IsNewWorld() const
+{
+	return m_is_new_world;
+}
+
+inline void LevelScene::SetNewWorld(bool IsNewWorld)
+{
+	m_is_new_world = IsNewWorld;
 }
 
 inline Player* LevelScene::GetPlayer() const

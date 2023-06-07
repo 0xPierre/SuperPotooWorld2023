@@ -118,25 +118,6 @@ void StaticMap::InitTiles()
 		{
 			Tile& tile = m_tiles[x][y];
 			Tile::Type type = GetTileType(x, y);
-
-			/*printf("%d %d\n", tile.type, tile.partIdx);
-			switch (type)
-			{
-			case Tile::Type::GROUND:
-				if (IsGround(x, y + 1))
-				{
-					tile.partIdx = 4;
-				}
-				else
-				{
-					tile.partIdx = 1;
-				}
-				break;
-
-			default:
-				tile.partIdx = 0;
-				break;
-			}*/
 		}
 	}
 }
@@ -240,7 +221,6 @@ void StaticMap::Start()
 	{
 		for (int y = 0; y < m_height; ++y)
 		{
-			printf("%d %d\n", x, y);
 			Tile& tile = m_tiles[x][y];
 			if (tile.type == Tile::Type::EMPTY)
 			{
@@ -282,6 +262,38 @@ void StaticMap::Start()
                 vertices[2] = position + PE_Vec2(1.0f, 1.0f);
                 polygon.SetVertices(vertices, 3);
                 break;
+
+			case Tile::Type::GENTLE_SLOPE_L1:
+				colliderDef.filter.categoryBits = CATEGORY_SLOPE;
+				vertices[0] = position + PE_Vec2(0.0f, 0.0f);
+				vertices[1] = position + PE_Vec2(1.0f, 0.0f);
+				vertices[2] = position + PE_Vec2(1.0f, 0.5f);
+				polygon.SetVertices(vertices, 3);
+				break;
+
+			case Tile::Type::GENTLE_SLOPE_L2:
+				colliderDef.filter.categoryBits = CATEGORY_SLOPE;
+				vertices[0] = position + PE_Vec2(0.0f, 0.5f);
+				vertices[1] = position + PE_Vec2(1.0f, 0.0f);
+				vertices[2] = position + PE_Vec2(1.0f, 1.0f);
+				polygon.SetVertices(vertices, 3);
+				break;
+
+			case Tile::Type::GENTLE_SLOPE_R1:
+				colliderDef.filter.categoryBits = CATEGORY_SLOPE;
+				vertices[0] = position + PE_Vec2(0.0f, 0.5f);
+				vertices[1] = position + PE_Vec2(0.0f, 0.0f);
+				vertices[2] = position + PE_Vec2(1.0f, 0.0f);
+				polygon.SetVertices(vertices, 3);
+				break;
+
+			case Tile::Type::GENTLE_SLOPE_R2:
+				colliderDef.filter.categoryBits = CATEGORY_SLOPE;
+				vertices[0] = position + PE_Vec2(0.0f, 0.0f);
+				vertices[1] = position + PE_Vec2(1.0f, 0.5f);
+				vertices[2] = position + PE_Vec2(0.0f, 1.0f);
+				polygon.SetVertices(vertices, 3);
+				break;
 
             case Tile::Type::SPIKE:
                 colliderDef.userData.id = 1;
