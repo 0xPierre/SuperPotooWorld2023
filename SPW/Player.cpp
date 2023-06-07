@@ -56,6 +56,7 @@ Player::Player(Scene &scene) :
     m_debugColor.g = 0;
     m_debugColor.b = 0;
 
+    m_fallTimeMemory = time(NULL);
     m_jumped = false;
 }
 
@@ -158,7 +159,6 @@ void Player::Render()
     if (m_onGround && m_jumped)
     {
         m_jumpAnimating = true;
-        printf("%d\n", m_jumped);
         m_jumped = false;
     }
     else if (!m_jumpAnimating)
@@ -168,7 +168,6 @@ void Player::Render()
 
     if (m_jumpAnimating)
     {
-        printf("animated");
         rect.h -= (milliseconds - jumpTimeAnimMemory) / 10;
         if ((milliseconds - jumpTimeAnimMemory) > 100)
         {
@@ -322,7 +321,7 @@ void Player::FixedUpdate()
             maxHSpeed = maxSpeedCoef > 0 ? 2.0f : 30.0f;
         }
     }
-
+    
     velocity.x = PE_Clamp(velocity.x, -maxHSpeed, maxHSpeed);
     
     // TODO : Ajouter un jump avec une vitesse au choix*
@@ -331,11 +330,8 @@ void Player::FixedUpdate()
             m_jump = false;
             m_jumped = true;
             velocity.y = 20.0f;
-            if (m_longJump) {
-            }
         }
-    } else if (!m_onGround)
-    {
+    } else if (!m_onGround){
         m_jump = false;
     }
 
@@ -344,8 +340,7 @@ void Player::FixedUpdate()
         body->SetGravityScale(0.65f);
         velocity.y += 0.15f;
     }
-    else
-    {
+    else {
         body->SetGravityScale(1);
     }
 
@@ -362,11 +357,20 @@ void Player::FixedUpdate()
     }
     
     if (m_onSlope == true && m_hDirection == 0 && time(NULL) - m_fallTimeMemory > 1) {
+        printf("%d\n", time(NULL) - (m_fallTimeMemory + 1));
+
+        double timeCoef = abs(time(NULL) - (m_fallTimeMemory));
+        printf("%d gf\n", timeCoef);
+
+        if (timeCoef > 20 || timeCoef < 20) {
+            timeCoef = 1;
+        }
+        
         if (maxSpeedCoef > 0) {
-            velocity.x -= 0.3f * (time(NULL) - (m_fallTimeMemory + 1));
+            velocity.x -= 0.3f * timeCoef;
         }
         else {
-            velocity.x += 0.3f * (time(NULL) - (m_fallTimeMemory + 1));
+            velocity.x += 0.3f * timeCoef;
         }
     }
 

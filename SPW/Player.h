@@ -57,7 +57,7 @@ private:
     int m_fireflyCount;
     double m_livesTimeMemory;
     bool m_isFlipped;
-    double m_fallTimeMemory;
+    unsigned long m_fallTimeMemory;
 };
 
 
