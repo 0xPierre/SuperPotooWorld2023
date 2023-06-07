@@ -202,6 +202,9 @@ void LevelParser::InitScene(LevelScene &scene) const
             case 'R':
                 map->SetTile(x, y, Tile::Type::GENTLE_SLOPE_L2, 15);
                 break;
+            case 'B':
+                map->SetTile(x, y, Tile::Type::BRICK);
+                break;
             case 'S':
             {
                 Player *player = scene.GetPlayer();

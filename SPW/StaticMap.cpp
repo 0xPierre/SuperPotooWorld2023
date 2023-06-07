@@ -261,18 +261,21 @@ void StaticMap::Start()
 				polygon.SetAsBox(PE_AABB(position, position + PE_Vec2(1.0f, 1.0f)));
 				break;
 
+			case Tile::Type::BRICK:
 			case Tile::Type::GROUND:
 			case Tile::Type::WOOD:
 				polygon.SetAsBox(PE_AABB(position, position + PE_Vec2(1.0f, 1.0f)));
 				break;
 
             case Tile::Type::STEEP_SLOPE_L:
+            	colliderDef.filter.categoryBits = CATEGORY_SLOPE;
                 vertices[0] = position + PE_Vec2(0.0f, 0.0f);
                 vertices[1] = position + PE_Vec2(1.0f, 0.0f);
                 vertices[2] = position + PE_Vec2(0.0f, 1.0f);
                 polygon.SetVertices(vertices, 3);
                 break;
             case Tile::Type::STEEP_SLOPE_R:
+            	colliderDef.filter.categoryBits = CATEGORY_SLOPE;
                 vertices[0] = position + PE_Vec2(0.0f, 0.0f);
                 vertices[1] = position + PE_Vec2(1.0f, 0.0f);
                 vertices[2] = position + PE_Vec2(1.0f, 1.0f);

@@ -8,6 +8,8 @@
 #include "LevelScene.h"
 #include "StaticMap.h"
 #include <time.h>
+
+#include "Brick.h"
 #include "Creative.h"
 
 Player::Player(Scene &scene) :
@@ -211,11 +213,18 @@ void Player::FixedUpdate()
     // Slop detection
 
     bool m_onSlope = false;
-    
-    if ((hitL.hitPoint.x > 0.0f && hitR.hitPoint.x == 0.0f) ||
-        (hitL.hitPoint.x == 0.0f && hitR.hitPoint.x > 0.0f)) {
+
+    PE_Vec2 origin = position + PE_Vec2(0.0f, +0.4f);
+
+    // Les rayons ne touchent que des colliders solides (non trigger)
+    // ayant la catégorie CATEGORY_SLOPE
+    RayHit hit = m_scene.RayCast(origin, PE_Vec2::down, 0.6f, CATEGORY_SLOPE, true);
+
+    if (hit.fraction > 0) {
         m_onSlope = true;
+        m_onGround = true;
     }
+    
     
     //--------------------------------------------------------------------------
     // Etat du joueur
@@ -305,14 +314,12 @@ void Player::FixedUpdate()
         m_fallTimeMemory = time(NULL);
     }
     
-    if (m_onSlope == true && m_hDirection == 0) {
-        if (maxSpeedCoef > 0)
-        {
-            velocity.x -= 0.3f * (time(NULL) - m_fallTimeMemory);
+    if (m_onSlope == true && m_hDirection == 0 && time(NULL) - m_fallTimeMemory > 1) {
+        if (maxSpeedCoef > 0) {
+            velocity.x -= 0.3f * (time(NULL) - (m_fallTimeMemory + 1));
         }
-        else
-        {
-            velocity.x += 0.3f * (time(NULL) - m_fallTimeMemory);
+        else {
+            velocity.x += 0.3f * (time(NULL) - (m_fallTimeMemory + 1));
         }
     }
 
@@ -427,7 +434,7 @@ void Player::OnCollisionStay(GameCollision &collision)
         collision.SetEnabled(false);
         return;
     }
-    else if (otherCollider->CheckCategory(CATEGORY_TERRAIN))
+    else if (otherCollider->CheckCategory(CATEGORY_TERRAIN) || otherCollider->CheckCategory(CATEGORY_SLOPE))
     {
         float angleUp = PE_AngleDeg(manifold.normal, PE_Vec2::up);
         if (angleUp <= 55.0f)
