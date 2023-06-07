@@ -183,11 +183,11 @@ void ControlsInput::OnEventProcess(SDL_Event evt)
         {
             case SDLK_a:
                 terrainSelected = (int)Tile::Type::GENTLE_SLOPE_R1;
-                groundSelected = 12;
+                groundSelected = 13;
 				break;
             case SDLK_z:
                 terrainSelected = (int)Tile::Type::GENTLE_SLOPE_R2;
-                groundSelected = 13;
+                groundSelected = 12;
                 break;
             case SDLK_e:
                 terrainSelected = (int)Tile::Type::GROUND;
