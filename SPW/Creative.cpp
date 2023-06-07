@@ -166,13 +166,13 @@ char GetCharFromTile(Tile tile)
 	case Tile::Type::STEEP_SLOPE_L:
 		return '\\';
 	case Tile::Type::GENTLE_SLOPE_R1:
-		return 'L';
-	case Tile::Type::GENTLE_SLOPE_R2:
-		return 'l';
-	case Tile::Type::GENTLE_SLOPE_L1:
 		return 'R';
-	case Tile::Type::GENTLE_SLOPE_L2:
+	case Tile::Type::GENTLE_SLOPE_R2:
 		return 'r';
+	case Tile::Type::GENTLE_SLOPE_L1:
+		return 'L';
+	case Tile::Type::GENTLE_SLOPE_L2:
+		return 'l';
 	}
 	return c;
 }

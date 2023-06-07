@@ -323,7 +323,9 @@ void Player::FixedUpdate()
     }
     
     velocity.x = PE_Clamp(velocity.x, -maxHSpeed, maxHSpeed);
-    
+
+    if (m_jump)
+        printf("%d %d\n", m_jump, m_onGround);
     // TODO : Ajouter un jump avec une vitesse au choix*
     if (m_jump && m_onGround) {
         if (m_onGround) {
@@ -357,10 +359,8 @@ void Player::FixedUpdate()
     }
     
     if (m_onSlope == true && m_hDirection == 0 && time(NULL) - m_fallTimeMemory > 1) {
-        printf("%d\n", time(NULL) - (m_fallTimeMemory + 1));
 
         double timeCoef = abs(time(NULL) - (m_fallTimeMemory));
-        printf("%d gf\n", timeCoef);
 
         if (timeCoef > 20 || timeCoef < 20) {
             timeCoef = 1;

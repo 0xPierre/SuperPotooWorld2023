@@ -37,7 +37,7 @@ void MainCamera::Update()
         cameraPos = m_center;
     }
     
-    TranslateWorldView(cameraPos - m_worldView.GetCenter());
+    TranslateWorldView(m_center - m_worldView.GetCenter());
 
     // Fixe la position verticale minimale de la caméra pour ne pas voir sous le sol
     float dispLowerY = m_worldBounds.lower.y - m_worldView.lower.y;

@@ -196,17 +196,17 @@ void LevelParser::InitScene(LevelScene &scene) const
             case '/':
                 map->SetTile(x, y, Tile::Type::STEEP_SLOPE_R, 10);
                 break;
-            case 'L': 
-                map->SetTile(x, y, Tile::Type::GENTLE_SLOPE_R1, 13);
-                break;
-            case 'l':
-                map->SetTile(x, y, Tile::Type::GENTLE_SLOPE_R2, 12);
-                break;
-            case 'R':
-                map->SetTile(x, y, Tile::Type::GENTLE_SLOPE_L1, 15);
+            case 'R': 
+                map->SetTile(x, y, Tile::Type::GENTLE_SLOPE_R1, 15);
                 break;
             case 'r':
-                map->SetTile(x, y, Tile::Type::GENTLE_SLOPE_L2, 16);
+                map->SetTile(x, y, Tile::Type::GENTLE_SLOPE_R2, 16);
+                break;
+            case 'L':
+                map->SetTile(x, y, Tile::Type::GENTLE_SLOPE_L1, 13);
+                break;
+            case 'l':
+                map->SetTile(x, y, Tile::Type::GENTLE_SLOPE_L2, 12);
                 break;
             case 'B':
                 //map->SetTile(x, y, Tile::Type::BRICK);

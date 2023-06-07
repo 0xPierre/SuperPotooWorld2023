@@ -46,7 +46,7 @@ LevelSelection::LevelSelection(TitleScene &scene) :
 
     // Création du titre
     TTF_Font *font = assets.GetFont(FontID::LARGE);
-    Text *title = new Text(scene, u8"Sélection du niveau", font, assets.GetColor(ColorID::NORMAL));
+    Text *title = new Text(scene, u8"Select Level", font, assets.GetColor(ColorID::NORMAL));
     title->GetLocalRect().anchorMin.Set(0.0f, 0.0f);
     title->GetLocalRect().anchorMax.Set(1.0f, 0.0f);
     title->GetLocalRect().offsetMin.Set(0.0f, 0);
