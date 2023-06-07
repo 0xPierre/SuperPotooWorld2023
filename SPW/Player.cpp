@@ -306,8 +306,13 @@ void Player::FixedUpdate()
     PE_Vec2 force = (20.0f * m_hDirection) * direction;
     body->ApplyForce(force);
 
-    float maxSpeedCoef = (velocity.y - force.y) / (velocity.x - force.x); // Directing coefficient
+    float divider = (velocity.x - force.x);
+    if (divider == 0)
+        divider = 0.001;
+
+    float maxSpeedCoef = (velocity.y - force.y) / divider; // Directing coefficient
     
+
     // TODO : Limiter la vitesse horizontale
     float maxHSpeed = 9.0f;
 
@@ -324,8 +329,6 @@ void Player::FixedUpdate()
     
     velocity.x = PE_Clamp(velocity.x, -maxHSpeed, maxHSpeed);
 
-    if (m_jump)
-        printf("%d %d\n", m_jump, m_onGround);
     // TODO : Ajouter un jump avec une vitesse au choix*
     if (m_jump && m_onGround) {
         if (m_onGround) {
