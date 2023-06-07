@@ -12,11 +12,23 @@ Nut::Nut(Scene &scene) :
     RE_Atlas *atlas = scene.GetAssetManager().GetAtlas(AtlasID::ENEMY);
     AssertNew(atlas);
 
+    RE_AtlasPart* part = nullptr;
+
     // Animation "Idle"
-    RE_AtlasPart *part = atlas->GetPart("NutIdle");
+    part = atlas->GetPart("NutIdle");
     AssertNew(part);
-    RE_TexAnim *idleAnim = new RE_TexAnim(m_animator, "Idle", part);
+    RE_TexAnim* idleAnim = new RE_TexAnim(
+        m_animator, "Idle", part
+    );
     idleAnim->SetCycleCount(0);
+
+    // Animation "Dying"
+    part = atlas->GetPart("NutDying");
+    AssertNew(part);
+    RE_TexAnim* fallingAnim = new RE_TexAnim(
+        m_animator, "Dying", part
+    );
+    fallingAnim->SetCycleCount(0);
 }
 
 Nut::~Nut()
@@ -100,6 +112,12 @@ void Nut::FixedUpdate()
         body->SetVelocity(PE_Vec2(-3.0f, 0.0f));
     }
 
+    if (m_state == State::DYING)
+    {
+        // Play the dying animation
+        m_animator.PlayAnimation("Dying");
+    }
+
    // if (dist <= 5.0f) {
    //     if (m_state == State::IDLE) {
 			//m_state = State::SPINNING;
@@ -136,16 +154,16 @@ void Nut::Render()
 void Nut::OnRespawn()
 {
     m_state = State::IDLE;
-
+    
     SetToRespawn(true);
     SetBodyEnabled(true);
     SetEnabled(true);
-
+    
     PE_Body *body = GetBody();
     body->SetPosition(GetStartPosition() + PE_Vec2(0.5f, 0.0f));
     body->SetVelocity(PE_Vec2::zero);
     body->ClearForces();
-
+    
     m_animator.StopAnimations();
     m_animator.PlayAnimation("Idle");
 }
@@ -161,7 +179,9 @@ void Nut::Damage(GameBody *damager)
 	}
 
     player->Bounce();
-    SetEnabled(false);
+    // SetEnabled(false);
+    // Set the nut's state to DYING
+    m_state = State::DYING;
 }
 
 void Nut::OnCollisionStay(GameCollision &collision)
