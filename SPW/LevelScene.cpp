@@ -4,8 +4,12 @@
 #include "DebugCamera.h"
 #include "Background.h"
 #include "StaticMap.h"
+#include <iostream>
+#include <filesystem>
 
-LevelScene::LevelScene(SDL_Renderer *renderer, RE_Timer &mainTime, LevelData &level, bool isCreative) :
+namespace fs = std::filesystem;
+
+LevelScene::LevelScene(SDL_Renderer *renderer, RE_Timer &mainTime, LevelData &level, bool isCreative, bool isNewWorld) :
     Scene(renderer, mainTime, level.themeID), m_paused(false),
     m_camIndex(0), m_cameras(), m_stepDelay(0.0f)
 {
@@ -16,6 +20,7 @@ LevelScene::LevelScene(SDL_Renderer *renderer, RE_Timer &mainTime, LevelData &le
     m_creative = new Creative(*this);
 
     SetCreative(isCreative);
+    SetNewWorld(isNewWorld);
 
     m_player = new Player(*this);
     m_player->SetName("Player");
@@ -27,17 +32,37 @@ LevelScene::LevelScene(SDL_Renderer *renderer, RE_Timer &mainTime, LevelData &le
     m_activeCam = m_cameras[m_camIndex];
 
     // Parse le niveau
-    LevelParser parser(level.path);
-    parser.InitScene(*this);
+    std::string path = level.path;
+    
+    if (m_is_new_world) {
+        LevelParser parser("../Assets/Level/Creative/NewWorldStarter.txt");
+        std::string newPath;
+        int i = 1;
+        std::string newName;
+        while (true)
+        {
+            std::string newName = "New World " + std::to_string(i);
+            newPath = "../Assets/Level/" + newName + ".txt";
+            if (!fs::exists(newPath))
+            {
+                break;
+            }
+            i++;
+        }
+        parser.InitScene(*this);
+        LevelData* level = new LevelData(newName, newPath, ThemeID::LAKE);
+        m_levelData = level;
+    }
+    else {
+        LevelParser parser(level.path);
+        parser.InitScene(*this);
 
-    m_levelData = &level;
-
-
-    //this->GetMap()->SetTile(5, 4, Tile::Type::WOOD);
+        m_levelData = &level;
+    }
     this->GetMap()->InitTiles();
+
     // Canvas
     m_canvas = new LevelCanvas(*this);
-
     // Crée le fond
     Background *background = new Background(*this, Layer::BACKGROUND);
     std::vector<SDL_Texture*> m_textures = m_assetManager.GetBackgrounds();

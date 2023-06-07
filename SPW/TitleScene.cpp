@@ -5,7 +5,7 @@
 
 TitleScene::TitleScene(SDL_Renderer *renderer, RE_Timer &mainTime, const std::vector<LevelData> &levels) :
     Scene(renderer, mainTime, ThemeID::MOUNTAINS),
-    m_levels(levels), m_selectedLevel(-1)
+    m_levels(levels), m_selectedLevel(-1), m_is_creative(false), m_is_new_world(false)
 {
     m_inputManager.GetApplication().SetEnabled(true);
     m_inputManager.GetMouse().SetEnabled(true);

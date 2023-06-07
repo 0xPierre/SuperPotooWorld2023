@@ -8,8 +8,8 @@ class LevelData
 public:
     LevelData(const std::string &name, const std::string &path, ThemeID themeID);
 
-    const std::string name;
-    const std::string path;
+    std::string name;
+    std::string path;
     ThemeID themeID;
 
     static std::vector<LevelData> Init();

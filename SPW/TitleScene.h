@@ -8,7 +8,6 @@
 enum TitleState {
     QUIT = -1,
     RETURN = -2,
-    CREATE_WORLD = -3,
 };
 
 class TitleScene : public Scene
@@ -22,12 +21,15 @@ public:
     int GetLevelID() const;
     void SetCreative(bool isCreative);
     bool IsCreative() const;
+    void SetIsNewWorld(bool isNewWorld);
+    bool IsNewWorld() const;
 
 private:
     TitleCanvas *m_canvas;
     const std::vector<LevelData> &m_levels;
     int m_selectedLevel;
     int m_is_creative;
+    int m_is_new_world;
 };
 
 inline void TitleScene::SetCreative(bool isCreative)
@@ -53,4 +55,14 @@ inline void TitleScene::SetLevelID(int levelID)
 inline int TitleScene::GetLevelID() const
 {
     return m_selectedLevel;
+}
+
+inline void TitleScene::SetIsNewWorld(bool isNewWorld)
+{
+	m_is_new_world = isNewWorld;
+}
+
+inline bool TitleScene::IsNewWorld() const
+{
+	return m_is_new_world;
 }

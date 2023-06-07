@@ -178,8 +178,8 @@ char GetCharFromTile(Tile tile)
 }
 
 void Creative::SaveInFile() {
-	printf("%s\n", m_levelScene->GetLevelData()->path.c_str());
-	FILE* levelFile = fopen("../assets/Level/aa.txt", "wb");
+	printf("Update : %s\n", m_levelScene->GetLevelData()->path.c_str());
+	FILE* levelFile = fopen(m_levelScene->GetLevelData()->path.c_str(), "wb");
 	AssertNew(levelFile);
 
 	const int width = m_levelScene->GetMap()->GetMaxWidth();
@@ -261,6 +261,4 @@ void Creative::SaveInFile() {
 
 
 	fclose(levelFile);
-
-	printf("Update level\n");
 }

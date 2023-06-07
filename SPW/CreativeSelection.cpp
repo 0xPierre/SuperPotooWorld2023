@@ -30,6 +30,28 @@ namespace CreativeSelectionNS
         TitleScene& m_titleScene;
         int m_levelID;
     };
+
+    class NewWorldCreationListener : public ButtonListener
+    {
+    public:
+        NewWorldCreationListener(TitleScene& scene) :
+            m_titleScene(scene)
+        {
+        }
+
+        virtual void OnPress()
+        {
+            m_titleScene.SetLevelID(0);
+            m_titleScene.SetCreative(true);
+            m_titleScene.SetIsNewWorld(true);
+
+            m_titleScene.Quit();
+        }
+
+    private:
+        TitleScene& m_titleScene;
+        int m_levelID;
+    };
 }
 
 CreativeSelection::CreativeSelection(TitleScene& scene) :
@@ -101,8 +123,7 @@ CreativeSelection::CreativeSelection(TitleScene& scene) :
     createWorldButton->SetParent(this);
     createWorldButton->SetBorders(new UIBorders(25, 25, 25, 25));
 
-    // We set levelId to TitleState::RETURN.
-    createWorldButton->SetListener(new CreativeSelectionNS::CreativeListener(scene, TitleState::RETURN));
+    createWorldButton->SetListener(new CreativeSelectionNS::NewWorldCreationListener(scene));
 
     Text* createWorldButtonLabel = new Text(scene, u8"Create World", font, colorUp);
     createWorldButton->SetText(createWorldButtonLabel, Button::State::UP);

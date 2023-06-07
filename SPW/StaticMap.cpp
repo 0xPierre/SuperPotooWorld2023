@@ -118,25 +118,6 @@ void StaticMap::InitTiles()
 		{
 			Tile& tile = m_tiles[x][y];
 			Tile::Type type = GetTileType(x, y);
-
-			/*printf("%d %d\n", tile.type, tile.partIdx);
-			switch (type)
-			{
-			case Tile::Type::GROUND:
-				if (IsGround(x, y + 1))
-				{
-					tile.partIdx = 4;
-				}
-				else
-				{
-					tile.partIdx = 1;
-				}
-				break;
-
-			default:
-				tile.partIdx = 0;
-				break;
-			}*/
 		}
 	}
 }
@@ -240,7 +221,6 @@ void StaticMap::Start()
 	{
 		for (int y = 0; y < m_height; ++y)
 		{
-			printf("%d %d\n", x, y);
 			Tile& tile = m_tiles[x][y];
 			if (tile.type == Tile::Type::EMPTY)
 			{

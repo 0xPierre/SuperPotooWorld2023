@@ -31,7 +31,7 @@ std::vector<LevelData> LevelData::Init()
             data.push_back(LevelData(
 				nameWithoutExtension,
 				path,
-				ThemeID::MOUNTAINS
+				ThemeID::LAKE
 			));
 		} while (FindNextFileA(hFind, &findData));
 		FindClose(hFind);
