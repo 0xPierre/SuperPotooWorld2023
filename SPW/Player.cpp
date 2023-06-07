@@ -8,7 +8,6 @@
 #include "LevelScene.h"
 #include "StaticMap.h"
 #include <time.h>
-
 #include "Brick.h"
 #include "Creative.h"
 
@@ -96,8 +95,8 @@ void Player::Update()
     // sa physique au prochain FixedUpdate()
 
     // TODO : Mettre à jour l'état du joueur en fonction des contrôles de jump
-    if (controls.jumpPressed)
-        m_jump = true;
+    m_jump = controls.jumpPressed;
+    m_longJump = controls.longJump;
 
     m_hDirection = controls.hAxis;
 
@@ -297,14 +296,29 @@ void Player::FixedUpdate()
     }
 
     velocity.x = PE_Clamp(velocity.x, -maxHSpeed, maxHSpeed);
-
+    
     // TODO : Ajouter un jump avec une vitesse au choix*
     if (m_jump && m_onGround) {
         if (m_onGround) {
             m_jump = false;
-            velocity.y = 20.0f;   
+            velocity.y = 20.0f;
+            if (m_longJump) {
+            }
         }
-    } else if (!m_onGround) m_jump = false;
+    } else if (!m_onGround)
+    {
+        m_jump = false;
+    }
+
+    if (m_longJump)
+    {
+        body->SetGravityScale(0.65f);
+        velocity.y += 0.15f;
+    }
+    else
+    {
+        body->SetGravityScale(1);
+    }
 
     // TODO : Rebond sur les ennemis
     if (m_bounce)

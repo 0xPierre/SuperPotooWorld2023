@@ -1,5 +1,6 @@
 #include "ControlsInput.h"
 #include "StaticMap.h"
+#include <time.h>
 
 ControlsInput::ControlsInput() :
     InputGroup(), hAxis(0.0f),
@@ -11,7 +12,20 @@ ControlsInput::ControlsInput() :
 
 void ControlsInput::OnPreEventProcess()
 {
+    const clock_t currentTime = clock();
+    milliseconds = (double)currentTime / (CLOCKS_PER_SEC / 1000);
+    
     jumpPressed = false;
+    longJump = false;
+
+    if (jumpDown)
+    {
+        if (milliseconds - jumpTimeMemory > 200 && jumpDown == true)
+        {
+            longJump = true;
+        }
+    }
+
 }
 
 void ControlsInput::OnEventProcess(SDL_Event evt)
@@ -87,7 +101,7 @@ void ControlsInput::OnEventProcess(SDL_Event evt)
 
     case SDL_KEYDOWN:
         scanCode = evt.key.keysym.scancode;
-
+        
         if (evt.key.repeat)
             break;
         
@@ -113,6 +127,7 @@ void ControlsInput::OnEventProcess(SDL_Event evt)
             // Saut
             jumpDown = true;
             jumpPressed = true;
+            jumpTimeMemory = milliseconds;
             break;
 
         case SDL_SCANCODE_1:
@@ -248,6 +263,7 @@ void ControlsInput::OnEventProcess(SDL_Event evt)
         case SDL_SCANCODE_SPACE:
         case SDL_SCANCODE_UP:
             // Saut
+            longJump = false;
             jumpDown = false;
             break;
 

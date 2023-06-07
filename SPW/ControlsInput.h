@@ -15,7 +15,10 @@ public:
     float hAxis;
     bool jumpDown;
     bool jumpPressed;
+    bool longJump;
+    long double jumpTimeMemory;
     bool goDownDown;
     int terrainSelected;
     int groundSelected;
+    double milliseconds;
 };
