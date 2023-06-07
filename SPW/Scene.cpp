@@ -333,9 +333,40 @@ private:
     int m_maskBits;
 };
 
+class SceneAreaCallbackAllBodies : public PE_QueryCallback
+{
+public:
+    SceneAreaCallbackAllBodies(int maskBits) : m_gameBodies(), m_maskBits(maskBits) {}
+
+    virtual bool ReportCollider(PE_Collider* collider)
+    {
+        if (collider->CheckCategory(m_maskBits) == false)
+            return true;
+
+        GameBody* gameBody = GameBody::GetFromBody(collider->GetBody());
+        if (gameBody == nullptr)
+            return true;
+
+        m_gameBodies.push_back(gameBody);
+        return true;
+    }
+
+    std::vector<GameBody*> m_gameBodies;
+
+private:
+    int m_maskBits;
+};
+
 GameBody *Scene::OverlapArea(const PE_AABB &area, int maskBits)
 {
     SceneAreaCallback callback(maskBits);
     m_world.QueryAABB(callback, area);
     return callback.m_gameBody;
+}
+
+std::vector<GameBody*> Scene::OverlapAreaAllBodies(const PE_AABB& area, int maskBits)
+{
+    SceneAreaCallbackAllBodies callback(maskBits);
+    m_world.QueryAABB(callback, area);
+    return callback.m_gameBodies;
 }

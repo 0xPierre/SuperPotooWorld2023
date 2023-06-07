@@ -11,7 +11,7 @@ struct Tile
         STEEP_SLOPE_L, STEEP_SLOPE_R,
         GENTLE_SLOPE_L1, GENTLE_SLOPE_L2, GENTLE_SLOPE_R1, GENTLE_SLOPE_R2,
         BRICK, BONUSFULL, BONUSEMPTY, CHECKPOINTFULL, CHECKPOINTEMPTY, LEVELEND, MOVINGPLATFORM,
-        FIREFLY
+        FIREFLY, NUT
     };
     Type type;
     int partIdx;
@@ -25,7 +25,7 @@ public:
     virtual ~StaticMap();
 
     void SetTile(int x, int y, Tile::Type type, int partIdx = 0);
-    bool RemoveTile(int x, int y, Tile &tile);
+    bool RemoveTile(int x, int y);
     void InitTiles();
 
     virtual void Render () override;

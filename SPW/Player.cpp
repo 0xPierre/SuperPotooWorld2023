@@ -478,6 +478,10 @@ void Player::Damage()
 {
     // Méthode appelée par un ennemi qui touche le joueur
 
+    // Désactive les damages en créatif
+    if (((LevelScene*)&m_scene)->IsCreative())
+        return;
+
     time_t now = time(NULL);
     if (now - m_livesTimeMemory > 2)
     {

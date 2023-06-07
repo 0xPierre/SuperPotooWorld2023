@@ -4,7 +4,7 @@
 
 
 GameObject::GameObject(Scene &scene, Layer layer) :
-    m_scene(scene), m_enabled(true), m_layer(layer),
+    m_scene(scene), m_enabled(false), m_layer(layer),
     m_children(), m_parent(nullptr), m_depth(0), m_name(), m_flags(Flag::NONE),
     m_objectID(-1)
 {

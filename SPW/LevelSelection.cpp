@@ -98,12 +98,12 @@ LevelSelection::LevelSelection(TitleScene &scene) :
     // We set levelId to TitleState::RETURN.
     button->SetListener(new LevelSelectionNS::SelectionListener(scene, TitleState::RETURN));
 
-    Text *buttonLabel = new Text(scene, u8"Retour", font, colorUp);
+    Text *buttonLabel = new Text(scene, u8"Go back", font, colorUp);
     button->SetText(buttonLabel, Button::State::UP);
 
-    buttonLabel = new Text(scene, u8"Retour", font, colorHover);
+    buttonLabel = new Text(scene, u8"Go back", font, colorHover);
     button->SetText(buttonLabel, Button::State::HOVER);
 
-    buttonLabel = new Text(scene, u8"Retour", font, colorDown);
+    buttonLabel = new Text(scene, u8"Go back", font, colorDown);
     button->SetText(buttonLabel, Button::State::DOWN);
 }

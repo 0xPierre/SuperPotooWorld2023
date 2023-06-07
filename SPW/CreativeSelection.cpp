@@ -92,6 +92,29 @@ CreativeSelection::CreativeSelection(TitleScene& scene) :
         button->SetText(buttonLabel, Button::State::DOWN);
     }
 
+    // Add a Create World btn
+    Button* createWorldButton = new Button(scene, buttonPart);
+    createWorldButton->GetLocalRect().anchorMin.Set(0.0f, 0.0f);
+    createWorldButton->GetLocalRect().anchorMax.Set(1.0f, 0.0f);
+    createWorldButton->GetLocalRect().offsetMin.Set(0.0f, curY);
+    createWorldButton->GetLocalRect().offsetMax.Set(0.0f, curY + buttonH);
+    createWorldButton->SetParent(this);
+    createWorldButton->SetBorders(new UIBorders(25, 25, 25, 25));
+
+    // We set levelId to TitleState::RETURN.
+    createWorldButton->SetListener(new CreativeSelectionNS::CreativeListener(scene, TitleState::RETURN));
+
+    Text* createWorldButtonLabel = new Text(scene, u8"Create World", font, colorUp);
+    createWorldButton->SetText(createWorldButtonLabel, Button::State::UP);
+
+    createWorldButtonLabel = new Text(scene, u8"Create World", font, colorHover);
+    createWorldButton->SetText(createWorldButtonLabel, Button::State::HOVER);
+
+    createWorldButtonLabel = new Text(scene, u8"Create World", font, colorDown);
+    createWorldButton->SetText(createWorldButtonLabel, Button::State::DOWN);
+
+    curY += buttonH + sep;
+
     // Add a return/cancel button
     Button* button = new Button(scene, buttonPart);
     button->GetLocalRect().anchorMin.Set(0.0f, 0.0f);
@@ -104,12 +127,12 @@ CreativeSelection::CreativeSelection(TitleScene& scene) :
     // We set levelId to TitleState::RETURN.
     button->SetListener(new CreativeSelectionNS::CreativeListener(scene, TitleState::RETURN));
 
-    Text* buttonLabel = new Text(scene, u8"Retour", font, colorUp);
+    Text* buttonLabel = new Text(scene, u8"Go back", font, colorUp);
     button->SetText(buttonLabel, Button::State::UP);
 
-    buttonLabel = new Text(scene, u8"Retour", font, colorHover);
+    buttonLabel = new Text(scene, u8"Go back", font, colorHover);
     button->SetText(buttonLabel, Button::State::HOVER);
 
-    buttonLabel = new Text(scene, u8"Retour", font, colorDown);
+    buttonLabel = new Text(scene, u8"Go back", font, colorDown);
     button->SetText(buttonLabel, Button::State::DOWN);
 }

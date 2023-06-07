@@ -8,6 +8,7 @@
 enum TitleState {
     QUIT = -1,
     RETURN = -2,
+    CREATE_WORLD = -3,
 };
 
 class TitleScene : public Scene

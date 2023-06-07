@@ -56,6 +56,10 @@ void LevelEnd::Render()
 
 void LevelEnd::OnCollisionEnter(GameCollision &collision)
 {
+    // Disable end of the game in creative
+    if (((LevelScene&)m_scene).IsCreative())
+        return;
+
     if (collision.otherCollider->CheckCategory(CATEGORY_PLAYER))
     {
         m_scene.Quit();

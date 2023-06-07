@@ -6,7 +6,7 @@ StaticMap::StaticMap(Scene& scene, int width, int height, bool isCreative) :
 	GameBody(scene, Layer::TERRAIN_BACKGROUND), m_width(width), m_height(height), m_is_creative(isCreative)
 {
 	m_name = "StaticMap";
-	m_max_width = 100;
+	m_max_width = 1000;
 
 	m_tiles = new Tile * [m_max_width];
 	for (int x = 0; x < m_max_width; x++)
@@ -93,7 +93,7 @@ void StaticMap::SetTile(int x, int y, Tile::Type type, int partIdx)
 }
 
 
-bool StaticMap::RemoveTile(int x, int y, Tile& tile)
+bool StaticMap::RemoveTile(int x, int y)
 {
 	if (x < 0 || x >= m_max_width || y < 0 || y >= m_height)
 	{
@@ -101,7 +101,7 @@ bool StaticMap::RemoveTile(int x, int y, Tile& tile)
 		//assert(false);
 		return false;
 	}
-	tile = m_tiles[x][y];
+	Tile tile = m_tiles[x][y];
 	tile.partIdx = 0;
 	tile.type = Tile::Type::EMPTY;
 
@@ -236,10 +236,11 @@ void StaticMap::Start()
 	PE_PolygonShape polygon;
 	PE_ColliderDef colliderDef;
 
-	for (int x = 0; x < m_width; ++x)
+	for (int x = 0; x < m_max_width; ++x)
 	{
 		for (int y = 0; y < m_height; ++y)
 		{
+			printf("%d %d\n", x, y);
 			Tile& tile = m_tiles[x][y];
 			if (tile.type == Tile::Type::EMPTY)
 			{
