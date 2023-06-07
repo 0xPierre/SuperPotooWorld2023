@@ -51,6 +51,18 @@ Player::Player(Scene &scene) :
     runninForwardgAnim->SetCycleCount(-1);
     runninForwardgAnim->SetCycleTime(0.2f);
 
+
+    // TODO : ajouter l'animation "Dying"
+    // Animation "Falling"
+    part = atlas->GetPart("Dying");
+    AssertNew(part);
+    RE_TexAnim* dyingAnim = new RE_TexAnim(
+        m_animator, "Dying", part
+    );
+    dyingAnim->SetCycleCount(-1);
+    dyingAnim->SetCycleTime(0.2f);
+    m_animator.StopAnimation("Dying");
+
     // Couleur des colliders en debug
     m_debugColor.r = 255;
     m_debugColor.g = 0;
@@ -172,6 +184,30 @@ void Player::Render()
         if ((milliseconds - jumpTimeAnimMemory) > 100)
         {
             m_jumpAnimating = false;   
+        }
+    }
+    
+    if (m_state != State::DYING && m_heartCount < 5)
+    {
+        if (time(NULL) - m_livesTimeMemory < 2)
+        {
+            if ((milliseconds - immunityTimeMemory) > 200)
+            {
+                if (!m_immunityState)
+                {
+                    m_immunityState = true;
+                }
+                else
+                {
+                    m_immunityState = false;
+                }
+                immunityTimeMemory = milliseconds;
+            }
+            if (m_immunityState)
+            {
+                rect.h *= 1.3;
+                rect.w *= 1.3;
+            }
         }
     }
 
@@ -326,11 +362,9 @@ void Player::FixedUpdate()
     
     // TODO : Ajouter un jump avec une vitesse au choix*
     if (m_jump && m_onGround) {
-        if (m_onGround) {
-            m_jump = false;
-            m_jumped = true;
-            velocity.y = 20.0f;
-        }
+        m_jump = false;
+        m_jumped = true;
+        velocity.y = 20.0f;
     } else if (!m_onGround){
         m_jump = false;
     }
@@ -520,6 +554,7 @@ void Player::Damage()
     {
         m_lifeCount--;
         m_livesTimeMemory = now;
+        m_state = State::DYING;
     }
     if (m_lifeCount <= 0)
     {

@@ -56,6 +56,8 @@ private:
     int m_heartCount;
     int m_fireflyCount;
     double m_livesTimeMemory;
+    bool m_immunityState;
+    double immunityTimeMemory;
     bool m_isFlipped;
     unsigned long m_fallTimeMemory;
 };
