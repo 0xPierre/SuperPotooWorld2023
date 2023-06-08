@@ -166,12 +166,12 @@ void ControlsInput::OnEventProcess(SDL_Event evt)
 
         case SDL_SCANCODE_8:
             terrainSelected = (int)Tile::Type::GENTLE_SLOPE_L1;
-            groundSelected = 15;
+            groundSelected = 13;
             break;
 
         case SDL_SCANCODE_9:
             terrainSelected = (int)Tile::Type::GENTLE_SLOPE_L2;
-            groundSelected = 16;
+            groundSelected = 12;
             break;        
 
         default:
@@ -183,11 +183,11 @@ void ControlsInput::OnEventProcess(SDL_Event evt)
         {
             case SDLK_a:
                 terrainSelected = (int)Tile::Type::GENTLE_SLOPE_R1;
-                groundSelected = 13;
+                groundSelected = 15;
 				break;
             case SDLK_z:
                 terrainSelected = (int)Tile::Type::GENTLE_SLOPE_R2;
-                groundSelected = 12;
+                groundSelected = 16;
                 break;
             case SDLK_e:
                 terrainSelected = (int)Tile::Type::GROUND;

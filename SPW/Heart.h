@@ -12,7 +12,10 @@ public:
     virtual void Render() override;
     virtual void OnRespawn() override;
     virtual void Update() override;
+    virtual void FixedUpdate() override;
 
     virtual void OnCollisionEnter(GameCollision &collision) override;
     virtual void Collect(GameBody *collector) override;
+private:
+    RE_Animator m_animator;
 };

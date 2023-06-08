@@ -4,6 +4,7 @@
 #include "MouseInput.h"
 #include "ControlsInput.h"
 #include "StaticMap.h"
+#include "GameBody.h"
 
 class Creative {
 public:
@@ -11,6 +12,7 @@ public:
 
 	void AddItem(Tile::Type tileType, int groundSelect, MouseInput& mouse);
 	void RemoveItem(MouseInput& mouse);
+	GameBody* SelectItem(MouseInput& mouse);
 	void SaveInFile();
 
 private:

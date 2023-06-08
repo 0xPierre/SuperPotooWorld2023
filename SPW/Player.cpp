@@ -145,7 +145,10 @@ void Player::Update()
         //        /*if (removedTile.collider != nullptr)
 				    //levelScene->GetMap()->GetBody()->RemoveCollider(removedTile.collider);*/
         //    }
-
+        }
+        if (mouse.middleClick && levelScene->IsCreative())
+        {
+            //Gamebody* levelScene->GetCreative()->SelectItem(mouse);
         }
     }
 }
@@ -394,8 +397,13 @@ void Player::FixedUpdate()
     PE_Vec2 force = (20.0f * m_hDirection) * direction;
     body->ApplyForce(force);
 
-    float maxSpeedCoef = (velocity.y - force.y) / (velocity.x - force.x); // Directing coefficient
+    float divider = (velocity.x - force.x);
+    if (divider == 0)
+        divider = 0.001;
+
+    float maxSpeedCoef = (velocity.y - force.y) / divider; // Directing coefficient
     
+
     // TODO : Limiter la vitesse horizontale
     float maxHSpeed = 9.0f;
 
@@ -411,7 +419,7 @@ void Player::FixedUpdate()
     }
     
     velocity.x = PE_Clamp(velocity.x, -maxHSpeed, maxHSpeed);
-    
+
     // TODO : Ajouter un jump avec une vitesse au choix*
     if (m_jump && m_canJump) {
         m_jump = false;
@@ -443,10 +451,8 @@ void Player::FixedUpdate()
     }
     
     if (m_onSlope == true && m_hDirection == 0 && time(NULL) - m_fallTimeMemory > 1) {
-        printf("%d\n", time(NULL) - (m_fallTimeMemory + 1));
 
         double timeCoef = abs(time(NULL) - (m_fallTimeMemory));
-        printf("%d gf\n", timeCoef);
 
         if (timeCoef > 20 || timeCoef < 20) {
             timeCoef = 1;
@@ -590,7 +596,8 @@ void Player::AddFirefly(int count)
 
 void Player::AddHeart()
 {
-    m_heartCount++;
+    if (m_heartCount < 3)
+        m_heartCount++;
 }
 
 void Player::Damage()

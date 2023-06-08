@@ -8,7 +8,8 @@ enum Category : uint32_t
     CATEGORY_COLLECTABLE = 1 << 1,
     CATEGORY_ENEMY       = 1 << 2,
     CATEGORY_TERRAIN     = 1 << 3,
-    CATEGORY_SLOPE       = 1 << 4
+    CATEGORY_TERRAIN_ENTITY = 1 << 4,
+    CATEGORY_SLOPE       = 1 << 5
 };
 
 enum class Layer : uint32_t

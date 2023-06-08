@@ -184,6 +184,9 @@ void LevelParser::InitScene(LevelScene &scene) const
             case 'W':
                 map->SetTile(x, y, Tile::Type::WOOD);
                 break;
+            case '^':
+                map->SetTile(x, y, Tile::Type::BONUSEMPTY);
+                break;
             case '=':
                 map->SetTile(x, y, Tile::Type::ONE_WAY);
                 break;
@@ -196,21 +199,30 @@ void LevelParser::InitScene(LevelScene &scene) const
             case '/':
                 map->SetTile(x, y, Tile::Type::STEEP_SLOPE_R, 10);
                 break;
-            case 'L': 
-                map->SetTile(x, y, Tile::Type::GENTLE_SLOPE_R1, 13);
-                break;
-            case 'l':
-                map->SetTile(x, y, Tile::Type::GENTLE_SLOPE_R2, 12);
-                break;
-            case 'R':
-                map->SetTile(x, y, Tile::Type::GENTLE_SLOPE_L1, 15);
+            case 'R': 
+                map->SetTile(x, y, Tile::Type::GENTLE_SLOPE_R1, 15);
                 break;
             case 'r':
-                map->SetTile(x, y, Tile::Type::GENTLE_SLOPE_L2, 16);
+                map->SetTile(x, y, Tile::Type::GENTLE_SLOPE_R2, 16);
+                break;
+            case 'L':
+                map->SetTile(x, y, Tile::Type::GENTLE_SLOPE_L1, 13);
+                break;
+            case 'l':
+                map->SetTile(x, y, Tile::Type::GENTLE_SLOPE_L2, 12);
                 break;
             case 'B':
-                //map->SetTile(x, y, Tile::Type::BRICK);
+            {
+                Brick * brick = new Brick(scene);
+                brick->SetStartPosition(position);
                 break;
+            }
+            case '?':
+            {
+                Bonus* bonus = new Bonus(scene);
+                bonus->SetStartPosition(position);
+                break;
+            }
             case 'S':
             {
                 Player *player = scene.GetPlayer();

@@ -13,6 +13,7 @@ public:
     virtual void Render() override;
     virtual void OnCollisionEnter(GameCollision &collision) override;
     virtual void OnRespawn() override;
+    void DrawGizmos() override;
 
 private:
     RE_Animator m_animator;

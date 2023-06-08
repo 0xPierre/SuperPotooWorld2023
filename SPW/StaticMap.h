@@ -37,6 +37,7 @@ public:
     int GetMaxWidth() const;
     int GetHeight() const;
     Tile** GetTiles() const;
+    int GetTilePartIndex(int x, int y) const;
 
 private:
 

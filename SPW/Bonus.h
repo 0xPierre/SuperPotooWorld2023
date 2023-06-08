@@ -16,4 +16,9 @@ public:
 private:
     RE_Animator m_animator;
     bool m_hit;
+    enum class State
+    {
+        FULL,EMPTY
+    };
+    State m_state;
 };
