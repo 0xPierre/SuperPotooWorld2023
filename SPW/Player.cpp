@@ -106,6 +106,8 @@ void Player::Start()
 void Player::Update()
 {
     ControlsInput& controls = m_scene.GetInputManager().GetControls();
+    const clock_t currentTime = clock();
+    const double milliseconds = (double)currentTime / (CLOCKS_PER_SEC / 1000);
 
     // Sauvegarde les contrôles du joueur pour modifier
     // sa physique au prochain FixedUpdate()
@@ -264,6 +266,8 @@ void Player::FixedUpdate()
     PE_Vec2 position = body->GetPosition();
     // TODO : Récuperer la vitesse du joueur
     PE_Vec2 velocity = body->GetLocalVelocity();
+    const clock_t currentTime = clock();
+    const double milliseconds = (double)currentTime / (CLOCKS_PER_SEC / 1000);
 
     // Réveille les corps autour du joueur
 
@@ -420,13 +424,24 @@ void Player::FixedUpdate()
     
     velocity.x = PE_Clamp(velocity.x, -maxHSpeed, maxHSpeed);
 
+    if (milliseconds - m_jumpShotTimeMemory > 200)
+    {
+        m_jumpShot = false;
+    }
+
     // TODO : Ajouter un jump avec une vitesse au choix*
-    if (m_jump && m_canJump) {
+    if ((m_jump && m_canJump) || m_jumpShot) {
         m_jump = false;
         m_jumped = true;
         velocity.y = 20.0f;
     } else if (!m_canJump){
         m_jump = false;
+    }
+
+    if (m_jump && !m_canJump)
+    {
+        m_jumpShot = true;
+        m_jumpShotTimeMemory = milliseconds;
     }
 
     if (m_longJump)
