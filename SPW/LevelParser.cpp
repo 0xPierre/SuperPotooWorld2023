@@ -184,6 +184,9 @@ void LevelParser::InitScene(LevelScene &scene) const
             case 'W':
                 map->SetTile(x, y, Tile::Type::WOOD);
                 break;
+            case '^':
+                map->SetTile(x, y, Tile::Type::BONUSEMPTY);
+                break;
             case '=':
                 map->SetTile(x, y, Tile::Type::ONE_WAY);
                 break;
@@ -212,7 +215,12 @@ void LevelParser::InitScene(LevelScene &scene) const
             {
                 Brick * brick = new Brick(scene);
                 brick->SetStartPosition(position);
-                //scene.SetStartingPoint(position);
+                break;
+            }
+            case '?':
+            {
+                Bonus* bonus = new Bonus(scene);
+                bonus->SetStartPosition(position);
                 break;
             }
             case 'S':

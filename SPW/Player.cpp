@@ -127,7 +127,10 @@ void Player::Update()
         //        /*if (removedTile.collider != nullptr)
 				    //levelScene->GetMap()->GetBody()->RemoveCollider(removedTile.collider);*/
         //    }
-
+        }
+        if (mouse.middleClick && levelScene->IsCreative())
+        {
+            //Gamebody* levelScene->GetCreative()->SelectItem(mouse);
         }
     }
 }
@@ -507,7 +510,8 @@ void Player::AddFirefly(int count)
 
 void Player::AddHeart()
 {
-    m_heartCount++;
+    if (m_heartCount < 3)
+        m_heartCount++;
 }
 
 void Player::Damage()

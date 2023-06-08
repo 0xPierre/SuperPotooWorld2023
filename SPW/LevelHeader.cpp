@@ -58,7 +58,7 @@ LevelHeader::LevelHeader(LevelScene &scene):
 
     
     
-    // Image number of lives
+    // Image number of heart
     RE_AtlasPart *heart = atlasPlayer->GetPart("Heart");
     AssertNew(heart);
     Image *heartImage = new Image(scene, heart, 0);
@@ -71,13 +71,13 @@ LevelHeader::LevelHeader(LevelScene &scene):
     currLivesX += imgW + sep;
     
     // lives counter
-    m_livesCount = new Text(scene, "0", font, color);
-    m_livesCount->SetAnchor(RE_Anchor::WEST);
-    m_livesCount->GetLocalRect().anchorMin.Set(0.0f, 1.0f);
-    m_livesCount->GetLocalRect().anchorMax.Set(0.0f, 1.0f);
-    m_livesCount->GetLocalRect().offsetMin.Set(currLivesX, currLivesY);
-    m_livesCount->GetLocalRect().offsetMax.Set(currLivesX + numW, currLivesY + imgH);
-    m_livesCount->SetParent(this);
+    m_heartCount = new Text(scene, "0", font, color);
+    m_heartCount->SetAnchor(RE_Anchor::WEST);
+    m_heartCount->GetLocalRect().anchorMin.Set(0.0f, 1.0f);
+    m_heartCount->GetLocalRect().anchorMax.Set(0.0f, 1.0f);
+    m_heartCount->GetLocalRect().offsetMin.Set(currLivesX, currLivesY);
+    m_heartCount->GetLocalRect().offsetMax.Set(currLivesX + numW, currLivesY + imgH);
+    m_heartCount->SetParent(this);
 
     // Creative selected block
     // lives counter
@@ -106,7 +106,7 @@ void LevelHeader::Update()
     
     Player* player = m_levelScene.GetPlayer();
     m_fireflyCount->SetString(std::to_string(player->GetFireflyCount()));
-    m_livesCount->SetString(std::to_string(player->GetLifeCount()));
+    m_heartCount->SetString(std::to_string(player->GetHeartCount()));
 
     if (!levelScene->IsCreative()) return;
     m_selectedBlock->SetString("Item selected :");

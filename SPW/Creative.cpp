@@ -7,6 +7,7 @@
 #include "Firefly.h"
 #include "Nut.h"
 #include "Brick.h"
+#include "Bonus.h"
 
 Creative::Creative(LevelScene& levelScene)
 {
@@ -66,7 +67,6 @@ void Creative::AddItem(Tile::Type tileType, int groundSelected, MouseInput& mous
 	case Tile::Type::WOOD:
 	case Tile::Type::ONE_WAY:
 	case Tile::Type::SPIKE:
-	case Tile::Type::BONUSFULL:
 	case Tile::Type::BONUSEMPTY:
 	case Tile::Type::CHECKPOINTFULL:
 	case Tile::Type::CHECKPOINTEMPTY:
@@ -103,6 +103,14 @@ void Creative::AddItem(Tile::Type tileType, int groundSelected, MouseInput& mous
 		Pos.x = (int)Pos.x;
 		Pos.y = (int)Pos.y;
 		brick->SetStartPosition(Pos);
+		break;
+	}
+	case Tile::Type::BONUSFULL:
+	{
+		Bonus* bonus = new Bonus(*m_levelScene);
+		Pos.x = (int)Pos.x;
+		Pos.y = (int)Pos.y;
+		bonus->SetStartPosition(Pos);
 		break;
 	}
 	}
@@ -144,6 +152,44 @@ void Creative::RemoveItem(MouseInput& mouse) {
 	m_levelScene->GetMap()->RemoveTile(Pos.x, Pos.y);
 }
 
+GameBody* Creative::SelectItem(MouseInput& mouse)
+{
+	PE_Vec2 Pos;
+	m_levelScene->GetActiveCamera()->ViewToWorld((int)mouse.viewPos.x, (int)mouse.viewPos.y, Pos);
+
+	PE_Vec2 lower;
+	lower.x = (int)Pos.x;
+	lower.y = (int)Pos.y;
+	PE_Vec2 upper;
+	upper.x = (int)Pos.x + 1;
+	upper.y = (int)Pos.y + 1;
+
+	PE_AABB aabb;
+	aabb.lower = lower;
+	aabb.upper = upper;
+
+	std::vector<GameBody*> gms;
+	gms = m_levelScene->OverlapAreaAllBodies(aabb, CATEGORY_COLLECTABLE | CATEGORY_ENEMY | CATEGORY_TERRAIN_ENTITY | CATEGORY_TERRAIN);
+
+	if (gms.size() > 0)
+	{
+		bool gmHasBeenSelected = false;
+		int i;
+		for (i=0; i < gms.size(); i++)
+		{
+			GameBody* gm = gms[i];
+
+			if ((int)gm->GetPosition().x == lower.x && (int)gm->GetPosition().y == lower.y)
+			{
+				gmHasBeenSelected = true;
+				break;
+			}
+		}
+		if (gmHasBeenSelected)
+			return gms[i];
+	}
+}
+
 char GetCharFromTile(Tile tile)
 {
 	char c = '.';
@@ -171,8 +217,6 @@ char GetCharFromTile(Tile tile)
 		}
 
 		break;
-	case Tile::Type::BONUSFULL:
-		return '?';
 	case Tile::Type::BONUSEMPTY:
 		return '^';
 	case Tile::Type::WOOD:
@@ -255,6 +299,12 @@ void Creative::SaveInFile() {
 						else if (gmName == "Brick")
 						{
 							fputc('B', levelFile);
+							gmHasBeenPut = true;
+							break;
+						}
+						else if (gmName == "Bonus")
+						{
+							fputc('?', levelFile);
 							gmHasBeenPut = true;
 							break;
 						}

@@ -35,12 +35,6 @@ StaticMap::StaticMap(Scene& scene, int width, int height, bool isCreative) :
 	m_spikePart = atlas->GetPart("Spike");
 	AssertNew(m_spikePart);
 
-	m_brickPart = atlas->GetPart("Brick");
-	AssertNew(m_brickPart);
-
-	m_bonusFullPart = atlas->GetPart("BonusFull");
-	AssertNew(m_bonusFullPart);
-
 	m_bonusEmptyPart = atlas->GetPart("BonusEmpty");
 	AssertNew(m_bonusEmptyPart);
 
@@ -243,9 +237,9 @@ void StaticMap::Render()
 			case Tile::Type::SPIKE:
 				m_spikePart->RenderCopyF(0, &dst, RE_Anchor::SOUTH_WEST);
 				break;
-			case Tile::Type::BONUSFULL:
+			/*case Tile::Type::BONUSFULL:
 				m_bonusFullPart->RenderCopyF(0, &dst, RE_Anchor::SOUTH_WEST);
-				break;
+				break;*/
 			case Tile::Type::BONUSEMPTY:
 				m_bonusEmptyPart->RenderCopyF(0, &dst, RE_Anchor::SOUTH_WEST);
 				break;
@@ -311,6 +305,7 @@ void StaticMap::Start()
 
 			case Tile::Type::GROUND:
 			case Tile::Type::WOOD:
+			case Tile::Type::BONUSEMPTY:
 				polygon.SetAsBox(PE_AABB(position, position + PE_Vec2(1.0f, 1.0f)));
 				break;
 

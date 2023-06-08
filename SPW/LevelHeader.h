@@ -17,6 +17,7 @@ private:
     LevelScene &m_levelScene;
     Text *m_fireflyCount;
     Text *m_livesCount;
+    Text* m_heartCount;
     Text *m_selectedBlock;
     Image *m_blockImage;
 };
