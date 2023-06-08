@@ -17,7 +17,7 @@
 Player::Player(Scene &scene) :
     GameBody(scene, Layer::PLAYER), m_animator(),
     m_jump(false), m_facingRight(true), m_bounce(false), m_hDirection(0.0f),
-    m_lifeCount(5), m_fireflyCount(0), m_heartCount(2), m_state(Player::State::IDLE)
+    m_lifeCount(3), m_fireflyCount(0), m_heartCount(2), m_state(Player::State::IDLE)
 {
     m_name = "Player";
 
@@ -420,6 +420,10 @@ void Player::FixedUpdate()
     
     velocity.x = PE_Clamp(velocity.x, -maxHSpeed, maxHSpeed);
 
+    if (m_jump)
+        printf("a\n");
+    if (m_canJump && m_jump)
+        printf("b\n");
     // TODO : Ajouter un jump avec une vitesse au choix*
     if (m_jump && m_canJump) {
         m_jump = false;
@@ -609,22 +613,22 @@ void Player::Damage()
         return;
 
     time_t now = time(NULL);
-    if (now - m_livesTimeMemory > 2 && m_lifeCount > 1)
+    if (now - m_livesTimeMemory > 2 && m_heartCount >= 1)
     {
         m_livesTimeMemory = now;
         m_state = State::DYING;
-        m_lifeCount--;
+        m_heartCount--;
     }
-    if (m_lifeCount <= 1)
+    if (m_heartCount < 1)
     {
-        m_lifeCount = 0;
+        m_heartCount = 0;
         m_state = State::DEAD;
     }
 }
 
 void Player::Kill()
 {
-    m_lifeCount = 5;
+    m_heartCount = 3;
     m_scene.Respawn();
 }
 
