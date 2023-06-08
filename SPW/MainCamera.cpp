@@ -22,17 +22,16 @@ void MainCamera::Update()
     
     m_center.SetTarget(playerBody->GetPosition());
     m_center.Update(levelScene.GetTime());
-    
-    PE_Vec2 startPosition(+12.0f, m_center.y);
-    
+
     PE_Vec2 cameraPos = m_center;
-    
-    if (camera->GetWorldView().lower.x + 11.0f <= startPosition.x && m_center.x <= camera->GetWorldView().upper.x / 2)
-    {
-        cameraPos = startPosition;
-    }
-    
+ 
     TranslateWorldView(cameraPos - m_worldView.GetCenter());
+
+    float dispLowerX = m_worldBounds.lower.x - m_worldView.lower.x;
+    if (dispLowerX > 0.0f)
+    {
+        TranslateWorldView(PE_Vec2(dispLowerX, 0.0f));
+    }
 
     // Fixe la position verticale minimale de la caméra pour ne pas voir sous le sol
     float dispLowerY = m_worldBounds.lower.y - m_worldView.lower.y;
