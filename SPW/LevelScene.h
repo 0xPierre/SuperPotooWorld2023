@@ -47,6 +47,8 @@ public:
 
 	Creative* GetCreative() const;
 
+	bool GetCamIndex() const;
+
 
 private:
 	std::array<Camera*, 2> m_cameras;
@@ -73,6 +75,10 @@ private:
 	Creative* m_creative;
 };
 
+inline bool LevelScene::GetCamIndex() const
+{
+	return m_camIndex;
+}
 
 inline LevelData* LevelScene::GetLevelData() const
 {

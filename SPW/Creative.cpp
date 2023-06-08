@@ -72,6 +72,7 @@ void Creative::AddItem(Tile::Type tileType, int groundSelected, MouseInput& mous
 	case Tile::Type::CHECKPOINTEMPTY:
 		
 		m_levelScene->GetMap()->SetTile(Pos.x, Pos.y, tileType, groundSelected);
+		m_levelScene->GetMap()->AddTileCollider(Pos.x, Pos.y);
 		break;
 	case Tile::Type::LEVELEND:
 		// Delete the older Level End

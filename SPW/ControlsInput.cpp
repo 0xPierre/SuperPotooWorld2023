@@ -6,7 +6,7 @@ ControlsInput::ControlsInput() :
     InputGroup(), hAxis(0.0f),
     jumpDown(false), jumpPressed(false), goDownDown(false),
     terrainSelected((int)Tile::Type::WOOD),
-    groundSelected(4)
+    groundSelected(4), shiftLPressed(0)
 {
 }
 
@@ -17,6 +17,7 @@ void ControlsInput::OnPreEventProcess()
     
     jumpPressed = false;
     longJump = false;
+    shiftLPressed = false;
 
     if (jumpDown)
     {
@@ -229,6 +230,9 @@ void ControlsInput::OnEventProcess(SDL_Event evt)
             case SDLK_l:
                 terrainSelected = (int)Tile::Type::NUT;
                 break;
+            case SDLK_LSHIFT:
+                shiftLPressed = true;
+                break;
             //case SDLK_d:
             //    // BRICK
             //    terrainSelected = (int)Tile::Type::BRICK;
@@ -269,7 +273,6 @@ void ControlsInput::OnEventProcess(SDL_Event evt)
             longJump = false;
             jumpDown = false;
             break;
-
         default:
             break;
         }
@@ -286,4 +289,5 @@ void ControlsInput::Reset()
     jumpDown = false;
     jumpPressed = false;
     goDownDown = false;
+    shiftLPressed = false;
 }

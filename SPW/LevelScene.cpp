@@ -2,6 +2,7 @@
 #include "LevelParser.h"
 #include "MainCamera.h"
 #include "DebugCamera.h"
+#include "CreativeCamera.h"
 #include "Background.h"
 #include "StaticMap.h"
 #include <iostream>
@@ -27,9 +28,19 @@ LevelScene::LevelScene(SDL_Renderer *renderer, RE_Timer &mainTime, LevelData &le
     m_map = NULL;
 
     // Crée les caméras
-    m_cameras[0] = new MainCamera(*this);
-    m_cameras[1] = new DebugCamera(*this, *m_cameras[0]);
-    m_activeCam = m_cameras[m_camIndex];
+
+    if (isCreative)
+    {
+        m_camIndex = 1;
+        m_cameras[0] = new MainCamera(*this);
+        m_cameras[1] = new CreativeCamera(*this, *m_cameras[0]);
+        m_activeCam = m_cameras[m_camIndex];
+    }
+    else {
+        m_cameras[0] = new MainCamera(*this);
+        m_cameras[1] = new DebugCamera(*this, *m_cameras[0]);
+        m_activeCam = m_cameras[m_camIndex];
+    }
 
     // Parse le niveau
     std::string path = level.path;

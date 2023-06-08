@@ -145,6 +145,7 @@
     <ClCompile Include="Checkpoint.cpp" />
     <ClCompile Include="Collectable.cpp" />
     <ClCompile Include="ControlsInput.cpp" />
+    <ClCompile Include="CreativeCamera.cpp" />
     <ClCompile Include="DebugCamera.cpp" />
     <ClCompile Include="DebugInput.cpp" />
     <ClCompile Include="Enemy.cpp" />
@@ -193,6 +194,7 @@
     <ClInclude Include="Checkpoint.h" />
     <ClInclude Include="Collectable.h" />
     <ClInclude Include="ControlsInput.h" />
+    <ClInclude Include="CreativeCamera.h" />
     <ClInclude Include="DebugCamera.h" />
     <ClInclude Include="DebugInput.h" />
     <ClInclude Include="Enemy.h" />

@@ -191,6 +191,9 @@
     <ClCompile Include="Creative.cpp">
       <Filter>Fichiers sources\Utils</Filter>
     </ClCompile>
+    <ClCompile Include="CreativeCamera.cpp">
+      <Filter>Fichiers sources\GameObject\GameBody\Camera</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Settings.h">
@@ -330,6 +333,9 @@
     </ClInclude>
     <ClInclude Include="Creative.h">
       <Filter>Fichiers sources\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="CreativeCamera.h">
+      <Filter>Fichiers sources\GameObject\GameBody\Camera</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

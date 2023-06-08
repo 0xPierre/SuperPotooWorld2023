@@ -17,6 +17,7 @@ public:
     bool jumpPressed;
     bool longJump;
     long double jumpTimeMemory;
+    int shiftLPressed;
     bool goDownDown;
     int terrainSelected;
     int groundSelected;

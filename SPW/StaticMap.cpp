@@ -99,6 +99,12 @@ bool StaticMap::RemoveTile(int x, int y)
 	tile.partIdx = 0;
 	tile.type = Tile::Type::EMPTY;
 
+
+	if (tile.collider != nullptr)
+	{
+		tile.collider->GetBody()->RemoveCollider(tile.collider);
+		tile.collider = nullptr;
+	}
 	m_tiles[x][y] = tile;
 
 	return true;
@@ -259,6 +265,110 @@ void StaticMap::Render()
 	}
 }
 
+bool StaticMap::AddTileCollider(int x, int y)
+{
+	PE_Vec2 vertices[3];
+	PE_PolygonShape polygon;
+	PE_ColliderDef colliderDef;
+
+	Tile& tile = m_tiles[x][y];
+	if (tile.type == Tile::Type::EMPTY)
+	{
+		return false;
+	}
+
+	PE_Vec2 position((float)x, (float)y);
+	bool newCollider = true;
+	colliderDef.SetDefault();
+	colliderDef.shape = &polygon;
+	colliderDef.friction = 0.5f;
+	colliderDef.filter.categoryBits = CATEGORY_TERRAIN;
+	colliderDef.userData.id = 0;
+
+	switch (tile.type)
+	{
+	case Tile::Type::ONE_WAY:
+		colliderDef.isOneWay = true;
+		polygon.SetAsBox(PE_AABB(position, position + PE_Vec2(1.0f, 1.0f)));
+		break;
+
+	case Tile::Type::GROUND:
+	case Tile::Type::WOOD:
+	case Tile::Type::BONUSEMPTY:
+		polygon.SetAsBox(PE_AABB(position, position + PE_Vec2(1.0f, 1.0f)));
+		break;
+
+	case Tile::Type::STEEP_SLOPE_L:
+		colliderDef.filter.categoryBits = CATEGORY_SLOPE;
+		vertices[0] = position + PE_Vec2(0.0f, 0.0f);
+		vertices[1] = position + PE_Vec2(1.0f, 0.0f);
+		vertices[2] = position + PE_Vec2(0.0f, 1.0f);
+		polygon.SetVertices(vertices, 3);
+		break;
+	case Tile::Type::STEEP_SLOPE_R:
+		colliderDef.filter.categoryBits = CATEGORY_SLOPE;
+		vertices[0] = position + PE_Vec2(0.0f, 0.0f);
+		vertices[1] = position + PE_Vec2(1.0f, 0.0f);
+		vertices[2] = position + PE_Vec2(1.0f, 1.0f);
+		polygon.SetVertices(vertices, 3);
+		break;
+
+	case Tile::Type::GENTLE_SLOPE_R1:
+		colliderDef.filter.categoryBits = CATEGORY_SLOPE;
+		vertices[0] = position + PE_Vec2(0.0f, 0.0f);
+		vertices[1] = position + PE_Vec2(1.0f, 0.0f);
+		vertices[2] = position + PE_Vec2(1.0f, 0.5f);
+		polygon.SetVertices(vertices, 3);
+		break;
+
+	case Tile::Type::GENTLE_SLOPE_R2:
+		colliderDef.filter.categoryBits = CATEGORY_SLOPE;
+		vertices[0] = position + PE_Vec2(0.0f, 0.5f);
+		vertices[1] = position + PE_Vec2(1.0f, 0.0f);
+		vertices[2] = position + PE_Vec2(1.0f, 1.0f);
+		polygon.SetVertices(vertices, 3);
+		break;
+
+	case Tile::Type::GENTLE_SLOPE_L1:
+		colliderDef.filter.categoryBits = CATEGORY_SLOPE;
+		vertices[0] = position + PE_Vec2(0.0f, 0.5f);
+		vertices[1] = position + PE_Vec2(0.0f, 0.0f);
+		vertices[2] = position + PE_Vec2(1.0f, 0.0f);
+		polygon.SetVertices(vertices, 3);
+		break;
+
+	case Tile::Type::GENTLE_SLOPE_L2:
+		colliderDef.filter.categoryBits = CATEGORY_SLOPE;
+		vertices[0] = position + PE_Vec2(0.0f, 0.0f);
+		vertices[1] = position + PE_Vec2(1.0f, 0.5f);
+		vertices[2] = position + PE_Vec2(0.0f, 1.0f);
+		polygon.SetVertices(vertices, 3);
+		break;
+
+	case Tile::Type::SPIKE:
+		colliderDef.userData.id = 1;
+
+		vertices[0] = position + PE_Vec2(0.1f, 0.0f);
+		vertices[1] = position + PE_Vec2(0.9f, 0.0f);
+		vertices[2] = position + PE_Vec2(0.5f, 0.8f);
+		polygon.SetVertices(vertices, 3);
+		break;
+
+	default:
+		newCollider = false;
+		break;
+	}
+	if (newCollider)
+	{
+		tile.collider = GetBody()->CreateCollider(colliderDef);
+		AssertNew(tile.collider);
+	}
+	else
+	{
+		tile.collider = nullptr;
+	}
+}
+
 void StaticMap::Start()
 {
 	PE_World& world = m_scene.GetWorld();
@@ -273,113 +383,18 @@ void StaticMap::Start()
 	AssertNew(body);
 	SetBody(body);
 
-	// Crée les colliders
-	PE_Vec2 vertices[3];
-	PE_PolygonShape polygon;
-	PE_ColliderDef colliderDef;
 
 	for (int x = 0; x < m_max_width; ++x)
 	{
 		for (int y = 0; y < m_height; ++y)
 		{
-			Tile& tile = m_tiles[x][y];
-			if (tile.type == Tile::Type::EMPTY)
-			{
-				continue;
-			}
-
-			PE_Vec2 position((float)x, (float)y);
-			bool newCollider = true;
-			colliderDef.SetDefault();
-			colliderDef.shape = &polygon;
-			colliderDef.friction = 0.5f;
-			colliderDef.filter.categoryBits = CATEGORY_TERRAIN;
-			colliderDef.userData.id = 0;
-
-			switch (tile.type)
-			{
-			case Tile::Type::ONE_WAY:
-				colliderDef.isOneWay = true;
-				polygon.SetAsBox(PE_AABB(position, position + PE_Vec2(1.0f, 1.0f)));
-				break;
-
-			case Tile::Type::GROUND:
-			case Tile::Type::WOOD:
-			case Tile::Type::BONUSEMPTY:
-				polygon.SetAsBox(PE_AABB(position, position + PE_Vec2(1.0f, 1.0f)));
-				break;
-
-			case Tile::Type::STEEP_SLOPE_L:
-				colliderDef.filter.categoryBits = CATEGORY_SLOPE;
-				vertices[0] = position + PE_Vec2(0.0f, 0.0f);
-				vertices[1] = position + PE_Vec2(1.0f, 0.0f);
-				vertices[2] = position + PE_Vec2(0.0f, 1.0f);
-				polygon.SetVertices(vertices, 3);
-				break;
-			case Tile::Type::STEEP_SLOPE_R:
-				colliderDef.filter.categoryBits = CATEGORY_SLOPE;
-				vertices[0] = position + PE_Vec2(0.0f, 0.0f);
-				vertices[1] = position + PE_Vec2(1.0f, 0.0f);
-				vertices[2] = position + PE_Vec2(1.0f, 1.0f);
-				polygon.SetVertices(vertices, 3);
-				break;
-
-			case Tile::Type::GENTLE_SLOPE_R1:
-				colliderDef.filter.categoryBits = CATEGORY_SLOPE;
-				vertices[0] = position + PE_Vec2(0.0f, 0.0f);
-				vertices[1] = position + PE_Vec2(1.0f, 0.0f);
-				vertices[2] = position + PE_Vec2(1.0f, 0.5f);
-				polygon.SetVertices(vertices, 3);
-				break;
-
-			case Tile::Type::GENTLE_SLOPE_R2:
-				colliderDef.filter.categoryBits = CATEGORY_SLOPE;
-				vertices[0] = position + PE_Vec2(0.0f, 0.5f);
-				vertices[1] = position + PE_Vec2(1.0f, 0.0f);
-				vertices[2] = position + PE_Vec2(1.0f, 1.0f);
-				polygon.SetVertices(vertices, 3);
-				break;
-
-			case Tile::Type::GENTLE_SLOPE_L1:
-				colliderDef.filter.categoryBits = CATEGORY_SLOPE;
-				vertices[0] = position + PE_Vec2(0.0f, 0.5f);
-				vertices[1] = position + PE_Vec2(0.0f, 0.0f);
-				vertices[2] = position + PE_Vec2(1.0f, 0.0f);
-				polygon.SetVertices(vertices, 3);
-				break;
-
-			case Tile::Type::GENTLE_SLOPE_L2:
-				colliderDef.filter.categoryBits = CATEGORY_SLOPE;
-				vertices[0] = position + PE_Vec2(0.0f, 0.0f);
-				vertices[1] = position + PE_Vec2(1.0f, 0.5f);
-				vertices[2] = position + PE_Vec2(0.0f, 1.0f);
-				polygon.SetVertices(vertices, 3);
-				break;
-
-			case Tile::Type::SPIKE:
-				colliderDef.userData.id = 1;
-
-				vertices[0] = position + PE_Vec2(0.1f, 0.0f);
-				vertices[1] = position + PE_Vec2(0.9f, 0.0f);
-				vertices[2] = position + PE_Vec2(0.5f, 0.8f);
-				polygon.SetVertices(vertices, 3);
-				break;
-
-			default:
-				newCollider = false;
-				break;
-			}
-			if (newCollider)
-			{
-				tile.collider = body->CreateCollider(colliderDef);
-				AssertNew(tile.collider);
-			}
-			else
-			{
-				tile.collider = nullptr;
-			}
+			AddTileCollider(x, y);
 		}
 	}
+
+	PE_Vec2 vertices[3];
+	PE_PolygonShape polygon;
+	PE_ColliderDef colliderDef;
 
 	// Limite à gauche du monde
 	polygon.SetAsBox(-1.0f, -2.0f, 0.0f, (float)m_height + 10.0f);

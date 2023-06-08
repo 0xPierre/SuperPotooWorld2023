@@ -134,20 +134,8 @@ void Player::Update()
         {
             levelScene->GetCreative()->AddItem((Tile::Type)controls.terrainSelected, controls.groundSelected, mouse);
         }
-        if (mouse.rightReleased && levelScene->IsCreative()) {
+        if (controls.shiftLPressed && levelScene->IsCreative()) {
             levelScene->GetCreative()->RemoveItem(mouse);
-            //m_scene.GetActiveCamera()->ViewToWorld((int)mouse.viewPos.x, (int)mouse.viewPos.y, Pos);
-
-           /* m_scene.GetObjectManager().PrintObjects();
-            m_scene.GetObjectManager().;*/
-
-        //    Tile removedTile;
-        //    if (levelScene->GetMap()->RemoveTile(Pos.x, Pos.y, removedTile))
-        //    {
-        //        // Remove collision for tile
-        //        /*if (removedTile.collider != nullptr)
-				    //levelScene->GetMap()->GetBody()->RemoveCollider(removedTile.collider);*/
-        //    }
         }
         if (mouse.middleClick && levelScene->IsCreative())
         {
@@ -163,6 +151,8 @@ void Player::Render()
 
     const clock_t currentTime = clock();
     const double milliseconds = (double)currentTime / (CLOCKS_PER_SEC / 1000);
+
+    if (((LevelScene* )&m_scene)->IsCreative() && ((LevelScene*)&m_scene)->GetCamIndex() != 0) return;
 
     // Met à jour les animations du joueur
     m_animator.Update(m_scene.GetTime());
@@ -277,6 +267,7 @@ void Player::FixedUpdate()
     // Réveille les corps autour du joueur
 
     LevelScene *levelscene = (LevelScene *)(&m_scene);
+    if (levelscene->IsCreative() && levelscene->GetCamIndex() != 0) return;
 
     if (!levelscene->IsCreative())
         WakeUpSurroundings();

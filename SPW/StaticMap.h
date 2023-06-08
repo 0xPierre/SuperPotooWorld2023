@@ -38,6 +38,7 @@ public:
     int GetHeight() const;
     Tile** GetTiles() const;
     int GetTilePartIndex(int x, int y) const;
+    bool AddTileCollider(int x, int y);
 
 private:
 
