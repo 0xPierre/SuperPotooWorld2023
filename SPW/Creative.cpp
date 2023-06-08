@@ -153,7 +153,7 @@ void Creative::RemoveItem(MouseInput& mouse) {
 	m_levelScene->GetMap()->RemoveTile(Pos.x, Pos.y);
 }
 
-GameBody* Creative::SelectItem(MouseInput& mouse)
+Tile::Type Creative::SelectItem(MouseInput& mouse)
 {
 	PE_Vec2 Pos;
 	m_levelScene->GetActiveCamera()->ViewToWorld((int)mouse.viewPos.x, (int)mouse.viewPos.y, Pos);
@@ -186,9 +186,28 @@ GameBody* Creative::SelectItem(MouseInput& mouse)
 				break;
 			}
 		}
-		if (gmHasBeenSelected)
-			return gms[i];
+		if (gmHasBeenSelected) {
+			std::string gmName = gms[i]->GetName();
+			if (gmName == "Nut")
+			{
+				return Tile::Type::NUT;
+			}
+			else if (gmName == "Firefly")
+			{
+				return Tile::Type::FIREFLY;
+			}
+			else if (gmName == "Brick")
+			{
+				return Tile::Type::BRICK;
+			}
+			else if (gmName == "Bonus")
+			{
+				return Tile::Type::BONUSFULL;
+			}
+		}
 	}
+
+	return m_levelScene->GetMap()->GetTileType(Pos.x, Pos.y);
 }
 
 char GetCharFromTile(Tile tile)

@@ -139,7 +139,38 @@ void Player::Update()
         }
         if (mouse.middleClick && levelScene->IsCreative())
         {
-            //Gamebody* levelScene->GetCreative()->SelectItem(mouse);
+            Tile::Type type = levelScene->GetCreative()->SelectItem(mouse);
+
+            controls.terrainSelected = (int)type;
+
+            switch (type)
+            {
+            case Tile::Type::STEEP_SLOPE_L:
+                controls.groundSelected = 9;
+                break;
+            case Tile::Type::STEEP_SLOPE_R:
+                controls.groundSelected = 10;
+                break;
+            case Tile::Type::GENTLE_SLOPE_R1:
+                controls.groundSelected = 15;
+                break;
+            case Tile::Type::GENTLE_SLOPE_R2:
+                controls.groundSelected = 16;
+                break;
+            case Tile::Type::GENTLE_SLOPE_L1:
+                controls.groundSelected = 13;
+                break;
+            case Tile::Type::GENTLE_SLOPE_L2:
+                controls.groundSelected = 12;
+                break;
+                break;
+            case Tile::Type::GROUND:
+                controls.groundSelected = 4;
+				break;
+            default:
+                controls.groundSelected = 0;
+				break;
+            }
         }
     }
 }

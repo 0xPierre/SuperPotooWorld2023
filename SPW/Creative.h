@@ -12,7 +12,7 @@ public:
 
 	void AddItem(Tile::Type tileType, int groundSelect, MouseInput& mouse);
 	void RemoveItem(MouseInput& mouse);
-	GameBody* SelectItem(MouseInput& mouse);
+	Tile::Type SelectItem(MouseInput& mouse);
 	void SaveInFile();
 
 private:

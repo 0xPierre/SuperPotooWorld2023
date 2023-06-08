@@ -39,6 +39,7 @@ public:
     Tile** GetTiles() const;
     int GetTilePartIndex(int x, int y) const;
     bool AddTileCollider(int x, int y);
+    Tile::Type GetTileType(int x, int y) const;
 
 private:
 
@@ -61,7 +62,6 @@ private:
     int m_max_width;
     bool m_is_creative;
 
-    Tile::Type GetTileType(int x, int y) const;
     bool IsGround(int x, int y) const;
 };
 
