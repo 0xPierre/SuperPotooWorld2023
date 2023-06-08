@@ -26,4 +26,5 @@ private:
         IDLE, SPINNING, DYING
     };
     State m_state;
+    bool isReversed;
 };

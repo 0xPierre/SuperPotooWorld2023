@@ -8,6 +8,7 @@ Nut::Nut(Scene &scene) :
     Enemy(scene), m_animator(), m_state(State::IDLE)
 {
     m_name = "Nut";
+    isReversed = false;
 
     RE_Atlas *atlas = scene.GetAssetManager().GetAtlas(AtlasID::ENEMY);
 	AssertNew(atlas);
@@ -29,6 +30,15 @@ Nut::Nut(Scene &scene) :
         m_animator, "Dying", part
     );
     fallingAnim->SetCycleCount(0);
+
+    // Animation "Spinning"
+    part = atlas->GetPart("NutSpinning");
+    AssertNew(part);
+    RE_TexAnim* spinningAnim = new RE_TexAnim(
+        m_animator, "NutSpinning", part
+    );
+    spinningAnim->SetCycleCount(0);
+    spinningAnim->SetSpeed(3);
 }
 
 Nut::~Nut()
@@ -57,7 +67,7 @@ void Nut::Start()
     PE_ColliderDef colliderDef;
     colliderDef.friction = 0.005f;
     colliderDef.filter.categoryBits = CATEGORY_ENEMY;
-    colliderDef.filter.maskBits = CATEGORY_ENEMY | CATEGORY_TERRAIN | CATEGORY_PLAYER;
+    colliderDef.filter.maskBits = CATEGORY_ENEMY | CATEGORY_TERRAIN | CATEGORY_PLAYER | CATEGORY_SLOPE;
     colliderDef.shape = &circle;
     PE_Collider *collider = body->CreateCollider(colliderDef);
 
@@ -110,6 +120,13 @@ void Nut::FixedUpdate()
     {
         m_state = State::SPINNING;
         body->SetVelocity(PE_Vec2(-3.0f, 0.0f));
+        m_animator.PlayAnimation("NutSpinning");
+        // printf("test\n");
+    }
+    if (m_state == State::SPINNING)
+    {
+        const float x = isReversed ? -3.0f : +3.0f;
+        body->SetVelocity(PE_Vec2(x, 0.0f));
     }
 
     if (m_state == State::DYING)
@@ -216,4 +233,21 @@ void Nut::OnCollisionStay(GameCollision &collision)
         }
         return;
     }
+
+    // Collision with others nuts
+    if (otherCollider->CheckCategory(CATEGORY_ENEMY)) {
+        isReversed = !isReversed;
+    }
+    
+    // Collision with terrains
+    if (otherCollider->CheckCategory(CATEGORY_TERRAIN) ||
+        otherCollider->CheckCategory(CATEGORY_SLOPE)) {
+        float angle = PE_SignedAngleDeg(manifold.normal, PE_Vec2::down);
+        printf("%f\n", fabsf(angle));
+        if (fabsf(angle) == 90 || (fabsf(angle) < 170 && fabsf(angle) > 100))
+        {
+            isReversed = !isReversed;
+        }
+    }
+    
 }
