@@ -9,6 +9,7 @@
 
 - Player:
 	- Saut long quand resté appuyer
+	- Préshot de saut possible 200ms avant d'attendre le saut
 	- Animation de marche
 	- Animation de mort
 	- Animation de dégat ( immunité )
