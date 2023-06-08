@@ -1,13 +1,16 @@
 #include "Firefly.h"
+#include <chrono>
 #include "Scene.h"
 #include "Camera.h"
 #include "LevelScene.h"
-#include "Graphics.h"
+#include "stdlib.h"
 
 Firefly::Firefly(Scene& scene) :
     Collectable(scene, Layer::COLLECTABLE), m_animator(), m_state(State::IDLE)
 {
     m_name = "Firefly";
+    m_randomPos = rand();
+    
     RE_Atlas* atlas = scene.GetAssetManager().GetAtlas(AtlasID::COLLECTABLE);
     AssertNew(atlas);
     // Animation "Idle"
@@ -20,7 +23,6 @@ Firefly::Firefly(Scene& scene) :
     m_debugColor.r = 255;
     m_debugColor.g = 0;
     m_debugColor.b = 255;
-
 }
 
 Firefly::~Firefly()
@@ -55,6 +57,8 @@ void Firefly::Render()
 {
     SDL_Renderer* renderer = m_scene.GetRenderer();
     Camera* camera = m_scene.GetActiveCamera();
+    const clock_t currentTime = clock();
+    const double milliseconds = (double)currentTime / (CLOCKS_PER_SEC / 1000);
 
     m_animator.Update(m_scene.GetTime());
 
@@ -63,6 +67,25 @@ void Firefly::Render()
     rect.h = 1.0f * scale;
     rect.w = 1.0f * scale;
     camera->WorldToView(GetPosition(), rect.x, rect.y);
+    if (m_state == State::IDLE)
+    {
+        rect.x += sin((milliseconds + m_randomPos) / 400) * 10;
+        rect.y += sin((milliseconds + m_randomPos) / 400) * 15;
+        m_dyingTimeMemory = milliseconds;
+    }
+    else if (m_state == State::DYING)
+    {
+        rect.x -= (milliseconds - m_dyingTimeMemory) / 2;
+        rect.y -= (milliseconds - m_dyingTimeMemory) / 3;
+        rect.w -= (milliseconds - m_dyingTimeMemory) / 50;
+        rect.h -= (milliseconds - m_dyingTimeMemory) / 50;
+        m_animator.MultAlpha(1 - (milliseconds - m_dyingTimeMemory) / 1000);
+
+        if (milliseconds - m_dyingTimeMemory > 4000)
+        {
+            SetEnabled(false);
+        }
+    }
     m_animator.RenderCopyF(&rect, RE_Anchor::CENTER);
 }
 
@@ -83,6 +106,10 @@ void Firefly::Collect(GameBody * collector)
 
     if (levelScene->IsCreative())
         return;
+    if (m_state == State::DYING)
+    {
+        return;
+    }
 
     Player* player = dynamic_cast<Player*>(collector);
     if (player == nullptr)
@@ -92,7 +119,8 @@ void Firefly::Collect(GameBody * collector)
     }
 
     SetToRespawn(true);
-    SetEnabled(false);
+
+    m_state = State::DYING;
     player->AddFirefly(1);
 }
 
