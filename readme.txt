@@ -1,5 +1,29 @@
-- auto detection des lvls
-- Add animation walking
-- Add lives
-- ajout d'un bouton retour en arrièer sur la liste des niveaux
-- menu creative
+- Détection automatique des niveaux dans Assets/Level
+- Ajout d'un bouton retour sur les menus/quitter
+- Mode créatif :
+	- Edition d'un monde existant
+	- Création d'un nouveau monde vide
+	- Possibilité de création de tous les block/Ennemy/Collectable/Bonus/Drapeau de fin
+	- Enregistrement des monde dans Assets/Level
+		- Monde peut être rejouer
+
+- Player:
+	- Saut long quand resté appuyer
+	- Animation de marche
+	- Animation de mort
+	- Animation de dégat ( immunité )
+	- Animation de compression au retour de jump 
+	- Player se retourne quand il va à gauche
+- Nut : 
+	- animation de mort
+
+- Blockage de la caméra
+
+- Auto détection des blocks GROUND. ( auto complétion des blocks en dessous de pentes/ à coté de vide.
+
+- 6 types de pente
+- Block Bonus ( Faire apparaître un coeur quand tappé du dessous )
+- Block Brick ( cassable du dessous )
+- Gestion des coeurs
+
+- Descente de pente progressif
