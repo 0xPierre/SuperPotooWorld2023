@@ -47,7 +47,9 @@ private:
     bool m_onGround;
     bool m_jumpAnimating;
     double jumpTimeAnimMemory;
+    double m_deadTimeMemory;
     bool m_jumped;
+    bool m_canJump;
     bool m_onSlope;
     bool m_bounce;
     bool m_facingRight;
@@ -56,6 +58,8 @@ private:
     int m_heartCount;
     int m_fireflyCount;
     double m_livesTimeMemory;
+    bool m_immunityState;
+    double immunityTimeMemory;
     bool m_isFlipped;
     unsigned long m_fallTimeMemory;
 };

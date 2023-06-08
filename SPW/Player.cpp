@@ -1,4 +1,7 @@
 #include "Player.h"
+
+#include <chrono>
+
 #include "Camera.h"
 #include "Scene.h"
 #include "Collectable.h"
@@ -51,6 +54,16 @@ Player::Player(Scene &scene) :
     runninForwardgAnim->SetCycleCount(-1);
     runninForwardgAnim->SetCycleTime(0.2f);
 
+    // Animation "Dying"
+    part = atlas->GetPart("Dying");
+    AssertNew(part);
+    RE_TexAnim* dyingAnim = new RE_TexAnim(
+        m_animator, "Dying", part
+    );
+    dyingAnim->SetCycleCount(-1);
+    dyingAnim->SetCycleTime(0.2f);
+    m_animator.StopAnimation("Dying");
+
     // Couleur des colliders en debug
     m_debugColor.r = 255;
     m_debugColor.g = 0;
@@ -96,6 +109,11 @@ void Player::Update()
 
     // Sauvegarde les contrôles du joueur pour modifier
     // sa physique au prochain FixedUpdate()
+
+    if (m_state == State::DEAD)
+    {
+        return;
+    }
 
     // TODO : Mettre à jour l'état du joueur en fonction des contrôles de jump
     m_jump = controls.jumpPressed;
@@ -158,23 +176,56 @@ void Player::Render()
     }
 
     rect.h = 1.375f * scale; // Le sprite fait 1.375 tuile de haut
-
-    if (m_onGround && m_jumped)
+    
+    if (m_state == State::DEAD)
     {
-        m_jumpAnimating = true;
-        m_jumped = false;
+        m_animator.PlayAnimation("Dying");
     }
-    else if (!m_jumpAnimating)
+    else
     {
-        jumpTimeAnimMemory = milliseconds;
-    }
-
-    if (m_jumpAnimating)
-    {
-        rect.h -= (milliseconds - jumpTimeAnimMemory) / 10;
-        if ((milliseconds - jumpTimeAnimMemory) > 100)
+        if (m_onGround && m_jumped)
         {
-            m_jumpAnimating = false;   
+            m_jumpAnimating = true;
+            m_jumped = false;
+        }
+        else if (!m_jumpAnimating)
+        {
+            jumpTimeAnimMemory = milliseconds;
+        }
+
+        if (m_jumpAnimating)
+        {
+            rect.h -= (milliseconds - jumpTimeAnimMemory) / 10;
+            if ((milliseconds - jumpTimeAnimMemory) > 100)
+            {
+                m_jumpAnimating = false;   
+            }
+        }
+
+    }
+    
+    if (m_state != State::DYING && m_heartCount < 5 && m_state != State::DEAD)
+    {
+        if (time(NULL) - m_livesTimeMemory < 2)
+        {
+            m_animator.MultAlpha(0.8);
+            if ((milliseconds - immunityTimeMemory) > 200)
+            {
+                if (!m_immunityState)
+                {
+                    m_immunityState = true;
+                }
+                else
+                {
+                    m_immunityState = false;
+                }
+                immunityTimeMemory = milliseconds;
+            }
+            if (m_immunityState)
+            {
+                rect.h *= 1.3;
+                rect.w *= 1.3;
+            }
         }
     }
 
@@ -182,10 +233,28 @@ void Player::Render()
     rect.w = 1.000f * scale; // Le sprite fait 1 tuile de large
     camera->WorldToView(GetPosition(), rect.x, rect.y);
 
+    float angle = 0.0f;
+    if (m_state == State::DEAD)
+    {
+        if (milliseconds - m_deadTimeMemory < 2000)
+        {
+            rect.y += (milliseconds - m_deadTimeMemory) / 2;
+            angle += (milliseconds - m_deadTimeMemory) / 10;
+        }
+        else
+        {
+            Kill();
+        }
+    }
+    else
+    {
+        m_deadTimeMemory = milliseconds;
+    }
+
     // Dessine l'animateur du joueur
     // TODO : Trouver le bon anchor
     m_animator.RenderCopyExF(
-        &rect, RE_Anchor::SOUTH , 0.0f, Vec2(0.5f, 0.5f), flip
+        &rect, RE_Anchor::SOUTH , angle, Vec2(0.5f, 0.5f), flip
     );
 }
 
@@ -203,6 +272,10 @@ void Player::FixedUpdate()
     if (!levelscene->IsCreative())
         WakeUpSurroundings();
 
+    if(m_state == State::DEAD)
+    {
+        return;
+    }
     
     // Tue le joueur s'il tombe dans un trou
     if (position.y < -2.0f)
@@ -227,9 +300,7 @@ void Player::FixedUpdate()
     // ayant la catégorie FILTER_TERRAIN
     RayHit hitL = m_scene.RayCast(originL, PE_Vec2::down, 0.6f, CATEGORY_TERRAIN, true);
     RayHit hitR = m_scene.RayCast(originR, PE_Vec2::down, 0.6f, CATEGORY_TERRAIN, true);
-
-    // hitL.normal;
-
+    
     if (hitL.collider != NULL)
     {
         // Le rayon gauche à touché le sol
@@ -256,6 +327,23 @@ void Player::FixedUpdate()
     if (hit.fraction > 0) {
         m_onSlope = true;
         m_onGround = true;
+    }
+
+    //--------------------------------------------------------------------------
+    // Jump check
+    
+    // Les rayons ne touchent que des colliders solides (non trigger)
+    // ayant la catégorie FILTER_TERRAIN
+    RayHit hitJump = m_scene.RayCast(origin, PE_Vec2::down, 0.7f, CATEGORY_TERRAIN, true);
+    RayHit hitJumpSl = m_scene.RayCast(origin, PE_Vec2::down, 0.7f, CATEGORY_SLOPE, true);
+    
+    if (hitJump.collider != NULL || hitJumpSl.collider != NULL)
+    {
+        m_canJump = true;
+    }
+    else
+    {
+        m_canJump = false;
     }
     
     
@@ -333,13 +421,11 @@ void Player::FixedUpdate()
     velocity.x = PE_Clamp(velocity.x, -maxHSpeed, maxHSpeed);
 
     // TODO : Ajouter un jump avec une vitesse au choix*
-    if (m_jump && m_onGround) {
-        if (m_onGround) {
-            m_jump = false;
-            m_jumped = true;
-            velocity.y = 20.0f;
-        }
-    } else if (!m_onGround){
+    if (m_jump && m_canJump) {
+        m_jump = false;
+        m_jumped = true;
+        velocity.y = 20.0f;
+    } else if (!m_canJump){
         m_jump = false;
     }
 
@@ -435,7 +521,7 @@ void Player::OnCollisionEnter(GameCollision &collision)
 {
     const PE_Manifold &manifold = collision.manifold;
     PE_Collider *otherCollider = collision.otherCollider;
-
+    
     // Collision avec un ennemi
     if (otherCollider->CheckCategory(CATEGORY_ENEMY))
     {
@@ -523,14 +609,16 @@ void Player::Damage()
         return;
 
     time_t now = time(NULL);
-    if (now - m_livesTimeMemory > 2)
+    if (now - m_livesTimeMemory > 2 && m_lifeCount > 1)
     {
-        m_lifeCount--;
         m_livesTimeMemory = now;
+        m_state = State::DYING;
+        m_lifeCount--;
     }
-    if (m_lifeCount <= 0)
+    if (m_lifeCount <= 1)
     {
-        Kill();
+        m_lifeCount = 0;
+        m_state = State::DEAD;
     }
 }
 
