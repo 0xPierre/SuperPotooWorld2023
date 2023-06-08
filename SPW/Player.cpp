@@ -297,9 +297,7 @@ void Player::FixedUpdate()
     // ayant la catégorie FILTER_TERRAIN
     RayHit hitL = m_scene.RayCast(originL, PE_Vec2::down, 0.6f, CATEGORY_TERRAIN, true);
     RayHit hitR = m_scene.RayCast(originR, PE_Vec2::down, 0.6f, CATEGORY_TERRAIN, true);
-
-    // hitL.normal;
-
+    
     if (hitL.collider != NULL)
     {
         // Le rayon gauche à touché le sol
@@ -326,6 +324,23 @@ void Player::FixedUpdate()
     if (hit.fraction > 0) {
         m_onSlope = true;
         m_onGround = true;
+    }
+
+    //--------------------------------------------------------------------------
+    // Jump check
+    
+    // Les rayons ne touchent que des colliders solides (non trigger)
+    // ayant la catégorie FILTER_TERRAIN
+    RayHit hitJump = m_scene.RayCast(origin, PE_Vec2::down, 0.7f, CATEGORY_TERRAIN, true);
+    RayHit hitJumpSl = m_scene.RayCast(origin, PE_Vec2::down, 0.7f, CATEGORY_SLOPE, true);
+    
+    if (hitJump.collider != NULL || hitJumpSl.collider != NULL)
+    {
+        m_canJump = true;
+    }
+    else
+    {
+        m_canJump = false;
     }
     
     
@@ -398,11 +413,11 @@ void Player::FixedUpdate()
     velocity.x = PE_Clamp(velocity.x, -maxHSpeed, maxHSpeed);
     
     // TODO : Ajouter un jump avec une vitesse au choix*
-    if (m_jump && m_onGround) {
+    if (m_jump && m_canJump) {
         m_jump = false;
         m_jumped = true;
         velocity.y = 20.0f;
-    } else if (!m_onGround){
+    } else if (!m_canJump){
         m_jump = false;
     }
 
