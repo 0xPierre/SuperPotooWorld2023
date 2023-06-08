@@ -23,4 +23,7 @@ private:
         IDLE, SPINNING, DYING
     };
     State m_state;
+    double m_dyingTimeMemory;
+    bool m_dyingAnimation;
+    unsigned int m_randomPos;
 };

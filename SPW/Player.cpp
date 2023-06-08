@@ -20,6 +20,7 @@ Player::Player(Scene &scene) :
     m_lifeCount(3), m_fireflyCount(0), m_heartCount(2), m_state(Player::State::IDLE)
 {
     m_name = "Player";
+    m_immunityEnabled = false;
 
     SetToRespawn(true);
 
@@ -229,6 +230,10 @@ void Player::Render()
                 rect.w *= 1.3;
             }
         }
+        else
+        {
+            m_immunityEnabled = false;
+        }
     }
 
     // TODO : Trouver les bonnes diemnsions de l'affichage en fonction du sprite (dimensions en tuiles)
@@ -401,13 +406,8 @@ void Player::FixedUpdate()
     PE_Vec2 force = (20.0f * m_hDirection) * direction;
     body->ApplyForce(force);
 
-    float divider = (velocity.x - force.x);
-    if (divider == 0)
-        divider = 0.001;
-
-    float maxSpeedCoef = (velocity.y - force.y) / divider; // Directing coefficient
+    float maxSpeedCoef = (velocity.y - force.y) / (velocity.x - force.x); // Directing coefficient
     
-
     // TODO : Limiter la vitesse horizontale
     float maxHSpeed = 9.0f;
 
@@ -626,6 +626,7 @@ void Player::Damage()
     time_t now = time(NULL);
     if (now - m_livesTimeMemory > 2 && m_heartCount >= 1)
     {
+        m_immunityEnabled = true;
         m_livesTimeMemory = now;
         m_state = State::DYING;
         m_heartCount--;

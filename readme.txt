@@ -3,6 +3,7 @@
 - Mode créatif :
 	- Edition d'un monde existant
 	- Création d'un nouveau monde vide
+	- Séléction des briques
 	- Possibilité de création de tous les block/Ennemy/Collectable/Bonus/Drapeau de fin
 	- Enregistrement des monde dans Assets/Level
 		- Monde peut être rejouer
@@ -15,8 +16,10 @@
 	- Animation de dégat ( immunité )
 	- Animation de compression au retour de jump 
 	- Player se retourne quand il va à gauche
+	- Traverser Ennemis
 - Nut : 
 	- animation de mort
+	- Se déplace de manière en autonomie
 
 - Blockage de la caméra
 
@@ -26,5 +29,6 @@
 - Block Bonus ( Faire apparaître un coeur quand tappé du dessous )
 - Block Brick ( cassable du dessous )
 - Gestion des coeurs
+- Firefly animations
 
 - Descente de pente progressif
