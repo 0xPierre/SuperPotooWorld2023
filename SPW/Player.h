@@ -24,6 +24,7 @@ public:
     int GetFireflyCount() const;
     int GetHeartCount() const;
     int GetLifeCount() const;
+    int isDying() const;
     void AddFirefly(int count);
     void AddHeart();
     void Damage();
@@ -61,6 +62,7 @@ private:
     int m_fireflyCount;
     double m_livesTimeMemory;
     bool m_immunityState;
+    bool m_immunityEnabled;
     double immunityTimeMemory;
     bool m_isFlipped;
     unsigned long m_fallTimeMemory;
@@ -85,4 +87,13 @@ inline int Player::GetHeartCount() const
 inline int Player::GetLifeCount() const
 {
     return m_lifeCount;
+}
+
+inline int Player::isDying() const
+{
+    return m_immunityEnabled;
+    if (m_state == State::DYING) {
+        return true;
+    }
+    return false;
 }

@@ -20,6 +20,7 @@ Player::Player(Scene &scene) :
     m_lifeCount(3), m_fireflyCount(0), m_heartCount(2), m_state(Player::State::IDLE)
 {
     m_name = "Player";
+    m_immunityEnabled = false;
 
     SetToRespawn(true);
 
@@ -228,6 +229,10 @@ void Player::Render()
                 rect.h *= 1.3;
                 rect.w *= 1.3;
             }
+        }
+        else
+        {
+            m_immunityEnabled = false;
         }
     }
 
@@ -621,6 +626,7 @@ void Player::Damage()
     time_t now = time(NULL);
     if (now - m_livesTimeMemory > 2 && m_heartCount >= 1)
     {
+        m_immunityEnabled = true;
         m_livesTimeMemory = now;
         m_state = State::DYING;
         m_heartCount--;

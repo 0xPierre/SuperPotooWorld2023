@@ -216,11 +216,38 @@ void Nut::OnCollisionStay(GameCollision &collision)
         collision.SetEnabled(false);
         return;
     }
+    // Player *player = collision.otherCollider;
+
+    // Collision with others nuts
+    if (otherCollider->CheckCategory(CATEGORY_ENEMY)) {
+        isReversed = !isReversed;
+    }
+    
+    // Collision with terrains
+    if (otherCollider->CheckCategory(CATEGORY_TERRAIN) ||
+        otherCollider->CheckCategory(CATEGORY_SLOPE)) {
+        float angle = PE_SignedAngleDeg(manifold.normal, PE_Vec2::down);
+        if (fabsf(angle) == 90 || (fabsf(angle) < 170 && fabsf(angle) > 100))
+        {
+            isReversed = !isReversed;
+        }
+        }
+
+    Player *player = dynamic_cast<Player *>(collision.gameBody);
+
+
+    if (player == nullptr) {
+        return;
+    }
+
+    if (player->isDying())
+    {
+        collision.SetEnabled(false);
+    }
 
     // Collision avec le joueur
     if (otherCollider->CheckCategory(CATEGORY_PLAYER))
     {
-        Player *player = dynamic_cast<Player *>(collision.gameBody);
         if (player == nullptr)
         {
             assert(false);
@@ -233,21 +260,4 @@ void Nut::OnCollisionStay(GameCollision &collision)
         }
         return;
     }
-
-    // Collision with others nuts
-    if (otherCollider->CheckCategory(CATEGORY_ENEMY)) {
-        isReversed = !isReversed;
-    }
-    
-    // Collision with terrains
-    if (otherCollider->CheckCategory(CATEGORY_TERRAIN) ||
-        otherCollider->CheckCategory(CATEGORY_SLOPE)) {
-        float angle = PE_SignedAngleDeg(manifold.normal, PE_Vec2::down);
-        printf("%f\n", fabsf(angle));
-        if (fabsf(angle) == 90 || (fabsf(angle) < 170 && fabsf(angle) > 100))
-        {
-            isReversed = !isReversed;
-        }
-    }
-    
 }

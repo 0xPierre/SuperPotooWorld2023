@@ -27,4 +27,5 @@ private:
     };
     State m_state;
     bool isReversed;
+    bool canBeCrossed;
 };
