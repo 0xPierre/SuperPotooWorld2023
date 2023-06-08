@@ -1,6 +1,7 @@
 #include "Background.h"
 #include "Camera.h"
 #include "DebugCamera.h"
+#include "CreativeCamera.h"
 
 Background::Background(Scene &scene, Layer layer) :
     GameObject(scene, layer), m_layers(),
@@ -34,6 +35,9 @@ void Background::Render()
 
     DebugCamera *debugCamera = dynamic_cast<DebugCamera *>(camera);
     if (debugCamera != nullptr)
+        return;
+    CreativeCamera* creativeCamera = dynamic_cast<CreativeCamera*>(camera);
+    if (creativeCamera != nullptr)
         return;
 
     // Dimension du fond dans le référentiel monde

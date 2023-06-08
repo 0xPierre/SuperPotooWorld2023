@@ -99,6 +99,7 @@ public:
 
     InputManager &GetInputManager();
     AssetManager &GetAssetManager();
+    void SetAssetManager(ThemeID theme);
     PE_World &GetWorld();
 
     void Respawn();
@@ -195,6 +196,11 @@ inline InputManager &Scene::GetInputManager()
 inline AssetManager &Scene::GetAssetManager()
 {
     return m_assetManager;
+}
+
+inline void Scene::SetAssetManager(ThemeID theme)
+{
+    m_assetManager = AssetManager(GetRenderer(), theme);
 }
 
 inline PE_World &Scene::GetWorld()

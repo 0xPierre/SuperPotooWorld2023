@@ -4,6 +4,30 @@
 #include <iostream>
 #include <filesystem>
 #include <Windows.h>
+#include <fstream>
+
+ThemeID extractBackgroundType(const std::string& filePath) {
+    std::ifstream file(filePath);
+    std::string line;
+    std::string backgroundType;
+
+    while (std::getline(file, line)) {
+        if (line.substr(0, 3) == "bg:") {
+            backgroundType = line.substr(3);
+            break;
+        }
+    }
+
+    if (backgroundType == "SKY") {
+        return ThemeID::SKY;
+	}
+    else if (backgroundType == "MOUNTAINS") {
+        return ThemeID::MOUNTAINS;
+	}
+    else {
+        return ThemeID::LAKE;
+	}
+}
 
 LevelData::LevelData(const std::string &nameIn, const std::string &pathIn, ThemeID themeIDIn) :
     name(nameIn), path(pathIn), themeID(themeIDIn)
@@ -31,7 +55,7 @@ std::vector<LevelData> LevelData::Init()
             data.push_back(LevelData(
 				nameWithoutExtension,
 				path,
-				ThemeID::LAKE
+                extractBackgroundType(path)
 			));
 		} while (FindNextFileA(hFind, &findData));
 		FindClose(hFind);

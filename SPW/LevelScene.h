@@ -9,6 +9,7 @@
 #include "LevelEnd.h"
 #include "Creative.h"
 #include "Firefly.h"
+#include "Background.h"
 
 class LevelScene : public Scene
 {
@@ -31,6 +32,8 @@ public:
 	bool IsCreative() const;
 	void SetCreative(bool isCreative);
 
+	void UpdateBackground();
+
 	bool IsNewWorld() const;
 	void SetNewWorld(bool IsNewWorld);
 
@@ -52,6 +55,10 @@ private:
 	bool m_is_new_world;
 	LevelCanvas* m_canvas;
 	LevelData* m_levelData;
+
+	Background* m_background;
+	Background* m_foreground;
+	ThemeID m_current_theme_id;
 
 	PE_Vec2 m_startPos;
 	StaticMap* m_map;

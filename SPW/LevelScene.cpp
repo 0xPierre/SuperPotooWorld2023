@@ -63,19 +63,28 @@ LevelScene::LevelScene(SDL_Renderer *renderer, RE_Timer &mainTime, LevelData &le
 
     // Canvas
     m_canvas = new LevelCanvas(*this);
-    // Crée le fond
-    Background *background = new Background(*this, Layer::BACKGROUND);
+    m_current_theme_id = level.themeID;
+    UpdateBackground();
+}
+
+LevelScene::~LevelScene()
+{
+}
+
+void LevelScene::UpdateBackground()
+{
+    m_background = new Background(*this, Layer::BACKGROUND);
     std::vector<SDL_Texture*> m_textures = m_assetManager.GetBackgrounds();
-    switch (level.themeID)
+    switch (GetLevelData()->themeID)
     {
     case ThemeID::LAKE:
     {
         PE_Vec2 worldDim(24.0f, 24.0f * 1080.0f / 1920.0f);
-        background->SetWorldDimensions(worldDim);
+        m_background->SetWorldDimensions(worldDim);
         float factors[] = { 0.0f, 0.05f, 0.3f, 0.6f, 0.7f };
         for (int i = 0; i < 5; i++)
         {
-            background->SetTexture(i, m_textures[i], PE_Vec2(factors[i], factors[i]));
+            m_background->SetTexture(i, m_textures[i], PE_Vec2(factors[i], factors[i]));
         }
         break;
     }
@@ -83,11 +92,11 @@ LevelScene::LevelScene(SDL_Renderer *renderer, RE_Timer &mainTime, LevelData &le
     case ThemeID::SKY:
     {
         PE_Vec2 worldDim(24.0f, 24.0f * 1080.0f / 1920.0f);
-        background->SetWorldDimensions(worldDim);
+        m_background->SetWorldDimensions(worldDim);
         float factors[] = { 0.0f, 0.05f, 0.1f, 0.2f, 0.35f, 0.5f, 0.7f };
         for (int i = 0; i < 7; i++)
         {
-            background->SetTexture(i, m_textures[i], PE_Vec2(factors[i], factors[i]));
+            m_background->SetTexture(i, m_textures[i], PE_Vec2(factors[i], factors[i]));
         }
         break;
     }
@@ -96,24 +105,20 @@ LevelScene::LevelScene(SDL_Renderer *renderer, RE_Timer &mainTime, LevelData &le
     default:
     {
         PE_Vec2 worldDim(36.0f, 36.0f * 1080.0f / 2880.0f);
-        background->SetWorldDimensions(worldDim);
+        m_background->SetWorldDimensions(worldDim);
         float factors[] = { 0.0f, 0.05f, 0.3f, 0.6f };
         for (int i = 0; i < 4; i++)
         {
-            background->SetTexture(i, m_textures[i], PE_Vec2(factors[i], factors[i]));
+            m_background->SetTexture(i, m_textures[i], PE_Vec2(factors[i], factors[i]));
         }
 
-        Background *foreground = new Background(*this, Layer::FOREGROUND);
+        m_foreground = new Background(*this, Layer::FOREGROUND);
         worldDim.Set(36.0f, 36.0f * 400.0f / 2880.0f);
-        foreground->SetWorldDimensions(worldDim);
-        foreground->SetTexture(0, m_textures[4], PE_Vec2(1.4f, 1.4f));
+        m_foreground->SetWorldDimensions(worldDim);
+        m_foreground->SetTexture(0, m_textures[4], PE_Vec2(1.4f, 1.4f));
         break;
     }
     }
-}
-
-LevelScene::~LevelScene()
-{
 }
 
 inline void LevelScene::SetPaused(bool isPaused)
@@ -206,6 +211,14 @@ bool LevelScene::Update()
             }
         }
     }
+
+    if (m_current_theme_id != m_levelData->themeID)
+    {
+        m_current_theme_id = m_levelData->themeID;
+        m_background->SetEnabled(false);
+        SetAssetManager(m_levelData->themeID);
+		UpdateBackground();
+	}
 
     return quit;
 }

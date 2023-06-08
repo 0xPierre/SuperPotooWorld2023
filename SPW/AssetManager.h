@@ -37,7 +37,7 @@ class AssetManager
 public:
     AssetManager(SDL_Renderer *renderer, ThemeID themeID);
     AssetManager(AssetManager const&) = delete;
-    AssetManager& operator=(AssetManager const&) = delete;
+    //AssetManager& operator=(AssetManager const&) = delete;
     ~AssetManager();
 
     RE_Atlas *GetAtlas(AtlasID atlasID);

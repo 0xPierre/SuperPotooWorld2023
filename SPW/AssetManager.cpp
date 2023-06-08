@@ -67,7 +67,7 @@ AssetManager::~AssetManager()
     for (auto it = m_sounds.begin(); it != m_sounds.end(); ++it)
     {
         Mix_Chunk *chunck = it->second;
-        if (chunck) Mix_FreeChunk(chunck);
+        //if (chunck) Mix_FreeChunk(chunck);
     }
 }
 

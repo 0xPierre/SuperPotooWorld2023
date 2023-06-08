@@ -335,6 +335,12 @@ void Creative::SaveInFile() {
 		fputc('\n', levelFile);
 	}
 
+	if (m_levelScene->GetLevelData()->themeID == ThemeID::MOUNTAINS)
+		fwrite("\nbg:MOUNTAINS\n", 1, 14, levelFile);
+	else if (m_levelScene->GetLevelData()->themeID == ThemeID::SKY)
+		fwrite("\nbg:SKY\n", 1, 8, levelFile);
+	else
+		fwrite("\nbg:LAKE\n", 1, 9, levelFile);
 
 	fclose(levelFile);
 }

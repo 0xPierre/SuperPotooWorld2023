@@ -2,6 +2,24 @@
 #include "LevelScene.h"
 #include "Image.h"
 #include "Camera.h"
+#include "Button.h"
+
+class ChangeBackgroundListener : public ButtonListener
+{
+public:
+    ChangeBackgroundListener(LevelScene& scene) :
+        m_levelScene(scene)
+    {
+    }
+
+    virtual void OnPress()
+    {
+        m_levelScene.GetLevelData()->themeID = (ThemeID)(((int)m_levelScene.GetLevelData()->themeID + 1) % 3);
+    }
+
+private:
+    LevelScene& m_levelScene;
+};
 
 LevelHeader::LevelHeader(LevelScene &scene):
     UIObject(scene), m_levelScene(scene), m_fireflyCount(nullptr)
@@ -35,49 +53,54 @@ LevelHeader::LevelHeader(LevelScene &scene):
     float currLivesX = 0.0f;
     float currLivesY = 0.5f;
 
-    // Image du nombre de luciolles
-    RE_AtlasPart *part = atlasPlayer->GetPart("Firefly");
-    AssertNew(part);
-    Image *fireflyImage = new Image(scene, part, 0);
-    fireflyImage->GetLocalRect().anchorMin.Set(0.0f, 0.0f);
-    fireflyImage->GetLocalRect().anchorMax.Set(0.0f, 0.0f);
-    fireflyImage->GetLocalRect().offsetMin.Set(currFireX, currFireY);
-    fireflyImage->GetLocalRect().offsetMax.Set(currFireX + imgW, currFireY + imgH);
-    fireflyImage->SetParent(this);
+    if (!levelScene->IsCreative())
+    {
+        // Image du nombre de luciolles
+        RE_AtlasPart *part = atlasPlayer->GetPart("Firefly");
+        AssertNew(part);
+        Image *fireflyImage = new Image(scene, part, 0);
+        fireflyImage->GetLocalRect().anchorMin.Set(0.0f, 0.0f);
+        fireflyImage->GetLocalRect().anchorMax.Set(0.0f, 0.0f);
+        fireflyImage->GetLocalRect().offsetMin.Set(currFireX, currFireY);
+        fireflyImage->GetLocalRect().offsetMax.Set(currFireX + imgW, currFireY + imgH);
+        fireflyImage->SetParent(this);
     
-    currFireX += imgW + sep;
+        currFireX += imgW + sep;
     
-    // Compteur du nombre de luciolles
-    m_fireflyCount = new Text(scene, "0", font, color);
-    m_fireflyCount->SetAnchor(RE_Anchor::WEST);
-    m_fireflyCount->GetLocalRect().anchorMin.Set(0.0f, 0.0f);
-    m_fireflyCount->GetLocalRect().anchorMax.Set(0.0f, 0.0f);
-    m_fireflyCount->GetLocalRect().offsetMin.Set(currFireX, currFireY);
-    m_fireflyCount->GetLocalRect().offsetMax.Set(currFireX + numW, currFireY + imgH);
-    m_fireflyCount->SetParent(this);
+        // Compteur du nombre de luciolles
+        m_fireflyCount = new Text(scene, "0", font, color);
+        m_fireflyCount->SetAnchor(RE_Anchor::WEST);
+        m_fireflyCount->GetLocalRect().anchorMin.Set(0.0f, 0.0f);
+        m_fireflyCount->GetLocalRect().anchorMax.Set(0.0f, 0.0f);
+        m_fireflyCount->GetLocalRect().offsetMin.Set(currFireX, currFireY);
+        m_fireflyCount->GetLocalRect().offsetMax.Set(currFireX + numW, currFireY + imgH);
+        m_fireflyCount->SetParent(this);
 
     
     
-    // Image number of heart
-    RE_AtlasPart *heart = atlasPlayer->GetPart("Heart");
-    AssertNew(heart);
-    Image *heartImage = new Image(scene, heart, 0);
-    heartImage->GetLocalRect().anchorMin.Set(0.0f, 1.0f);
-    heartImage->GetLocalRect().anchorMax.Set(0.0f, 1.0f);
-    heartImage->GetLocalRect().offsetMin.Set(currLivesX, currLivesY);
-    heartImage->GetLocalRect().offsetMax.Set(currLivesX + imgW, currLivesY + imgH);
-    heartImage->SetParent(this);
+        // Image number of heart
+        RE_AtlasPart *heart = atlasPlayer->GetPart("Heart");
+        AssertNew(heart);
+        Image *heartImage = new Image(scene, heart, 0);
+        heartImage->GetLocalRect().anchorMin.Set(0.0f, 1.0f);
+        heartImage->GetLocalRect().anchorMax.Set(0.0f, 1.0f);
+        heartImage->GetLocalRect().offsetMin.Set(currLivesX, currLivesY);
+        heartImage->GetLocalRect().offsetMax.Set(currLivesX + imgW, currLivesY + imgH);
+        heartImage->SetParent(this);
     
-    currLivesX += imgW + sep;
+        currLivesX += imgW + sep;
     
-    // lives counter
-    m_heartCount = new Text(scene, "0", font, color);
-    m_heartCount->SetAnchor(RE_Anchor::WEST);
-    m_heartCount->GetLocalRect().anchorMin.Set(0.0f, 1.0f);
-    m_heartCount->GetLocalRect().anchorMax.Set(0.0f, 1.0f);
-    m_heartCount->GetLocalRect().offsetMin.Set(currLivesX, currLivesY);
-    m_heartCount->GetLocalRect().offsetMax.Set(currLivesX + numW, currLivesY + imgH);
-    m_heartCount->SetParent(this);
+        // lives counter
+        m_heartCount = new Text(scene, "0", font, color);
+        m_heartCount->SetAnchor(RE_Anchor::WEST);
+        m_heartCount->GetLocalRect().anchorMin.Set(0.0f, 1.0f);
+        m_heartCount->GetLocalRect().anchorMax.Set(0.0f, 1.0f);
+        m_heartCount->GetLocalRect().offsetMin.Set(currLivesX, currLivesY);
+        m_heartCount->GetLocalRect().offsetMax.Set(currLivesX + numW, currLivesY + imgH);
+        m_heartCount->SetParent(this);
+
+        return;
+    }
 
     // Creative selected block
     // lives counter
@@ -88,6 +111,35 @@ LevelHeader::LevelHeader(LevelScene &scene):
     m_selectedBlock->GetLocalRect().offsetMin.Set(currLivesX, currLivesY);
     m_selectedBlock->GetLocalRect().offsetMax.Set(currLivesX + numW, currLivesY + imgH);
     m_selectedBlock->SetParent(this);
+
+    // Add a Change background btn
+    RE_Atlas* atlas = assets.GetAtlas(AtlasID::UI);
+    AssertNew(atlas);
+    RE_AtlasPart* buttonPart = atlas->GetPart("Button");
+    AssertNew(buttonPart);
+    SDL_Color colorUp = assets.GetColor(ColorID::NORMAL);
+    SDL_Color colorHover = assets.GetColor(ColorID::BLACK);
+    SDL_Color colorDown = assets.GetColor(ColorID::NORMAL);
+    font = assets.GetFont(FontID::NORMAL);
+
+    Button* createWorldButton = new Button(scene, buttonPart);
+    createWorldButton->GetLocalRect().anchorMin.Set(-0.1f, -0.5f);
+    createWorldButton->GetLocalRect().anchorMax.Set(1.6f, -0.5f);
+    createWorldButton->GetLocalRect().offsetMin.Set(0.0f, 50.f);
+    createWorldButton->GetLocalRect().offsetMax.Set(0.0f, 50.f + 60.f);
+    createWorldButton->SetParent(this);
+    createWorldButton->SetBorders(new UIBorders(25, 25, 25, 25));
+
+    createWorldButton->SetListener(new ChangeBackgroundListener(scene));
+
+    Text* createWorldButtonLabel = new Text(scene, u8"Change background", font, colorUp);
+    createWorldButton->SetText(createWorldButtonLabel, Button::State::UP);
+
+    createWorldButtonLabel = new Text(scene, u8"Change background", font, colorHover);
+    createWorldButton->SetText(createWorldButtonLabel, Button::State::HOVER);
+
+    createWorldButtonLabel = new Text(scene, u8"Change background", font, colorDown);
+    createWorldButton->SetText(createWorldButtonLabel, Button::State::DOWN);
 }
 
 void LevelHeader::Update()
@@ -104,11 +156,15 @@ void LevelHeader::Update()
     float imgW = imgH;
 
     
-    Player* player = m_levelScene.GetPlayer();
-    m_fireflyCount->SetString(std::to_string(player->GetFireflyCount()));
-    m_heartCount->SetString(std::to_string(player->GetHeartCount()));
+    if (!levelScene->IsCreative())
+    {
+        Player* player = m_levelScene.GetPlayer();
+        m_fireflyCount->SetString(std::to_string(player->GetFireflyCount()));
+        m_heartCount->SetString(std::to_string(player->GetHeartCount()));
 
-    if (!levelScene->IsCreative()) return;
+        return;
+    }
+
     m_selectedBlock->SetString("Item selected :");
     
     // Update creative block
