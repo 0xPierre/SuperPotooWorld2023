@@ -401,13 +401,8 @@ void Player::FixedUpdate()
     PE_Vec2 force = (20.0f * m_hDirection) * direction;
     body->ApplyForce(force);
 
-    float divider = (velocity.x - force.x);
-    if (divider == 0)
-        divider = 0.001;
-
-    float maxSpeedCoef = (velocity.y - force.y) / divider; // Directing coefficient
+    float maxSpeedCoef = (velocity.y - force.y) / (velocity.x - force.x); // Directing coefficient
     
-
     // TODO : Limiter la vitesse horizontale
     float maxHSpeed = 9.0f;
 
