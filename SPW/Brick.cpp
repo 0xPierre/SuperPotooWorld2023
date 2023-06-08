@@ -3,6 +3,9 @@
 #include "Camera.h"
 #include "LevelScene.h"
 #include "Graphics.h"
+#include <random>
+#include "Heart.h"
+#include "Firefly.h"
 
 Brick::Brick(Scene &scene) :
     GameBody(scene, Layer::TERRAIN), m_animator()
@@ -71,6 +74,33 @@ void Brick::OnCollisionEnter(GameCollision &collision)
         {
             SetToRespawn(true);
             SetEnabled(false);
+
+            std::random_device rd;
+            std::mt19937 rng(rd());
+
+            std::uniform_int_distribution<int> dist(1, 100);
+            int randomInt = dist(rng);
+
+            // 25% chance to spawn nothing
+            // 50% chance to spawn a Firefly
+            // 25% chance to spawn a heart
+            if (randomInt < 50)
+            {
+				Firefly* firefly = new Firefly(m_scene);
+				PE_Vec2 pos = GetPosition();
+				pos.x += 0.7f;
+				pos.y += 1.f;
+				firefly->SetStartPosition(pos);
+            }
+            else if (randomInt < 75)
+            {
+                Heart* heart = new Heart(m_scene);
+                PE_Vec2 pos = GetPosition();
+                pos.x += 0.7f;
+                pos.y += 1.f;
+                heart->SetStartPosition(pos);
+            }
+
         }
     }
 }
