@@ -3,6 +3,8 @@
 #include "UIObject.h"
 #include "Text.h"
 #include "Image.h"
+#include "Button.h"
+#include "StaticMap.h"
 
 class LevelScene;
 
@@ -18,6 +20,8 @@ private:
     Text *m_fireflyCount;
     Text *m_livesCount;
     Text* m_heartCount;
-    Text *m_selectedBlock;
+    Button *m_selectedBlock;
     Image *m_blockImage;
+    std::vector<Tile::Type> m_objects_v;
+    std::vector<Tile::Type> m_objects_h;
 };

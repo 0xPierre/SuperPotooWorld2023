@@ -271,6 +271,9 @@ bool StaticMap::AddTileCollider(int x, int y)
 	PE_PolygonShape polygon;
 	PE_ColliderDef colliderDef;
 
+	if (x < 0 || x >= m_width || y < 0 || y >= m_height)
+		return 0;
+
 	Tile& tile = m_tiles[x][y];
 	if (tile.type == Tile::Type::EMPTY)
 	{

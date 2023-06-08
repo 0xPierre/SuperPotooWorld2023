@@ -1,10 +1,11 @@
 #include "Button.h"
 #include "Scene.h"
 
-Button::Button(Scene &scene, RE_AtlasPart *atlasPart) :
+Button::Button(Scene &scene, RE_AtlasPart *atlasPart, bool disableAnim, int partIdx) :
     UIObject(scene), m_atlasPart(atlasPart),
     m_currState(State::UP), m_prevState(State::UP),
-    m_borders(nullptr), m_listener(nullptr), m_texts()
+    m_borders(nullptr), m_listener(nullptr), m_texts(),
+    m_disableAnim(disableAnim), m_partIdx(partIdx)
 {
     m_name = "Button";
     for (auto &text : m_texts)
@@ -118,21 +119,29 @@ void Button::Render()
         SDL_FRect dstRect = GetCanvasRect();
         const SDL_Rect *srcRect = NULL;
 
-        switch (m_currState)
+
+        if (m_disableAnim) {
+
+             srcRect = m_atlasPart->GetSrcRect(m_partIdx);
+        }
+        else
         {
-        case State::UP:
-            srcRect = m_atlasPart->GetSrcRect(0);
-            break;
-        case State::HOVER:
-            srcRect = m_atlasPart->GetSrcRect(1);
-            break;
-        case State::DOWN:
-            srcRect = m_atlasPart->GetSrcRect(2);
-            break;
-        case State::DISABLED:
-        default:
-            srcRect = m_atlasPart->GetSrcRect(3);
-            break;
+            switch (m_currState)
+            {
+            case State::UP:
+                srcRect = m_atlasPart->GetSrcRect(0);
+                break;
+            case State::HOVER:
+                srcRect = m_atlasPart->GetSrcRect(1);
+                break;
+            case State::DOWN:
+                srcRect = m_atlasPart->GetSrcRect(2);
+                break;
+            case State::DISABLED:
+            default:
+                srcRect = m_atlasPart->GetSrcRect(3);
+                break;
+            }
         }
 
         if (m_borders)

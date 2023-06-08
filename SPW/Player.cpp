@@ -132,7 +132,7 @@ void Player::Update()
     {
         if (mouse.leftReleased && levelScene->IsCreative())
         {
-            levelScene->GetCreative()->AddItem((Tile::Type)controls.terrainSelected, controls.groundSelected, mouse);
+            levelScene->GetCreative()->AddItem(levelScene->GetSelectedTile(), levelScene->GetSelectedPartIdx(), mouse);
         }
         if (controls.shiftLPressed && levelScene->IsCreative()) {
             levelScene->GetCreative()->RemoveItem(mouse);

@@ -21,6 +21,119 @@ private:
     LevelScene& m_levelScene;
 };
 
+class SelectItemListener : public ButtonListener
+{
+public:
+    SelectItemListener(LevelScene& scene, Tile::Type type, int partIdx) :
+        m_levelScene(scene),
+        m_type(type),
+        m_part(partIdx)
+    {
+    }
+
+    virtual void OnPress()
+    {
+        m_levelScene.SetSelectedTile(m_type);
+        m_levelScene.SetSelectedPartIdx(m_part);
+    }
+
+private:
+    LevelScene& m_levelScene;
+    Tile::Type m_type;
+    int m_part;
+};
+
+
+RE_AtlasPart* GetAtlasFromTile(Tile::Type type, Scene &scene, int &partIdx)
+{
+    const char* terrain = "-";
+    const char* uiPlayer = "-";
+    const char* uiEnemy = "-";
+
+    switch (type)
+    {
+    case Tile::Type::WOOD:
+        terrain = "Wood";
+        break;
+    case Tile::Type::ONE_WAY:
+        terrain = "OneWay";
+        break;
+    case Tile::Type::SPIKE:
+        terrain = "Spike";
+        break;
+    case Tile::Type::BRICK:
+        terrain = "Brick";
+        break;
+    case Tile::Type::BONUSFULL:
+        terrain = "BonusFull";
+        break;
+    case Tile::Type::BONUSEMPTY:
+        terrain = "BonusEmpty";
+        break;
+    case Tile::Type::CHECKPOINTFULL:
+        terrain = "CheckPointFull";
+        break;
+    case Tile::Type::CHECKPOINTEMPTY:
+        terrain = "CheckPointEmpty";
+        break;
+    case Tile::Type::LEVELEND:
+        terrain = "LevelEnd";
+        break;
+    case Tile::Type::MOVINGPLATFORM:
+        terrain = "LevelEnd";
+        break;
+    case Tile::Type::GROUND:
+        terrain = "Terrain";
+        partIdx = 4;
+        break;
+    case Tile::Type::STEEP_SLOPE_L:
+        terrain = "Terrain";
+        partIdx = 9;
+        break;
+    case Tile::Type::STEEP_SLOPE_R:
+        terrain = "Terrain";
+        partIdx = 10;
+        break;
+    case Tile::Type::GENTLE_SLOPE_L1:
+        terrain = "Terrain";
+        partIdx = 13;
+        break;
+    case Tile::Type::GENTLE_SLOPE_L2:
+        terrain = "Terrain";
+        partIdx = 12;
+        break;
+    case Tile::Type::GENTLE_SLOPE_R1:
+        terrain = "Terrain";
+        partIdx = 15;
+        break;
+    case Tile::Type::GENTLE_SLOPE_R2:
+        terrain = "Terrain";
+        partIdx = 16;
+        break;
+    case Tile::Type::FIREFLY:
+        uiPlayer = "Firefly";
+        break;
+    case Tile::Type::NUT:
+        uiEnemy = "NutIdle";
+        break;
+    }
+
+    AssetManager& assets = scene.GetAssetManager();
+    RE_Atlas* atlasPlayer = assets.GetAtlas(AtlasID::UI);
+    RE_Atlas* atlasCreative = assets.GetAtlas(AtlasID::TERRAIN);
+    RE_Atlas* atlasEnemy = assets.GetAtlas(AtlasID::ENEMY);
+    RE_AtlasPart* m_block;
+
+    if (uiPlayer != "-")
+        m_block = atlasPlayer->GetPart(uiPlayer);
+    else if (uiEnemy != "-")
+        m_block = atlasEnemy->GetPart(uiEnemy);
+    else
+        m_block = atlasCreative->GetPart(terrain);
+
+    return m_block;
+}
+
 LevelHeader::LevelHeader(LevelScene &scene):
     UIObject(scene), m_levelScene(scene), m_fireflyCount(nullptr)
 {
@@ -102,16 +215,6 @@ LevelHeader::LevelHeader(LevelScene &scene):
         return;
     }
 
-    // Creative selected block
-    // lives counter
-    m_selectedBlock = new Text(scene, " ", font, color);
-    m_selectedBlock->SetAnchor(RE_Anchor::WEST);
-    m_selectedBlock->GetLocalRect().anchorMin.Set(-1.0f, 11.8f);
-    m_selectedBlock->GetLocalRect().anchorMax.Set(-1.0f, 11.8f);
-    m_selectedBlock->GetLocalRect().offsetMin.Set(currLivesX, currLivesY);
-    m_selectedBlock->GetLocalRect().offsetMax.Set(currLivesX + numW, currLivesY + imgH);
-    m_selectedBlock->SetParent(this);
-
     // Add a Change background btn
     RE_Atlas* atlas = assets.GetAtlas(AtlasID::UI);
     AssertNew(atlas);
@@ -140,6 +243,102 @@ LevelHeader::LevelHeader(LevelScene &scene):
 
     createWorldButtonLabel = new Text(scene, u8"Change background", font, colorDown);
     createWorldButton->SetText(createWorldButtonLabel, Button::State::DOWN);
+
+    RE_Atlas* atlasCreative = m_levelScene.GetAssetManager().GetAtlas(AtlasID::TERRAIN);
+    RE_AtlasPart* block = atlasCreative->GetPart("Wood");
+
+
+    m_objects_v = {
+        Tile::Type::GENTLE_SLOPE_L1,
+        Tile::Type::GENTLE_SLOPE_R1,
+        Tile::Type::GENTLE_SLOPE_L2,
+        Tile::Type::GENTLE_SLOPE_R2,
+        Tile::Type::STEEP_SLOPE_L,
+        Tile::Type::STEEP_SLOPE_R,
+        Tile::Type::LEVELEND,
+    };
+
+    float offsetY = 0.f;
+    float offsetX = 9.4f;
+    float objectHeight = 90.f;
+    float objectWidth = 0.50f;
+    for (int i = 0; i < m_objects_v.size(); i++)
+    {
+        int partIdx = 0;
+        RE_AtlasPart* block = GetAtlasFromTile(m_objects_v[i], m_scene, partIdx);
+
+        if (m_objects_v[i] == Tile::Type::LEVELEND)
+        {
+            objectHeight = 180.f;
+            objectWidth = 0.55f;
+        }
+
+        Button* item = new Button(scene, block, true, partIdx);
+        //item.
+        item->GetLocalRect().anchorMin.Set(offsetX, 0.f);
+        item->GetLocalRect().anchorMax.Set(offsetX + objectWidth, 0.f);
+        item->GetLocalRect().offsetMin.Set(0.0f, offsetY);
+        item->GetLocalRect().offsetMax.Set(0.0f, offsetY + objectHeight);
+        item->SetParent(this);
+        item->SetBorders(new UIBorders(25, 25, 25, 25));
+        item->SetListener(new SelectItemListener(scene, m_objects_v[i], partIdx));
+
+        offsetY += objectHeight + 25.f;
+        objectHeight = 90.f;
+        objectWidth = 0.50f;
+    }
+
+    m_objects_h = {
+        Tile::Type::WOOD,
+        Tile::Type::SPIKE,
+        Tile::Type::GROUND,
+        Tile::Type::BRICK,
+        Tile::Type::BONUSFULL,
+        Tile::Type::BONUSEMPTY,
+        Tile::Type::FIREFLY,
+        Tile::Type::NUT,
+        Tile::Type::ONE_WAY,
+    };
+
+    offsetY = 0.f;
+    offsetX = 3.7f;
+    objectHeight = 90.f;
+    objectWidth = 0.50f;
+    for (int i = 0; i < m_objects_h.size(); i++)
+    {
+        int partIdx = 0;
+        RE_AtlasPart* block = GetAtlasFromTile(m_objects_h[i], m_scene, partIdx);
+
+        Button* item = new Button(scene, block, true, partIdx);
+        item->GetLocalRect().anchorMin.Set(offsetX, 0.f);
+        item->GetLocalRect().anchorMax.Set(offsetX + objectWidth, 0.f);
+        item->GetLocalRect().offsetMin.Set(0.0f, offsetY);
+        item->GetLocalRect().offsetMax.Set(0.0f, offsetY + objectHeight);
+        item->SetParent(this);
+        item->SetBorders(new UIBorders(25, 25, 25, 25));
+        item->SetListener(new SelectItemListener(scene, m_objects_h[i], partIdx));
+
+        /*if (m_objects_h[i] == levelScene->GetSelectedTile() && partIdx == levelScene->GetSelectedPartIdx())
+        {
+            
+        }*/
+
+        offsetX += objectWidth + 0.10f;
+    }
+
+    // Btn is on the first item
+    offsetY = 0.f;
+    offsetX = 3.7f;
+    objectHeight = 90.f;
+    objectWidth = 0.50f;
+    m_selectedBlock = new Button(scene, atlas->GetPart("Button"), true);
+    m_selectedBlock->GetLocalRect().anchorMin.Set(offsetX - 0.07, offsetY);
+    m_selectedBlock->GetLocalRect().anchorMax.Set(offsetX + objectWidth + 0.07f, offsetY);
+    m_selectedBlock->GetLocalRect().offsetMin.Set(0.0f, 0.0f - 9.f);
+    m_selectedBlock->GetLocalRect().offsetMax.Set(0.0f, 0.0f + objectHeight + 9.f);
+    m_selectedBlock->SetParent(this);
+    m_selectedBlock->SetBorders(new UIBorders(25, 25, 25, 25));
+    
 }
 
 void LevelHeader::Update()
@@ -165,91 +364,66 @@ void LevelHeader::Update()
         return;
     }
 
-    m_selectedBlock->SetString("Item selected :");
-    
-    // Update creative block
-    const char* terrain = "-";
-    const char* uiPlayer = "-";
-    const char* uiEnemy = "-";
-    int terrainGroundId = 0;
-    switch ((Tile::Type)controls.terrainSelected)
+
+    float offsetY = 0.f;
+    float offsetX = 9.4f;
+    float objectHeight = 90.f;
+    float objectWidth = 0.50f;
+
+    for (int i = 0; i < m_objects_v.size(); i++)
     {
-    case Tile::Type::WOOD:
-        terrain = "Wood";
-        break;
-    case Tile::Type::ONE_WAY:
-        terrain = "OneWay";
-        break;
-    case Tile::Type::SPIKE:
-        terrain = "Spike";
-        break;
-    case Tile::Type::BRICK:
-        terrain = "Brick";
-        break;
-    case Tile::Type::BONUSFULL:
-        terrain = "BonusFull";
-        break;
-    case Tile::Type::BONUSEMPTY:
-        terrain = "BonusEmpty";
-        break;
-    case Tile::Type::CHECKPOINTFULL:
-        terrain = "CheckPointFull";
-        break;
-    case Tile::Type::CHECKPOINTEMPTY:
-        terrain = "CheckPointEmpty";
-        break;
-    case Tile::Type::LEVELEND:
-        terrain = "LevelEnd";
-        break;
-    case Tile::Type::MOVINGPLATFORM:
-        terrain = "LevelEnd";
-        break;
-    case Tile::Type::GROUND:
-    case Tile::Type::STEEP_SLOPE_L:
-    case Tile::Type::STEEP_SLOPE_R:
-    case Tile::Type::GENTLE_SLOPE_L1:
-    case Tile::Type::GENTLE_SLOPE_L2:
-    case Tile::Type::GENTLE_SLOPE_R1:
-    case Tile::Type::GENTLE_SLOPE_R2:
-        terrain = "Terrain";
-        terrainGroundId = controls.groundSelected;
-        break;
-    case Tile::Type::FIREFLY:
-        uiPlayer = "Firefly";
-		break;
-    case Tile::Type::NUT:
-        uiEnemy = "NutIdle";
-        break;
+        int partIdx = 0;
+        RE_AtlasPart* block = GetAtlasFromTile(m_objects_v[i], m_scene, partIdx);
+        if (m_objects_v[i] == levelScene->GetSelectedTile() && partIdx == levelScene->GetSelectedPartIdx())
+        {
+         if (levelScene->GetSelectedTile() == Tile::Type::LEVELEND)
+         {
+             m_selectedBlock->GetLocalRect().anchorMin.Set(offsetX - 0.07, 0.f);
+             m_selectedBlock->GetLocalRect().anchorMax.Set(offsetX + objectWidth + 0.07f, 0.f);
+             m_selectedBlock->GetLocalRect().offsetMin.Set(0.0f, offsetY - 9.f);
+             m_selectedBlock->GetLocalRect().offsetMax.Set(0.0f, offsetY + objectHeight + 99.f);
+         }
+         else {
+             m_selectedBlock->GetLocalRect().anchorMin.Set(offsetX - 0.07, 0.f);
+             m_selectedBlock->GetLocalRect().anchorMax.Set(offsetX + objectWidth + 0.07, 0.f);
+             m_selectedBlock->GetLocalRect().offsetMin.Set(0.0f, offsetY - 9.f);
+             m_selectedBlock->GetLocalRect().offsetMax.Set(0.0f, offsetY + objectHeight + 9.f);
+         }
+        }
+         offsetY += objectHeight + 25.f;
+         objectHeight = 90.f;
+         objectWidth = 0.50f;
     }
 
-    if (uiPlayer == "-" && terrain == "-" && uiEnemy == "-")
-        return;
+    offsetY = 0.f;
+    offsetX = 3.7f;
+    objectHeight = 90.f;
+    objectWidth = 0.50f;
 
-    RE_AtlasPart* m_block;
-    if (uiPlayer != "-")
-        m_block = atlasPlayer->GetPart(uiPlayer);
-    else if (uiEnemy != "-")
-        m_block = atlasEnemy->GetPart(uiEnemy);
-    else
-        m_block = atlasCreative->GetPart(terrain);
-
-    if (m_blockImage != nullptr) m_blockImage->Delete();
-    AssertNew(m_block);
-
-
-    m_blockImage = new Image(m_levelScene, m_block, terrainGroundId);
-    if (terrain == "LevelEnd")
+    for (int i = 0; i < m_objects_h.size(); i++)
     {
-        m_blockImage->GetLocalRect().anchorMin.Set(2.0f, 10.8f);
-        m_blockImage->GetLocalRect().anchorMax.Set(2.2f, 11.9f);
+        int partIdx = 0;
+        RE_AtlasPart* block = GetAtlasFromTile(m_objects_h[i], m_scene, partIdx);
+
+        if (m_objects_h[i] == levelScene->GetSelectedTile() && partIdx == levelScene->GetSelectedPartIdx())
+        {
+            if (levelScene->GetSelectedTile() == Tile::Type::LEVELEND)
+            {
+                m_selectedBlock->GetLocalRect().anchorMin.Set(offsetX - 0.07, offsetY);
+                m_selectedBlock->GetLocalRect().anchorMax.Set(offsetX + objectWidth + 0.07f, offsetY);
+                m_selectedBlock->GetLocalRect().offsetMin.Set(0.0f, 0.0f - 9.f);
+                m_selectedBlock->GetLocalRect().offsetMax.Set(0.0f, offsetY + objectHeight + 93.f);
+            }
+            else
+            {
+                m_selectedBlock->GetLocalRect().anchorMin.Set(offsetX - 0.07, offsetY);
+                m_selectedBlock->GetLocalRect().anchorMax.Set(offsetX + objectWidth + 0.07f, offsetY);
+                m_selectedBlock->GetLocalRect().offsetMin.Set(0.0f, 0.0f - 9.f);
+                m_selectedBlock->GetLocalRect().offsetMax.Set(0.0f, offsetY + objectHeight + 9.f);
+            }
+        }
+
+        offsetX += objectWidth + 0.10f;
     }
-    else
-    {
-        m_blockImage->GetLocalRect().anchorMin.Set(2.0f, 11.9f);
-        m_blockImage->GetLocalRect().anchorMax.Set(2.0f, 11.9f);
-    }
-    m_blockImage->GetLocalRect().offsetMin.Set(currLivesX, currLivesY);
-    m_blockImage->GetLocalRect().offsetMax.Set(currLivesX + imgW, currLivesY + imgH);
-    m_blockImage->SetParent(this);
 }
 

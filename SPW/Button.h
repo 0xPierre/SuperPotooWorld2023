@@ -9,7 +9,7 @@ class ButtonListener;
 class Button : public UIObject
 {
 public:
-    Button(Scene &scene, RE_AtlasPart *atlasPart);
+    Button(Scene &scene, RE_AtlasPart *atlasPart, bool disableAnim = false, int partIdx = 0);
     virtual ~Button();
 
     enum class State : int
@@ -33,6 +33,8 @@ protected:
 
     State m_currState;
     State m_prevState;
+    bool m_disableAnim;
+    int m_partIdx;
 
     UIBorders *m_borders;
     std::array<Text *, 4> m_texts;

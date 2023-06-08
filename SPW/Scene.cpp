@@ -38,7 +38,12 @@ Scene::Scene(SDL_Renderer *renderer, RE_Timer &mainTime, ThemeID themeID) :
 
 Scene::~Scene()
 {
-    m_objectManager.DeleteObjects();
+    try {
+        m_objectManager.DeleteObjects();
+    }
+    catch (int aa) {
+        printf("ERROR BUT WE DONT CARE\n");
+    }
 }
 
 class DrawCallback : public PE_QueryCallback

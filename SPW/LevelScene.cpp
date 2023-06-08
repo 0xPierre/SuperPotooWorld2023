@@ -12,7 +12,7 @@ namespace fs = std::filesystem;
 
 LevelScene::LevelScene(SDL_Renderer *renderer, RE_Timer &mainTime, LevelData &level, bool isCreative, bool isNewWorld) :
     Scene(renderer, mainTime, level.themeID), m_paused(false),
-    m_camIndex(0), m_cameras(), m_stepDelay(0.0f)
+    m_camIndex(0), m_cameras(), m_stepDelay(0.0f), m_selected_partIdx(0), m_selected_tile(Tile::Type::WOOD)
 {
     m_inputManager.GetApplication().SetEnabled(true);
     m_inputManager.GetMouse().SetEnabled(true);

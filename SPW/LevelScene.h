@@ -49,6 +49,12 @@ public:
 
 	bool GetCamIndex() const;
 
+	Tile::Type GetSelectedTile() const;
+	void SetSelectedTile(Tile::Type tile);
+
+	int GetSelectedPartIdx() const;
+	void SetSelectedPartIdx(int partIdx);
+
 
 private:
 	std::array<Camera*, 2> m_cameras;
@@ -57,6 +63,9 @@ private:
 	bool m_is_new_world;
 	LevelCanvas* m_canvas;
 	LevelData* m_levelData;
+
+	Tile::Type m_selected_tile;
+	int m_selected_partIdx;
 
 	Background* m_background;
 	Background* m_foreground;
@@ -74,6 +83,26 @@ private:
 
 	Creative* m_creative;
 };
+
+inline Tile::Type LevelScene::GetSelectedTile() const
+{
+	return m_selected_tile;
+}
+
+inline void LevelScene::SetSelectedTile(Tile::Type tile)
+{
+	m_selected_tile = tile;
+}
+
+inline int LevelScene::GetSelectedPartIdx() const
+{
+	return m_selected_partIdx;
+}
+
+inline void LevelScene::SetSelectedPartIdx(int partIdx)
+{
+	m_selected_partIdx = partIdx;
+}
 
 inline bool LevelScene::GetCamIndex() const
 {
