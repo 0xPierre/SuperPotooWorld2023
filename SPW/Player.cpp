@@ -127,7 +127,7 @@ void Player::Update()
     LevelScene* levelScene = (LevelScene* )(&m_scene);
     MouseInput& mouse = m_scene.GetInputManager().GetMouse();
 
-    if (!levelScene->IsPaused() && (mouse.leftReleased || controls.shiftLPressed) && levelScene->IsCreative())
+    if (!levelScene->IsPaused() && (mouse.leftReleased || controls.shiftLPressed || mouse.middleClick) && levelScene->IsCreative())
     {
         if (mouse.viewPos.x > 742 && mouse.viewPos.y < 140 && mouse.viewPos.y > 35)
             return;
@@ -153,36 +153,38 @@ void Player::Update()
         {
             Tile::Type type = levelScene->GetCreative()->SelectItem(mouse);
 
-            controls.terrainSelected = (int)type;
+            levelScene->SetSelectedTile(type);
 
+            int partIdx;
             switch (type)
             {
             case Tile::Type::STEEP_SLOPE_L:
-                controls.groundSelected = 9;
+                partIdx = 9;
                 break;
             case Tile::Type::STEEP_SLOPE_R:
-                controls.groundSelected = 10;
+                partIdx = 10;
                 break;
             case Tile::Type::GENTLE_SLOPE_R1:
-                controls.groundSelected = 15;
+                partIdx = 15;
                 break;
             case Tile::Type::GENTLE_SLOPE_R2:
-                controls.groundSelected = 16;
+                partIdx = 16;
                 break;
             case Tile::Type::GENTLE_SLOPE_L1:
-                controls.groundSelected = 13;
+                partIdx = 13;
                 break;
             case Tile::Type::GENTLE_SLOPE_L2:
-                controls.groundSelected = 12;
+                partIdx = 12;
                 break;
                 break;
             case Tile::Type::GROUND:
-                controls.groundSelected = 4;
+                partIdx = 4;
 				break;
             default:
-                controls.groundSelected = 0;
+                partIdx = 0;
 				break;
             }
+            levelScene->SetSelectedPartIdx(partIdx);
         }
     }
 }
