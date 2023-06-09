@@ -138,7 +138,7 @@ void StaticMap::InitTiles()
 					(GetTileType(x, y + 1) == Tile::Type::STEEP_SLOPE_R
 						|| GetTileType(x, y + 1) == Tile::Type::GENTLE_SLOPE_R1
 						|| GetTileType(x, y + 1) == Tile::Type::GENTLE_SLOPE_R2)
-					&& IsGround(x - 1, y) && !(
+					&& IsOnlyGround(x - 1, y) && !(
 						GetTilePartIndex(x - 1, y) == 17
 						)
 					)
@@ -152,7 +152,7 @@ void StaticMap::InitTiles()
 					(GetTileType(x, y + 1) == Tile::Type::STEEP_SLOPE_L
 						|| GetTileType(x, y + 1) == Tile::Type::GENTLE_SLOPE_L1
 						|| GetTileType(x, y + 1) == Tile::Type::GENTLE_SLOPE_L2)
-					&& IsGround(x + 1, y) && !(
+					&& IsOnlyGround(x + 1, y) && !(
 						GetTilePartIndex(x + 1, y) == 14
 						)
 					)
@@ -536,6 +536,17 @@ bool StaticMap::IsGround(int x, int y) const
 	case Tile::Type::GENTLE_SLOPE_L2:
 	case Tile::Type::GENTLE_SLOPE_R1:
 	case Tile::Type::GENTLE_SLOPE_R2:
+		return true;
+	default:
+		return false;
+	}
+}
+
+bool StaticMap::IsOnlyGround(int x, int y) const
+{
+	switch (GetTileType(x, y))
+	{
+	case Tile::Type::GROUND:
 		return true;
 	default:
 		return false;

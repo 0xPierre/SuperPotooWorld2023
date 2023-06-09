@@ -40,6 +40,7 @@ public:
     int GetTilePartIndex(int x, int y) const;
     bool AddTileCollider(int x, int y);
     Tile::Type GetTileType(int x, int y) const;
+    bool IsOnlyGround(int x, int y) const;
 
 private:
 
