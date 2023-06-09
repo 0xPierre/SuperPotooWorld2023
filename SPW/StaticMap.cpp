@@ -247,7 +247,9 @@ void StaticMap::Render()
 				m_bonusFullPart->RenderCopyF(0, &dst, RE_Anchor::SOUTH_WEST);
 				break;*/
 			case Tile::Type::BONUSEMPTY:
-				m_bonusEmptyPart->RenderCopyF(0, &dst, RE_Anchor::SOUTH_WEST);
+				// Bonus empty is used for MovingPlatform
+				if (m_is_creative)
+					m_bonusEmptyPart->RenderCopyF(0, &dst, RE_Anchor::SOUTH_WEST);
 				break;
 			case Tile::Type::CHECKPOINTFULL:
 				m_checkpointFullPart->RenderCopyF(0, &dst, RE_Anchor::SOUTH_WEST);
@@ -297,8 +299,14 @@ bool StaticMap::AddTileCollider(int x, int y)
 
 	case Tile::Type::GROUND:
 	case Tile::Type::WOOD:
-	case Tile::Type::BONUSEMPTY:
 		polygon.SetAsBox(PE_AABB(position, position + PE_Vec2(1.0f, 1.0f)));
+		break;
+
+	case Tile::Type::BONUSEMPTY:
+	{
+		polygon.SetAsBox(PE_AABB(position, position + PE_Vec2(1.0f, 1.0f)));
+		colliderDef.filter.categoryBits = CATEGORY_STOP_MOVING_PLATFORM;
+	}
 		break;
 
 	case Tile::Type::STEEP_SLOPE_L:
@@ -504,8 +512,9 @@ Tile::Type StaticMap::GetTileType(int x, int y) const
 		return Tile::Type::GROUND;
 	else if (y >= m_height)
 		return Tile::Type::EMPTY;
-	else
+	else {
 		return m_tiles[x][y].type;
+	}
 }
 
 int StaticMap::GetTilePartIndex(int x, int y) const

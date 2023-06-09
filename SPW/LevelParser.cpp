@@ -8,6 +8,7 @@
 #include "LevelEnd.h"
 #include "Bonus.h"
 #include "Camera.h"
+#include "MovingPlatform.h"
 
 // TODO : Ajouter le fichier "Firefly.h"
 
@@ -247,6 +248,12 @@ void LevelParser::InitScene(LevelScene &scene) const
             {
                 Firefly* firefly = new Firefly(scene);
                 firefly->SetStartPosition(position);
+                break;
+            }
+            case 'M':
+            {
+                MovingPlatform* movingPlatform = new MovingPlatform(scene);
+                movingPlatform->SetStartPosition(position);
                 break;
             }
             default:

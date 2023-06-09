@@ -100,6 +100,7 @@ void Player::Start()
     PE_CapsuleShape capsule(PE_Vec2(0.0f, 0.35f), PE_Vec2(0.0f, 0.85f), 0.35f);
     colliderDef.friction = 1.0f;
     colliderDef.filter.categoryBits = CATEGORY_PLAYER;
+    colliderDef.filter.maskBits = CATEGORY_SLOPE | CATEGORY_PLAYER | CATEGORY_COLLECTABLE | CATEGORY_ENEMY | CATEGORY_TERRAIN | CATEGORY_TERRAIN_ENTITY;
     colliderDef.shape = &capsule;
     PE_Collider* collider = body->CreateCollider(colliderDef);
 }
@@ -127,7 +128,7 @@ void Player::Update()
     LevelScene* levelScene = (LevelScene* )(&m_scene);
     MouseInput& mouse = m_scene.GetInputManager().GetMouse();
 
-    if (!levelScene->IsPaused() && (mouse.leftDown || controls.shiftLPressed || mouse.middleClick) && levelScene->IsCreative())
+    if (!levelScene->IsPaused() && (mouse.leftDown || mouse.leftReleased || controls.shiftLPressed || mouse.middleClick) && levelScene->IsCreative())
     {
         if (mouse.viewPos.x > 742 && mouse.viewPos.y < 140 && mouse.viewPos.y > 35)
             return;
@@ -142,7 +143,20 @@ void Player::Update()
         {
             return;
 		}
-        if (mouse.leftDown && levelScene->IsCreative())
+        
+        bool hasClick = false;
+        if (mouse.leftDown)
+        {
+            if (levelScene->GetSelectedTile() == Tile::Type::MOVINGPLATFORM)
+                return;
+            hasClick = true;
+        }
+            
+
+        if (mouse.leftReleased && levelScene->GetSelectedTile() == Tile::Type::MOVINGPLATFORM)
+            hasClick = true;
+
+        if (hasClick && levelScene->IsCreative())
         {
             levelScene->GetCreative()->AddItem(levelScene->GetSelectedTile(), levelScene->GetSelectedPartIdx(), mouse);
         }

@@ -194,6 +194,9 @@
     <ClCompile Include="CreativeCamera.cpp">
       <Filter>Fichiers sources\GameObject\GameBody\Camera</Filter>
     </ClCompile>
+    <ClCompile Include="MovingPlatform.cpp">
+      <Filter>Fichiers sources\GameObject\GameBody\Terrain</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Settings.h">
@@ -336,6 +339,9 @@
     </ClInclude>
     <ClInclude Include="CreativeCamera.h">
       <Filter>Fichiers sources\GameObject\GameBody\Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="MovingPlatform.h">
+      <Filter>Fichiers sources\GameObject\GameBody\Terrain</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

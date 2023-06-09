@@ -8,6 +8,7 @@
 #include "Nut.h"
 #include "Brick.h"
 #include "Bonus.h"
+#include "MovingPlatform.h"
 
 Creative::Creative(LevelScene& levelScene)
 {
@@ -114,6 +115,14 @@ void Creative::AddItem(Tile::Type tileType, int groundSelected, MouseInput& mous
 		bonus->SetStartPosition(Pos);
 		break;
 	}
+	case Tile::Type::MOVINGPLATFORM:
+	{
+		MovingPlatform* movingPlatform = new MovingPlatform(*m_levelScene);
+		Pos.x = (int)Pos.x;
+		Pos.y = (int)Pos.y;
+		movingPlatform->SetStartPosition(Pos);
+		break;
+	}
 	}
 }
 
@@ -134,18 +143,25 @@ void Creative::RemoveItem(MouseInput& mouse) {
 
 	std::vector<GameBody*> gms;
 	gms = m_levelScene->OverlapAreaAllBodies(aabb, CATEGORY_COLLECTABLE | CATEGORY_ENEMY | CATEGORY_TERRAIN_ENTITY);
-
 	if (gms.size() > 0)
 	{
 		bool gmHasBeenRemoved = false;
 		for (int i = 0; i < gms.size(); i++)
 		{
-			GameBody* gm = gms[i];
-
-			if ((int)gm->GetPosition().x == lower.x && (int)gm->GetPosition().y == lower.y)
+			if (gms[i]->GetName() == "MovingPlatform")
 			{
-				gm->SetEnabled(false);
+				gms[i]->SetEnabled(false);
 				gmHasBeenRemoved = true;
+			}
+			else
+			{
+				GameBody* gm = gms[i];
+
+				if ((int)gm->GetPosition().x == lower.x && (int)gm->GetPosition().y == lower.y)
+				{
+					gm->SetEnabled(false);
+					gmHasBeenRemoved = true;
+				}
 			}
 		}
 	}
@@ -203,6 +219,10 @@ Tile::Type Creative::SelectItem(MouseInput& mouse)
 			else if (gmName == "Bonus")
 			{
 				return Tile::Type::BONUSFULL;
+			}
+			else if (gmName == "MovingPlatform")
+			{
+				return Tile::Type::MOVINGPLATFORM;
 			}
 		}
 	}
@@ -325,6 +345,12 @@ void Creative::SaveInFile() {
 						else if (gmName == "Bonus")
 						{
 							fputc('?', levelFile);
+							gmHasBeenPut = true;
+							break;
+						}
+						else if (gmName == "MovingPlatform")
+						{
+							fputc('M', levelFile);
 							gmHasBeenPut = true;
 							break;
 						}

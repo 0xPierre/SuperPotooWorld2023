@@ -87,6 +87,9 @@ RE_AtlasPart* GetAtlasFromTile(Tile::Type type, Scene &scene, int &partIdx)
     case Tile::Type::BONUSEMPTY:
         terrain = "BonusEmpty";
         break;
+    case Tile::Type::MOVINGPLATFORM:
+        terrain = "MovingPlatform";
+        break;
     case Tile::Type::CHECKPOINTFULL:
         terrain = "CheckPointFull";
         break;
@@ -94,9 +97,6 @@ RE_AtlasPart* GetAtlasFromTile(Tile::Type type, Scene &scene, int &partIdx)
         terrain = "CheckPointEmpty";
         break;
     case Tile::Type::LEVELEND:
-        terrain = "LevelEnd";
-        break;
-    case Tile::Type::MOVINGPLATFORM:
         terrain = "LevelEnd";
         break;
     case Tile::Type::GROUND:
@@ -324,6 +324,16 @@ LevelHeader::LevelHeader(LevelScene &scene):
         objectWidth = 0.50f;
     }
 
+    int partIdx = 0;
+    Button* item = new Button(scene, GetAtlasFromTile(Tile::Type::MOVINGPLATFORM, m_scene, partIdx), true, 0);
+    item->GetLocalRect().anchorMin.Set(8.f, 0.f);
+    item->GetLocalRect().anchorMax.Set(8.f + 2.f, 0.f);
+    item->GetLocalRect().offsetMin.Set(0.0f, offsetY + 25.f);
+    item->GetLocalRect().offsetMax.Set(0.0f, offsetY + 25.f + 45.f);
+    item->SetParent(this);
+    item->SetBorders(new UIBorders(25, 25, 25, 25));
+    item->SetListener(new SelectItemListener(scene, Tile::Type::MOVINGPLATFORM, 0));
+
     m_objects_h = {
         Tile::Type::WOOD,
         Tile::Type::SPIKE,
@@ -429,6 +439,15 @@ void LevelHeader::Update()
          offsetY += objectHeight + 25.f;
          objectHeight = 90.f;
          objectWidth = 0.50f;
+    }
+
+    // Moving platform
+    if (levelScene->GetSelectedTile() == Tile::Type::MOVINGPLATFORM)
+    {
+        m_selectedBlock->GetLocalRect().anchorMin.Set(8.f - 0.07, 0.f);
+        m_selectedBlock->GetLocalRect().anchorMax.Set(8.f + 2.f + 0.07, 0.f);
+        m_selectedBlock->GetLocalRect().offsetMin.Set(0.0f, offsetY + 113.f - 9.f);
+        m_selectedBlock->GetLocalRect().offsetMax.Set(0.0f, offsetY + 113.f +45.f + 9.f);
     }
 
     offsetY = 0.f;

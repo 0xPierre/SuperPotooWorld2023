@@ -75,8 +75,8 @@ void Bonus::OnRespawn()
 void Bonus::OnCollisionEnter(GameCollision &collision)
 {
     // Disable end of the game in creative
-    /*if (((LevelScene&)m_scene).IsCreative())
-        return;*/
+    if (((LevelScene&)m_scene).IsCreative())
+        return;
 
     // Check if the player is touching the brick
     if (collision.otherCollider->CheckCategory(CATEGORY_PLAYER))
