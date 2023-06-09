@@ -81,24 +81,24 @@ void Brick::OnCollisionEnter(GameCollision &collision)
             std::uniform_int_distribution<int> dist(1, 100);
             int randomInt = dist(rng);
 
-            // 25% chance to spawn nothing
+            // 45% chance to spawn nothing
             // 50% chance to spawn a Firefly
-            // 25% chance to spawn a heart
-            if (randomInt < 50)
-            {
-				Firefly* firefly = new Firefly(m_scene);
-				PE_Vec2 pos = GetPosition();
-				pos.x += 0.7f;
-				pos.y += 1.f;
-				firefly->SetStartPosition(pos);
-            }
-            else if (randomInt < 75)
+            // 5% chance to spawn a heart
+            if (randomInt < 5)
             {
                 Heart* heart = new Heart(m_scene);
                 PE_Vec2 pos = GetPosition();
                 pos.x += 0.7f;
                 pos.y += 1.f;
                 heart->SetStartPosition(pos);
+            }
+            else if (randomInt < 55)
+            {
+				Firefly* firefly = new Firefly(m_scene);
+				PE_Vec2 pos = GetPosition();
+				pos.x += 0.7f;
+				pos.y += 1.f;
+				firefly->SetStartPosition(pos);
             }
 
         }
