@@ -151,6 +151,7 @@ void Creative::RemoveItem(MouseInput& mouse) {
 			if (gms[i]->GetName() == "MovingPlatform")
 			{
 				gms[i]->SetEnabled(false);
+				gms[i]->DeleteBody();
 				gmHasBeenRemoved = true;
 			}
 			else
@@ -160,6 +161,7 @@ void Creative::RemoveItem(MouseInput& mouse) {
 				if ((int)gm->GetPosition().x == lower.x && (int)gm->GetPosition().y == lower.y)
 				{
 					gm->SetEnabled(false);
+					gms[i]->DeleteBody();
 					gmHasBeenRemoved = true;
 				}
 			}
