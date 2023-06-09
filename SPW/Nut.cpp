@@ -109,13 +109,13 @@ void Nut::FixedUpdate()
 
     float dist = PE_Distance(position, player->GetPosition());
 
-    if (dist > 24.0f)
-    {
-        // La distance entre de joueur et la noisette vient de dépasser 24 tuiles.
-        // On endort la noisette pour ne plus la simuler dans le moteur physique.
-        body->SetAwake(false);
-        return;
-    } 
+    //if (dist > 24.0f)
+    //{
+    //    // La distance entre de joueur et la noisette vient de dépasser 24 tuiles.
+    //    // On endort la noisette pour ne plus la simuler dans le moteur physique.
+    //    body->SetAwake(false);
+    //    return;
+    //} 
     if (dist <= 5.0f && m_state == State::IDLE)
     {
         m_state = State::SPINNING;
