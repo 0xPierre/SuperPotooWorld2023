@@ -55,6 +55,7 @@ public:
 	int GetSelectedPartIdx() const;
 	void SetSelectedPartIdx(int partIdx);
 
+	void SetCamIndex(int idx);
 
 private:
 	std::array<Camera*, 2> m_cameras;
@@ -107,6 +108,12 @@ inline void LevelScene::SetSelectedPartIdx(int partIdx)
 inline bool LevelScene::GetCamIndex() const
 {
 	return m_camIndex;
+}
+
+inline void LevelScene::SetCamIndex(int idx)
+{
+	m_camIndex = idx;
+	m_activeCam = m_cameras[m_camIndex];
 }
 
 inline LevelData* LevelScene::GetLevelData() const

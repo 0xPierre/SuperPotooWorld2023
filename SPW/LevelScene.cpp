@@ -123,10 +123,10 @@ void LevelScene::UpdateBackground()
             m_background->SetTexture(i, m_textures[i], PE_Vec2(factors[i], factors[i]));
         }
 
-        m_foreground = new Background(*this, Layer::FOREGROUND);
+       /* m_foreground = new Background(*this, Layer::FOREGROUND);
         worldDim.Set(36.0f, 36.0f * 400.0f / 2880.0f);
         m_foreground->SetWorldDimensions(worldDim);
-        m_foreground->SetTexture(0, m_textures[4], PE_Vec2(1.4f, 1.4f));
+        m_foreground->SetTexture(0, m_textures[4], PE_Vec2(1.4f, 1.4f));*/
         break;
     }
     }

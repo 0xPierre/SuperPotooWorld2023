@@ -21,6 +21,23 @@ private:
     LevelScene& m_levelScene;
 };
 
+class ChangeViewListener : public ButtonListener
+{
+public:
+    ChangeViewListener(LevelScene& scene) :
+        m_levelScene(scene)
+    {
+    }
+
+    virtual void OnPress()
+    {
+        m_levelScene.SetCamIndex((m_levelScene.GetCamIndex()+1) % 2);
+    }
+
+private:
+    LevelScene& m_levelScene;
+};
+
 class SelectItemListener : public ButtonListener
 {
 public:
@@ -244,6 +261,26 @@ LevelHeader::LevelHeader(LevelScene &scene):
     createWorldButtonLabel = new Text(scene, u8"Change background", font, colorDown);
     createWorldButton->SetText(createWorldButtonLabel, Button::State::DOWN);
 
+    // Add a Change view btn
+    Button* changeViewBtn = new Button(scene, buttonPart);
+    changeViewBtn->GetLocalRect().anchorMin.Set(-0.1f, -0.5f);
+    changeViewBtn->GetLocalRect().anchorMax.Set(1.6f, -0.5f);
+    changeViewBtn->GetLocalRect().offsetMin.Set(0.0f, 120.f);
+    changeViewBtn->GetLocalRect().offsetMax.Set(0.0f, 120.f + 60.f);
+    changeViewBtn->SetParent(this);
+    changeViewBtn->SetBorders(new UIBorders(25, 25, 25, 25));
+
+    changeViewBtn->SetListener(new ChangeViewListener(scene));
+
+    Text* changeViewButtonLabel = new Text(scene, u8"Change view", font, colorUp);
+    changeViewBtn->SetText(changeViewButtonLabel, Button::State::UP);
+
+    changeViewButtonLabel = new Text(scene, u8"Change view", font, colorHover);
+    changeViewBtn->SetText(changeViewButtonLabel, Button::State::HOVER);
+
+    changeViewButtonLabel = new Text(scene, u8"Change view", font, colorDown);
+    changeViewBtn->SetText(changeViewButtonLabel, Button::State::DOWN);
+
     RE_Atlas* atlasCreative = m_levelScene.GetAssetManager().GetAtlas(AtlasID::TERRAIN);
     RE_AtlasPart* block = atlasCreative->GetPart("Wood");
 
@@ -274,7 +311,6 @@ LevelHeader::LevelHeader(LevelScene &scene):
         }
 
         Button* item = new Button(scene, block, true, partIdx);
-        //item.
         item->GetLocalRect().anchorMin.Set(offsetX, 0.f);
         item->GetLocalRect().anchorMax.Set(offsetX + objectWidth, 0.f);
         item->GetLocalRect().offsetMin.Set(0.0f, offsetY);

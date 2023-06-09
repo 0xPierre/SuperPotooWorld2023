@@ -127,7 +127,7 @@ void Player::Update()
     LevelScene* levelScene = (LevelScene* )(&m_scene);
     MouseInput& mouse = m_scene.GetInputManager().GetMouse();
 
-    if (!levelScene->IsPaused() && (mouse.leftReleased || controls.shiftLPressed || mouse.middleClick) && levelScene->IsCreative())
+    if (!levelScene->IsPaused() && (mouse.leftDown || controls.shiftLPressed || mouse.middleClick) && levelScene->IsCreative())
     {
         if (mouse.viewPos.x > 742 && mouse.viewPos.y < 140 && mouse.viewPos.y > 35)
             return;
@@ -138,11 +138,11 @@ void Player::Update()
             return;
         if (mouse.viewPos.x > 55 && mouse.viewPos.y < 115 && mouse.viewPos.x < 375 && mouse.viewPos.y > 40)
             return;
-        /*if (mouse.viewPos.x > 0 && mouse.viewPos.x < 1 && mouse.viewPos.y > 0 && mouse.viewPos.y < 1)
+        if (mouse.viewPos.x > 55 && mouse.viewPos.x < 375 && mouse.viewPos.y > 110 && mouse.viewPos.y < 185)
         {
-            return
-		}*/
-        if (mouse.leftReleased && levelScene->IsCreative())
+            return;
+		}
+        if (mouse.leftDown && levelScene->IsCreative())
         {
             levelScene->GetCreative()->AddItem(levelScene->GetSelectedTile(), levelScene->GetSelectedPartIdx(), mouse);
         }

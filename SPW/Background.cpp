@@ -37,8 +37,6 @@ void Background::Render()
     if (debugCamera != nullptr)
         return;
     CreativeCamera* creativeCamera = dynamic_cast<CreativeCamera*>(camera);
-    if (creativeCamera != nullptr)
-        return;
 
     // Dimension du fond dans le référentiel monde
     float scale = camera->GetWorldToViewScale();
@@ -66,6 +64,14 @@ void Background::Render()
         while (x > layerW)
         {
             x -= layerW;
+        }
+
+        if (creativeCamera != nullptr)
+        {
+            layerW = 1920.f;
+            layerH = 1080.f;
+            x = layerW;
+            y = layerH;
         }
 
         SDL_FRect dstRect = { 0 };
