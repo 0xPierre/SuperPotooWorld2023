@@ -42,7 +42,7 @@ void Heart::Start()
     PE_ColliderDef colliderDef;
     colliderDef.friction = 0.000f;
     colliderDef.filter.categoryBits = CATEGORY_COLLECTABLE;
-    colliderDef.filter.maskBits = CATEGORY_COLLECTABLE | CATEGORY_TERRAIN | CATEGORY_PLAYER | CATEGORY_ENEMY;
+    colliderDef.filter.maskBits = CATEGORY_COLLECTABLE | CATEGORY_TERRAIN | CATEGORY_PLAYER | CATEGORY_ENEMY | CATEGORY_SLOPE;
     colliderDef.shape = &circle;
     PE_Collider *collider = body->CreateCollider(colliderDef);
 
