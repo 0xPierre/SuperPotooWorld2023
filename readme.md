@@ -1,8 +1,24 @@
 # Super Potoo World ++
+Super Potoo World is a platform Game made for a school rush in 5 days ([ESIEA](https://esiea.fr)).
+We worked on main feature, the creative mode, allowing to create a map and then play it.
+We also worked a little bit on the gameplay himself.
+### Game Demo :
+https://github.com/0xPierre/SuperPotooWorld2023/assets/64857347/8991097a-86c4-4e43-98e2-e0a2a3425d84
+### Creative Demo :
+https://github.com/0xPierre/SuperPotooWorld2023/assets/64857347/5e9fc476-e215-46ae-a292-1220361005c7
 
+## Readme for School :
 Depuis le menu, vous pouvez choisir soit "Play", soit "Creative".
 Play permet de jouer au jeu.
-Creative permet de créer une map en partant de zéro ou d'éditer une map déjà existante.
+Creative permet 
+
+
+
+
+
+
+
+de créer une map en partant de zéro ou d'éditer une map déjà existante.
 
 ## Mode créatif 👻
 - Edition d'un monde existant
