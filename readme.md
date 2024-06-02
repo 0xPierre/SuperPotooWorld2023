@@ -10,8 +10,7 @@ https://github.com/0xPierre/SuperPotooWorld2023/assets/64857347/772d41dc-2ee3-44
 
 https://github.com/0xPierre/SuperPotooWorld2023/assets/64857347/fcdcb456-1326-4bea-b859-d9aca04da836
 
-## Readme for 
-School :
+## Readme for School :
 Depuis le menu, vous pouvez choisir soit "Play", soit "Creative".
 Play permet de jouer au jeu.
 Creative permet 
